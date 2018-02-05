@@ -41,7 +41,7 @@ class Session(db.Model):
     __tablename__ = 'sessions'
 
     sess_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.String(25), db.ForeignKey('users.user_id'),
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
                         nullable=False)
 
     records = db.relationship('Record', backref='session')
@@ -54,7 +54,9 @@ class Session(db.Model):
 
 
 class Activity(db.Model):
-    """The various activities users can select for each session."""
+    """The various activities users can select for each session.
+
+    default_time is stored in seconds"""
 
     __tablename__ = 'activities'
 
@@ -68,7 +70,7 @@ class Activity(db.Model):
         """Display activity information"""
 
         return '<Activity act_id={} act_name={} default_time={}>'.\
-            format(self.user_id, self.fname, self.lname)
+            format(self.act_id, self.act_name, self.default_time)
 
 
 class Record(db.Model):
@@ -91,7 +93,7 @@ class Record(db.Model):
 
         return '<Record record_id={} user_id={} sess_id={} act_id={} start_t={}\
              end_t={}>'.format(self.record_id, self.user_id, self.sess_id,
-                               self.start_t, self.end_t)
+                               self.act_id, self.start_t, self.end_t)
 
 
 class Friend(db.Model):
@@ -133,3 +135,24 @@ class Destination(db.Model):
             state={} zipcode={}>'.format(self.dest_id, self.user_id, self.name,
                                          self.street, self.city, self.state,
                                          self.zipcode)
+
+################################################################################
+
+
+def connect_to_db(app):
+    """Connect the database to Flask app"""
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///readynow'
+    app.config['SQLACHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.app = app
+    db.init_app(app)
+
+
+if __name__ == '__main__':
+
+    from server import app
+
+    connect_to_db(app)
+    db.drop_all()
+    db.create_all()

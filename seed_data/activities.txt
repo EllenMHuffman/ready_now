@@ -1,0 +1,13 @@
+Shower|600
+Wash Hair|600
+Shave|300
+Wash Face|300
+Brush Teeth|120
+Skin Care|300
+Make Up (Simple)|300
+Make Up (Full Face)|900
+Hair Styling (Simple)|600
+Hair Styling (Heat)|1200
+Choose Clothes|300
+Dressing/Shoes|300
+Accessories|180
