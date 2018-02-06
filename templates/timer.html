@@ -2,4 +2,12 @@
 
 {% block content %}
 
+  {% for activity in activities %}
+
+    Step: {{ activity.act_name }} --- Remaining Time: {{ activity.default_time}}
+    <br>
+    <br>
+
+  {% endfor %}
+
 {% endblock %}

@@ -1,7 +1,7 @@
 """Utility file to seed readynow database with dummy data in seed_data/"""
 
 import models
-from models import User, Session, Activity, Record, Friend, Destination, \
+from models import User, Session, Activity, UserActivity, Friend, Destination, \
     connect_to_db, db
 from server import app
 
@@ -64,18 +64,18 @@ def load_sessions():
     db.session.commit()
 
 
-def load_records():
-    """Reads in records.txt and adds to database."""
+def load_useractivities():
+    """Reads in useractivities.txt and adds to database."""
 
-    Record.query.delete()
+    UserActivity.query.delete()
 
-    with open('seed_data/records.txt') as f:
+    with open('seed_data/useractivities.txt') as f:
         for row in f:
             row = row.strip()
             user_id, sess_id, act_id, start_t, end_t = row.split('|')
 
-            entry = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
-                           start_t=start_t, end_t=end_t)
+            entry = UserActivity(user_id=user_id, sess_id=sess_id,
+                                 act_id=act_id, start_t=start_t, end_t=end_t)
 
             db.session.add(entry)
 
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     load_users()
     load_activities()
     load_sessions()
-    load_records()
+    load_useractivities()
 
 #########
 # After my database is loaded with the dummy data I want, I need to do:
