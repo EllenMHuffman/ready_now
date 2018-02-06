@@ -1,0 +1,2 @@
+Jane|Doe|janedoe|password|female|504-555-5309|123 Sesame St.|San Francsico|CA|94110
+John|Smith|johnsmith|longpassword|male|415-555-7777|321 Sutter St.|San Francisco|CA|94332

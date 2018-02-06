@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <title>Ready Now</title>
+</head>
+<body>
+
+  <div>
+    Have an account? <a href='/login'>Login!</a>
+    <br>
+    Need an account? <a href='/register'>Register here</a>
+  </div>
+  <br>
+
+  {% block content %} CONTENT GOES HERE {% endblock %}
+
+  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+
+  <script>
+
+  {% block js %}
+    // JAVASCRIPT GOES HERE
+
+  {% endblock %}
+
+  </script>
+
+</body>
+</html>

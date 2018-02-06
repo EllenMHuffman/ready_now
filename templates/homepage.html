@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to Ready Now!</h1>
+<br>
+<div>
+  <h2>What do you need to do before you're ready?</h2>
+  <br>
+  <form action='/timer' method='POST'>
+    <input type='checkbox' name='activity' value='shower'>Shower
+    <br>
+    <input type='checkbox' name='activity' value='washhair'>Wash Hair
+    <br>
+    <input type='checkbox' name='activity' value='shave'>Shave
+    <br>
+    <input type='checkbox' name='activity' value='washface'>Wash Face
+    <br>
+    <input type='checkbox' name='activity' value='teeth'>Brush Teeth
+    <br>
+    <input type='checkbox' name='activity' value='skin'>Skin Care
+    <br>
+    <input type='checkbox' name='activity' value='makeupsimp'>Make Up (Simple)
+    <br>
+    <input type='checkbox' name='activity' value='makeupfull'>Make Up (Full Face)
+    <br>
+    <input type='checkbox' name='activity' value='hairstyle'>Hair Styling (Simple)
+    <br>
+    <input type='checkbox' name='activity' value='hairheat'>Hair Styling (Heat)
+    <br>
+    <input type='checkbox' name='activity' value='clothes'>Choose Clothes
+    <br>
+    <input type='checkbox' name='activity' value='dressed'>Get Dressed with Shoes
+    <br>
+    <input type='checkbox' name='activity' value='accessories'>Accessories
+    <br>
+    <br>
+    <div>
+      <b>Total time until you'll be ready:</b>
+      <span id='total-time'>TOTAL TIME GOES HERE</span>
+      <!-- The total time should update as user checks boxes with AJAX -->
+    </div>
+    <br>
+    <br>
+    <input type='submit' value="Go!">
+  </form>
+</div>
+{% endblock %}

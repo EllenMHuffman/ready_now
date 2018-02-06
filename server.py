@@ -17,7 +17,12 @@ app.secret_key = 'getready'
 app.jinja_env.undefined = StrictUndefined
 ################################################################################
 
-# ROUTES GO HERE
+
+@app.route('/')
+def show_homepage():
+    """Displays the homepage for Ready Now."""
+
+    return render_template('homepage.html')
 
 ################################################################################
 
