@@ -2,14 +2,12 @@
 
 from jinja2 import StrictUndefined
 
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import Flask, render_template, redirect, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import User, Session, Activity, UserActivity, Friend, Destination, \
     connect_to_db, db
-
-import bcrypt
-from sqlalchemy import exc
+from user_validation import register_user, login_user
 
 
 app = Flask(__name__)
@@ -19,6 +17,7 @@ app.secret_key = 'getready'
 
 # Raise error if undefined variable is used in Jinja2
 app.jinja_env.undefined = StrictUndefined
+
 ################################################################################
 
 
@@ -49,28 +48,10 @@ def show_register_page():
 
 
 @app.route('/register', methods=['POST'])
-def register_user():
-    """Adds new user to database."""
+def render_register_user():
+    """Registers a new user and adds them to the database."""
 
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
-    username = request.form.get('username')
-    password = request.form.get('password')
-    gender = request.form.get('gender')
-    phone = request.form.get('phone')
-    street = request.form.get('street')
-    city = request.form.get('city')
-    state = request.form.get('state')
-    zipcode = request.form.get('zipcode')
-
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(10))
-
-    new_user = User(fname=fname, lname=lname, username=username,
-                    password=hashed_password, gender=gender, phone=phone,
-                    street=street, city=city, state=state, zipcode=zipcode)
-
-    db.session.add(new_user)
-    db.session.commit()
+    new_user = register_user()
 
     return render_template('user-info.html', user=new_user)
 
@@ -83,25 +64,12 @@ def show_login_page():
 
 
 @app.route('/login', methods=['POST'])
-def login_user():
-    """Logs in a user by storing session data."""
+def render_login_user():
+    """Logs in a user by validating username and password."""
 
-    username = request.form.get('username')
-    password = request.form.get('password')
+    validation, user_id = login_user()
 
-    user = User.query.filter(User.username == username).first()
-
-    if user is None:
-        return redirect('/?invalid=True')
-
-    user_id = user.user_id
-    hashed = user.password
-
-    validPassword = bcrypt.hashpw(password.encode('utf-8'),
-                                  hashed.encode('utf-8')) == hashed
-
-    if validPassword:
-        session[user_id] = user_id
+    if validation:
         return redirect('/user/' + str(user_id))
 
     return redirect('/?invalid=True')
@@ -111,7 +79,7 @@ def login_user():
 def logout_user():
     """Logs the user out of the app."""
 
-    del session[user_id]
+    del session['user_id']
 
     return redirect('/')
 
