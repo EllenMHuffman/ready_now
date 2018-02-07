@@ -6,11 +6,13 @@
 <body>
 
   <div>
-    Have an account? <a href='/login'>Login!</a>
-    <br>
-    Need an account? <a href='/register'>Register here</a>
-    <br>
-    <a href='/logout'>Log Out</a>
+    <button type='button' id='home'>Home</button>
+    {% if session.get('user_id'): %}
+    <button type='button' id='logout'>Log out</button>
+    {% else %}
+    <button type='button' id='register'>Register</button>
+    <button type='button' id='login'>Log in</button>
+    {% endif %}
   </div>
   <br>
 
@@ -20,11 +22,14 @@
 
   <script>
 
-  {% block js %}
-    // JAVASCRIPT GOES HERE
+    $('#home').on('click', ()=> location.href='/');
+    $('#register').on('click', ()=> location.href='/register');
+    $('#logout').on('click', ()=> location.href='/logout');
+    $('#login').on('click', ()=> location.href='/login');
 
-  {% endblock %}
+    {% block js %}
 
+    {% endblock %}
   </script>
 
 </body>
