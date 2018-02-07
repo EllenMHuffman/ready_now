@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Register</h1>
 
+<label>
+  <form action='/register' method='POST'>
+    First name*: <input type='text' name='fname' require>
+    <br>
+    Last name*: <input type='text' name='lname' require>
+    <br>
+    Username*: <input type='text' name='username' require>
+    <br>
+    Password*: <input type='text' name='password' require>
+    <br>
+    Gender: <select name='gender'>
+      <option value='decline'> -- </option>
+      <option value='female'>Female</option>
+      <option value='male'>Male</option>
+      <option value='other'>Other</option>
+    </select>
+    <br>
+    Phone number: <input type='text' name='phone'>
+    <br>
+    Street: <input type='text' name='street'>
+    <br>
+    City: <input type='text' name='city'>
+    <br>
+    State abbreviation: <input type='text' name='state'>
+    <br>
+    Zipcode: <input type='text' name='zipcode'>
+    <br>
+    <input type='submit' value='Register'>
+  </form>
+</label>
 {% endblock %}

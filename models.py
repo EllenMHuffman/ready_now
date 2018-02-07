@@ -14,8 +14,8 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fname = db.Column(db.String(25), nullable=False)
     lname = db.Column(db.String(25), nullable=False)
-    username = db.Column(db.String(50), default=fname + lname)
-    password = db.Column(db.String(12), nullable=False) # Flask login, handles user session data, library to handle password encryption, "passlib"
+    username = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.String(15), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     street = db.Column(db.String(30), nullable=True)

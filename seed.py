@@ -4,6 +4,7 @@ import models
 from models import User, Session, Activity, UserActivity, Friend, Destination, \
     connect_to_db, db
 from server import app
+import bcrypt
 
 ################################################################################
 
@@ -38,9 +39,11 @@ def load_users():
             fname, lname, username, password, gender, phone, street, city, \
                 state, zipcode = row.split('|')
 
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt(10))
+
             entry = User(fname=fname, lname=lname, username=username, password=
-                         password, gender=gender, phone=phone, street=street,
-                         city=city, state=state, zipcode=zipcode)
+                         hashed_password, gender=gender, phone=phone,
+                         street=street, city=city, state=state, zipcode=zipcode)
 
             db.session.add(entry)
 
