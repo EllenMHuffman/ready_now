@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import User, Session, Activity, UserActivity, Friend, Destination, \
+from models import User, Session, Activity, Record, Friend, Destination, \
     connect_to_db, db
 from user_validation import register_user, login_user
 
@@ -25,8 +25,7 @@ app.jinja_env.undefined = StrictUndefined
 def show_homepage():
     """Displays the homepage for Ready Now."""
 
-    invalid = request.args.get('invalid')
-    return render_template('homepage.html', invalid=invalid)
+    return render_template('homepage.html')
 
 
 @app.route('/timer', methods=['POST'])
@@ -44,53 +43,63 @@ def show_timer_page():
 def show_register_page():
     """Shows registration page."""
 
-    return render_template('register.html')
+    validation = request.args.get('validation')
+    return render_template('register.html', validation=validation)
 
 
 @app.route('/register', methods=['POST'])
 def render_register_user():
     """Registers a new user and adds them to the database."""
 
-    new_user = register_user()
+    validation = register_user()
 
-    return render_template('user-info.html', user=new_user)
+    if validation:
+        return render_template('homepage.html', validation=validation)
+
+    return redirect('/register?validation=False')
 
 
 @app.route('/login')
 def show_login_page():
     """Shows login page."""
 
-    return render_template('login.html')
+    validation = request.args.get('validation')
+    return render_template('login.html', validation=validation)
 
 
 @app.route('/login', methods=['POST'])
 def render_login_user():
     """Logs in a user by validating username and password."""
 
-    validation, user_id = login_user()
+    validation = login_user()
 
     if validation:
-        return redirect('/user/' + str(user_id))
+        return redirect('/profile')
 
-    return redirect('/?invalid=True')
+    return redirect('/login?validation=False')
 
 
 @app.route('/logout')
 def logout_user():
     """Logs the user out of the app."""
 
-    del session['user_id']
+    try:
+        del session['user_id']
+    except KeyError:
+        pass
 
     return redirect('/')
 
 
-@app.route('/user/<user_id>')
-def show_user_page(user_id):
+@app.route('/profile')
+def show_user_page():
     """Shows user profile page when logged in."""
 
-    user = User.query.filter(User.user_id == user_id).one()
+    user_id = session['user_id']
 
-    return render_template('user-info.html', user=user)
+    user = User.query.filter(User.user_id == user_id).one()
+    return render_template('profile.html', user=user)
+
 
 ################################################################################
 

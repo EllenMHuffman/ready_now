@@ -12,8 +12,8 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fname = db.Column(db.String(25), nullable=False)
-    lname = db.Column(db.String(25), nullable=False)
+    fname = db.Column(db.String(25), nullable=True)
+    lname = db.Column(db.String(25), nullable=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.String(15), nullable=True)
@@ -24,7 +24,7 @@ class User(db.Model):
     zipcode = db.Column(db.String(5), nullable=True)
 
     sessions = db.relationship('Session', backref='user')
-    useractivities = db.relationship('UserActivity', backref='user')
+    records = db.relationship('Record', backref='user')
     friends = db.relationship('Friend', backref='user')
     destinations = db.relationship('Destination', backref='user')
 
@@ -44,7 +44,7 @@ class Session(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
                         nullable=False)
 
-    useractivities = db.relationship('UserActivity', backref='session')
+    records = db.relationship('Record', backref='session')
 
     def __repr__(self):
         """Display session information"""
@@ -64,7 +64,7 @@ class Activity(db.Model):
     act_name = db.Column(db.String(25), nullable=False)
     default_time = db.Column(db.Integer, nullable=False)
 
-    useractivities = db.relationship('UserActivity', backref='activity')
+    records = db.relationship('Record', backref='activity')
 
     def __repr__(self):
         """Display activity information"""
@@ -73,12 +73,12 @@ class Activity(db.Model):
             format(self.act_id, self.act_name, self.default_time)
 
 
-class UserActivity(db.Model):
+class Record(db.Model):
     """Records of each activity completed by users."""
 
-    __tablename__ = 'useractivities'
+    __tablename__ = 'records'
 
-    ua_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    record_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
                         nullable=False)
     sess_id = db.Column(db.Integer, db.ForeignKey('sessions.sess_id'),
@@ -89,10 +89,10 @@ class UserActivity(db.Model):
     end_t = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        """Display useractivity information"""
+        """Display record information"""
 
-        return '<UserActivity ua_id={} user_id={} sess_id={} act_id={} start_t={}\
-             end_t={}>'.format(self.ua_id, self.user_id, self.sess_id,
+        return '<Record record_id={} user_id={} sess_id={} act_id={} start_t={}\
+             end_t={}>'.format(self.record_id, self.user_id, self.sess_id,
                                self.act_id, self.start_t, self.end_t)
 
 

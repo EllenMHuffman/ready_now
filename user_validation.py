@@ -1,5 +1,6 @@
 from flask import request, session
 from models import User, db
+from sqlalchemy import exc
 import bcrypt
 
 
@@ -20,16 +21,19 @@ def register_user():
     hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                     bcrypt.gensalt(10))
 
-    new_user = User(fname=fname, lname=lname, username=username,
-                    password=hashed_password, gender=gender, phone=phone,
-                    street=street, city=city, state=state, zipcode=zipcode)
+    try:
+        new_user = User(fname=fname, lname=lname, username=username,
+                        password=hashed_password, gender=gender, phone=phone,
+                        street=street, city=city, state=state, zipcode=zipcode)
+    except exc.IntegrityError:
+        return False
 
     db.session.add(new_user)
     db.session.commit()
 
     session['user_id'] = new_user.user_id
 
-    return new_user
+    return True
 
 
 def login_user():
@@ -41,7 +45,7 @@ def login_user():
     user = User.query.filter(User.username == username).first()
 
     if user is None:
-        return False, None
+        return False
 
     user_id = user.user_id
     hashed = user.password
@@ -50,7 +54,7 @@ def login_user():
                                   hashed.encode('utf-8')) == hashed
 
     if validPassword:
-        session[user_id] = user_id
-        return True, user_id
+        session['user_id'] = user_id
+        return True
 
-    return False, None
+    return False
