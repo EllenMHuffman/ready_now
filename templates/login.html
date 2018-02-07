@@ -18,4 +18,8 @@
 
   $('#login').hide();
 
+  {% if validation == 'False' %}
+    alert('Invalid username and/or password')
+  {% endif %}
+
 {% endblock %}

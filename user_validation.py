@@ -21,14 +21,17 @@ def register_user():
     hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                     bcrypt.gensalt(10))
 
+    new_user = User(fname=fname, lname=lname, username=username,
+                    password=hashed_password, gender=gender, phone=phone,
+                    street=street, city=city, state=state, zipcode=zipcode)
+
     try:
-        new_user = User(fname=fname, lname=lname, username=username,
-                        password=hashed_password, gender=gender, phone=phone,
-                        street=street, city=city, state=state, zipcode=zipcode)
+        db.session.add(new_user)
+        db.session.flush()
     except exc.IntegrityError:
+        db.session.rollback()
         return False
 
-    db.session.add(new_user)
     db.session.commit()
 
     session['user_id'] = new_user.user_id

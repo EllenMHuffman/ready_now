@@ -54,7 +54,7 @@ def render_register_user():
     validation = register_user()
 
     if validation:
-        return render_template('homepage.html', validation=validation)
+        return redirect('/')
 
     return redirect('/register?validation=False')
 
@@ -64,6 +64,8 @@ def show_login_page():
     """Shows login page."""
 
     validation = request.args.get('validation')
+    print validation
+    # validation is None when first displayed, False if invalid attempt
     return render_template('login.html', validation=validation)
 
 

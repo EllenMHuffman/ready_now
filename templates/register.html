@@ -39,4 +39,9 @@
 
   $('#register').hide()
 
+  {% if validation == 'False' %}
+    alert('Username already exists. Choose a new one or click "Log In" if you' +
+          ' already have an account.')
+  {% endif %}
+
 {% endblock %}
