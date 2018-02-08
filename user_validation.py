@@ -1,63 +1,39 @@
-from flask import request, session
+from flask import request
 from models import User, db
-from sqlalchemy import exc
 import bcrypt
 
 
-def register_user():
-    """Adds new user to database."""
+def register_user(request_form):
+    """Checks for existing username and adds new user to database."""
 
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
-    username = request.form.get('username')
-    password = request.form.get('password')
-    gender = request.form.get('gender')
-    phone = request.form.get('phone')
-    street = request.form.get('street')
-    city = request.form.get('city')
-    state = request.form.get('state')
-    zipcode = request.form.get('zipcode')
+    new_user = User.create_user(request_form)
+    result = User.query.filter(User.username == new_user.username)
 
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'),
-                                    bcrypt.gensalt(10))
-
-    new_user = User(fname=fname, lname=lname, username=username,
-                    password=hashed_password, gender=gender, phone=phone,
-                    street=street, city=city, state=state, zipcode=zipcode)
-
-    try:
+    if result.count() == 0:
         db.session.add(new_user)
-        db.session.flush()
-    except exc.IntegrityError:
-        db.session.rollback()
-        return False
+        db.session.commit()
+        return True, new_user
 
-    db.session.commit()
-
-    session['user_id'] = new_user.user_id
-
-    return True
+    return False, None
 
 
-def login_user():
-    """Logs in a user by storing session data."""
+def verify_user(request_form):
+    """Verifies that given username and password match database."""
 
-    username = request.form.get('username')
-    password = request.form.get('password')
+    username = (request_form.get('username')).lower()
+    password = request_form.get('password')
 
     user = User.query.filter(User.username == username).first()
 
     if user is None:
-        return False
+        return False, None
 
-    user_id = user.user_id
     hashed = user.password
 
     validPassword = bcrypt.hashpw(password.encode('utf-8'),
                                   hashed.encode('utf-8')) == hashed
 
     if validPassword:
-        session['user_id'] = user_id
-        return True
+        return True, user
 
-    return False
+    return False, None

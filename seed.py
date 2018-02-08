@@ -1,6 +1,5 @@
 """Utility file to seed readynow database with dummy data in seed_data/"""
 
-import models
 from models import User, Session, Activity, Record, Friend, Destination, \
     connect_to_db, db
 from server import app
@@ -13,7 +12,7 @@ def load_activities():
     """Reads in activities.txt and adds to database."""
 
     # Delete existing data before loading new data
-    Activity.query.delete()
+    # Activity.query.delete()
 
     # Read in activities.txt file and insert data
     with open('seed_data/activities.txt') as f:
@@ -31,7 +30,7 @@ def load_activities():
 def load_users():
     """Reads in users.txt and adds to database."""
 
-    User.query.delete()
+    # User.query.delete()
 
     with open('seed_data/users.txt') as f:
         for row in f:
@@ -53,7 +52,7 @@ def load_users():
 def load_sessions():
     """Reads in sessions.txt and adds to database."""
 
-    Session.query.delete()
+    # Session.query.delete()
 
     with open('seed_data/sessions.txt') as f:
         for row in f:
@@ -70,7 +69,7 @@ def load_sessions():
 def load_records():
     """Reads in records.txt and adds to database."""
 
-    Record.query.delete()
+    # Record.query.delete()
 
     with open('seed_data/records.txt') as f:
         for row in f:
@@ -100,8 +99,10 @@ def load_destinations():
 ################################################################################
 
 if __name__ == '__main__':
+    import os
+    os.system('dropdb readynow')
+    os.system('createdb readynow')
     connect_to_db(app)
-
     db.create_all()
 
     load_users()

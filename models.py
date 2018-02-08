@@ -1,6 +1,8 @@
 """Models and database functions for Ready Now project"""
 
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug import ImmutableMultiDict
+import bcrypt
 
 db = SQLAlchemy()
 ################################################################################
@@ -28,11 +30,41 @@ class User(db.Model):
     friends = db.relationship('Friend', backref='user')
     destinations = db.relationship('Destination', backref='user')
 
+    @classmethod
+    def create_user(cls, request_form):
+        """Instantiates a User object given a registration POST request.
+
+            >>> info = ImmutableMultiDict({'username': 'newuser', 'password':\
+                                           'newpassword'})
+            >>> new_user = User.create_user(info)
+            >>> new_user.username
+            'newuser'
+
+        """
+
+        fname = request_form.get('fname')
+        lname = request_form.get('lname')
+        username = (request_form.get('username')).lower()
+        password = request_form.get('password')
+        gender = request_form.get('gender')
+        phone = request_form.get('phone')
+        street = request_form.get('street')
+        city = request_form.get('city')
+        state = request_form.get('state')
+        zipcode = request_form.get('zipcode')
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                                        bcrypt.gensalt(10))
+
+        return cls(fname=fname, lname=lname, username=username,
+                   password=hashed_password, gender=gender, phone=phone,
+                   street=street, city=city, state=state, zipcode=zipcode)
+
     def __repr__(self):
         """Display user information"""
 
-        return '<User user_id={} name={} {}>'.format(self.user_id, self.fname,
-                                                     self.lname)
+        return '<User user_id={} username={}>'.format(self.user_id,
+                                                      self.username)
 
 
 class Session(db.Model):
@@ -139,10 +171,10 @@ class Destination(db.Model):
 ################################################################################
 
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri='postgresql:///readynow'):
     """Connect the database to Flask app"""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///readynow'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLACHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app

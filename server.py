@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from models import User, Session, Activity, Record, Friend, Destination, \
     connect_to_db, db
-from user_validation import register_user, login_user
+from user_validation import register_user, verify_user
 
 
 app = Flask(__name__)
@@ -51,9 +51,10 @@ def show_register_page():
 def render_register_user():
     """Registers a new user and adds them to the database."""
 
-    validation = register_user()
+    validation, new_user = register_user(request.form)
 
     if validation:
+        session['user_id'] = new_user.user_id
         return redirect('/')
 
     return redirect('/register?validation=False')
@@ -64,18 +65,18 @@ def show_login_page():
     """Shows login page."""
 
     validation = request.args.get('validation')
-    print validation
-    # validation is None when first displayed, False if invalid attempt
+
     return render_template('login.html', validation=validation)
 
 
 @app.route('/login', methods=['POST'])
 def render_login_user():
-    """Logs in a user by validating username and password."""
+    """Logs in a user after validating username and password."""
 
-    validation = login_user()
+    validation, user = verify_user(request.form)
 
     if validation:
+        session['user_id'] = user.user_id
         return redirect('/profile')
 
     return redirect('/login?validation=False')
