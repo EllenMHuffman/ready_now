@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from models import User, Session, Activity, Record, Friend, Destination, \
     connect_to_db, db
-from user_validation import register_user, verify_user
+from helper_functions import add_user, verify_user
 
 
 app = Flask(__name__)
@@ -25,7 +25,10 @@ app.jinja_env.undefined = StrictUndefined
 def show_homepage():
     """Displays the homepage for Ready Now."""
 
-    return render_template('homepage.html')
+    activities = db.session.query(Activity.act_id, Activity.act_name,
+                                  Activity.default_time)
+
+    return render_template('homepage.html', activities=activities)
 
 
 @app.route('/timer', methods=['POST'])
@@ -48,12 +51,14 @@ def show_register_page():
 
 
 @app.route('/register', methods=['POST'])
-def render_register_user():
-    """Registers a new user and adds them to the database."""
+def register_user():
+    """Creates a new user, adds them to the database, and logs them in."""
 
-    validation, new_user = register_user(request.form)
+    new_user = User.create_user(request.form)
+    result = User.query.filter(User.username == new_user.username)
 
-    if validation:
+    if result.count() == 0:
+        add_user(new_user)
         session['user_id'] = new_user.user_id
         return redirect('/')
 
@@ -73,7 +78,12 @@ def show_login_page():
 def render_login_user():
     """Logs in a user after validating username and password."""
 
-    validation, user = verify_user(request.form)
+    username = (request.form.get('username')).lower()
+    password = request.form.get('password')
+
+    user = User.query.filter(User.username == username).first()
+
+    validation = verify_user(user, password)
 
     if validation:
         session['user_id'] = user.user_id

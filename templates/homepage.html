@@ -7,36 +7,17 @@
   <h2>What do you need to do before you're ready?</h2>
   <br>
   <form action='/timer' method='POST'>
-    <input type='checkbox' name='activity' value='1'>Shower</input>
+
+    {% for activity in activities %}
+    <input type='checkbox' name='activity' value={{activity[0]}}
+        data-time={{activity[2]}}>{{ activity[1] }}</input>
     <br>
-    <input type='checkbox' name='activity' value='2'>Wash Hair</input>
-    <br>
-    <input type='checkbox' name='activity' value='3'>Shave</input>
-    <br>
-    <input type='checkbox' name='activity' value='4'>Wash Face</input>
-    <br>
-    <input type='checkbox' name='activity' value='5'>Brush Teeth</input>
-    <br>
-    <input type='checkbox' name='activity' value='6'>Skin Care</input>
-    <br>
-    <input type='checkbox' name='activity' value='7'>Make Up (Simple)</input>
-    <br>
-    <input type='checkbox' name='activity' value='8'>Make Up (Full Face)</input>
-    <br>
-    <input type='checkbox' name='activity' value='9'>Hair Styling (Simple)</input>
-    <br>
-    <input type='checkbox' name='activity' value='10'>Hair Styling (Heat)</input>
-    <br>
-    <input type='checkbox' name='activity' value='11'>Choose Clothes</input>
-    <br>
-    <input type='checkbox' name='activity' value='12'>Get Dressed with Shoes</input>
-    <br>
-    <input type='checkbox' name='activity' value='13'>Accessories</input>
-    <br>
+    {% endfor %}
+
     <br>
     <div>
       <b>Total time until you'll be ready:</b>
-      <span id='total-time'>TOTAL TIME GOES HERE</span>
+      <span id='total-time'></span>
       <!-- The total time should update as user checks boxes with AJAX -->
     </div>
     <br>
@@ -44,4 +25,21 @@
     <input type='submit' value="Go!">
   </form>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+function calculateTime() {
+  let activities = $('input:checked');
+  console.log(activities)
+  let totalTime = 0;
+
+  for (let activity of activities) {
+    totalTime += $(activity).data('time');
+  }
+  $('#total-time').html(totalTime + ' minutes');
+}
+
+$('input').on('click', calculateTime);
+</script>
 {% endblock %}
