@@ -16,10 +16,10 @@
 
 {% block js %}
 
+<script>
   $('#login').hide();
-
   {% if validation == 'False' %}
     alert('Invalid username and/or password')
   {% endif %}
-
+</script>
 {% endblock %}

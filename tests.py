@@ -54,43 +54,24 @@ class FlaskTestsDatabase(unittest.TestCase):
         self.assertEqual(matt.username, result.username)
         self.assertEqual(matt.password, result.password)
 
-    # def test_registration_existing(self):
-    #     """Test for rejection of existing user registration from database."""
-
-    #     jane = User(username='janedoe', password='oops')
-    #     register_user(jane)
-
-    #     self.assertFalse(boolean)
-    #     self.assertIsNone(user)
-
     def test_verify_user_accept(self):
         """Test for validation of existing login credentials."""
 
-        password = ('password').decode('utf-8')
-        jane = User(username='janedoe', password=password)
-        boolean = verify_user(jane, password)
+        info = {'username': 'timmy', 'password': u'password'}
+        timmy = User.create_user(info)
+        boolean = verify_user(timmy, u'password')
 
         self.assertTrue(boolean)
 
     def test_verify_user_username(self):
         """Test for rejection of incorrect password in login credentials."""
 
-        password = ('changeme').decode('utf-8')
-        jane = User(username='janedoe', password=password)
-
-        boolean = verify_user(jane, password)
+        info = {'username': 'timmy', 'password': u'password'}
+        timmy = User.create_user(info)
+        boolean = verify_user(timmy, u'wrong')
 
         self.assertFalse(boolean)
 
-    # def test_verify_user_password(self):
-    #     """Test for rejection of missing username in login credentials."""
-
-    #     jane = ImmutableMultiDict({'username': 'janedoe', 'password':
-    #                                'wrong'})
-    #     boolean, user = verify_user(jane)
-
-    #     self.assertFalse(boolean)
-    #     self.assertIsNone(user)
 
 ################################################################################
 

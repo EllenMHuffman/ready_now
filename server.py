@@ -5,10 +5,10 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import User, Session, Activity, Record, Friend, Destination, \
-    connect_to_db, db
-from helper_functions import add_user, verify_user
-
+from models import (User, Session, Activity, Record, Friend, Destination, db,
+                    connect_to_db)
+from helper_functions import (add_user, verify_user, create_activity_times,
+                              get_user_avg, get_user_avg_timer)
 
 app = Flask(__name__)
 
@@ -28,16 +28,13 @@ def show_homepage():
     activities = db.session.query(Activity.act_id, Activity.act_name,
                                   Activity.default_time)
 
-    activity_time = {}
-
-    for act_id, act_name, default_time in activities:
-        activity_time[act_id] = [act_name, default_time/60]
+    activity_time = create_activity_times(activities)
+    # activity time = {act_id: [act_name, default_time], ...}
 
     if 'user_id' in session:
-        # NEED TO: Query records for user, calculate their avg time for each
-        # activity, and replace that time in the dictionary if it exists
-        # NEXT STEP: Only replace in dictionary if user has >2 times
-        pass
+        user_id = session['user_id']
+
+        activity_time = get_user_avg(user_id, activity_time)
 
     return render_template('homepage.html', activity_time=activity_time)
 
@@ -52,10 +49,12 @@ def show_timer_page():
                                   Activity.default_time).filter(
         Activity.act_id.in_(act_ids)).order_by(Activity.act_id).all()
 
-    activity_time = {}
+    activity_time = create_activity_times(activities)
 
-    for act_id, act_name, default_time in activities:
-        activity_time[act_id] = [act_name, default_time/60]
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        activity_time = get_user_avg_timer(user_id, activity_time, act_ids)
 
     return render_template('timer.html', activity_time=activity_time)
 

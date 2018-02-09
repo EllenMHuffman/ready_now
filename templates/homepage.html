@@ -39,7 +39,7 @@ function calculateTime() {
   for (let activity of activities) {
     totalTime += $(activity).data('time');
   }
-  $('#total-time').html(totalTime + ' minutes');
+  $('#total-time').html((totalTime/60).toFixed(2) + ' minutes');
 }
 
 $('input').on('click', calculateTime);
