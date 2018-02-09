@@ -8,10 +8,12 @@
   <br>
   <form action='/timer' method='POST'>
 
-    {% for activity in activities %}
-    <input type='checkbox' name='activity' value={{activity[0]}}
-        data-time={{activity[2]}}>{{ activity[1] }}</input>
-    <br>
+    {% for activity in activity_time %}
+    <div>
+      <input type='checkbox' name='activity' value={{ activity }}
+          data-time={{ activity_time[activity][1] }}>
+          <label for={{ activity }}> {{ activity_time[activity][0] }}</label>
+    </div>
     {% endfor %}
 
     <br>

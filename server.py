@@ -28,7 +28,18 @@ def show_homepage():
     activities = db.session.query(Activity.act_id, Activity.act_name,
                                   Activity.default_time)
 
-    return render_template('homepage.html', activities=activities)
+    activity_time = {}
+
+    for act_id, act_name, default_time in activities:
+        activity_time[act_id] = [act_name, default_time/60]
+
+    if 'user_id' in session:
+        # NEED TO: Query records for user, calculate their avg time for each
+        # activity, and replace that time in the dictionary if it exists
+        # NEXT STEP: Only replace in dictionary if user has >2 times
+        pass
+
+    return render_template('homepage.html', activity_time=activity_time)
 
 
 @app.route('/timer', methods=['POST'])
@@ -37,9 +48,16 @@ def show_timer_page():
 
     act_ids = request.form.getlist('activity')
 
-    activities = Activity.query.filter(Activity.act_id.in_(act_ids)).all()
+    activities = db.session.query(Activity.act_id, Activity.act_name,
+                                  Activity.default_time).filter(
+        Activity.act_id.in_(act_ids)).order_by(Activity.act_id).all()
 
-    return render_template('timer.html', activities=activities)
+    activity_time = {}
+
+    for act_id, act_name, default_time in activities:
+        activity_time[act_id] = [act_name, default_time/60]
+
+    return render_template('timer.html', activity_time=activity_time)
 
 
 @app.route('/register')
@@ -108,10 +126,13 @@ def logout_user():
 def show_user_page():
     """Shows user profile page when logged in."""
 
-    user_id = session['user_id']
+    if 'user_id' in session:
+        user_id = session['user_id']
 
-    user = User.query.filter(User.user_id == user_id).one()
-    return render_template('profile.html', user=user)
+        user = User.query.filter(User.user_id == user_id).one()
+        return render_template('profile.html', user=user)
+
+    return redirect('/')
 
 
 ################################################################################

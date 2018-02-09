@@ -2,9 +2,9 @@
 
 {% block content %}
 
-  {% for activity in activities %}
+  {% for activity in activity_time %}
 
-    Step: {{ activity.act_name }} --- Remaining Time: {{ activity.default_time}}
+    Step: {{ activity_time[activity][0] }} --- Remaining Time: {{ activity_time[activity][1] }}
     <br>
     <br>
 
