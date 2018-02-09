@@ -3,12 +3,38 @@
 {% block content %}
 
   {% for activity in activity_time %}
-
-    Step: {{ activity_time[activity][0] }} --- Remaining Time:
-    {{ activity_time[activity][1] }} seconds
-    <br>
-    <br>
+    <div>
+      Step: {{ activity_time[activity][0] }} ---
+    </div>
+    <div>
+      Remaining Time: <span class='timer' id='{{ activity }}'>
+        {{ activity_time[activity][1] }} seconds</span>
+      <button type='button' class='start' id='start-{{ activity }}'>Start Timer</button>
+      <button type='button' class='stop' id='stop-{{ activity }}'>Stop Timer</button>
+      <br>
+      <br>
+    </div>
 
   {% endfor %}
 
+{% endblock %}
+
+{% block js %}
+<script>
+
+let time = 10
+let interval = setInterval(function () {
+  $('.timer').html(time);
+  time -= 1;
+}, 1000);
+
+
+function stopTimer() {
+  clearInterval(interval)
+}
+
+// $('.start').on('click', countDown(5));
+$('.stop').on('click', stopTimer);
+
+</script>
 {% endblock %}
