@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+  <button type='button' id='start'>Start!</button>
   {% for activity in activity_time %}
     <div>
       Step: {{ activity_time[activity][0] }} ---
@@ -9,7 +9,6 @@
     <div>
       Remaining Time: <span class='timer' id='{{ activity }}'>
         {{ activity_time[activity][1] }} seconds</span>
-      <button type='button' class='start' id='start-{{ activity }}'>Start Timer</button>
       <button type='button' class='stop' id='stop-{{ activity }}'>Stop Timer</button>
       <br>
       <br>
@@ -22,19 +21,22 @@
 {% block js %}
 <script>
 
-let time = 10
-let interval = setInterval(function () {
-  $('.timer').html(time);
-  time -= 1;
-}, 1000);
-
-
-function stopTimer() {
-  clearInterval(interval)
+function countDown(time) {
+  let interval = setInterval(function () {
+    $('.timer').html(time);
+    time -= 1;
+  }, 1000);
+  if (makeStop == true) {
+    clearInterval(interval);
+  }
 }
 
-// $('.start').on('click', countDown(5));
-$('.stop').on('click', stopTimer);
+
+let time = 15;
+let makeStop = false;
+
+$('#start').on('click', ()=>countDown(time));
+$('.stop').on('click', ()=>(makeStop===true));
 
 </script>
 {% endblock %}
