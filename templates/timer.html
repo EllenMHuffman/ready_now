@@ -1,40 +1,62 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html>
+<head>
+  <title>Ready Now</title>
+</head>
+<body>
 
-{% block content %}
+  <div>
+    <button type='button' id='home'>Home</button>
+    {% if session.get('user_id'): %}
+    <button type='button' id='logout'>Log out</button>
+    {% else %}
+    <button type='button' id='register'>Register</button>
+    <button type='button' id='login'>Log in</button>
+    {% endif %}
+  </div>
+
+  <br>
   <button type='button' id='start'>Start!</button>
   <br>
   <br>
-  {% for activity in activity_time %}
-    <div>
-      Step: {{ activity_time[activity][0] }} ---
-    </div>
-    <div>
-      Remaining Time: <span class='timer' id='{{ activity }}' data-time='{{ activity_time[activity][1] }}'>
-        {{ activity_time[activity][1]/60 }} minutes</span>
-      <button type='button' class='stop' id='stop-{{ activity }}'>Stop Timer</button>
-      <br>
-      <br>
-    </div>
+  <div id='root'></div>
 
-  {% endfor %}
+  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+  <script>
 
-{% endblock %}
+    $('#home').on('click', ()=> location.href='/');
+    $('#register').on('click', ()=> location.href='/register');
+    $('#logout').on('click', ()=> location.href='/logout');
+    $('#login').on('click', ()=> location.href='/login');
 
-{% block js %}
-<script>
+  </script>
 
-let time = 15;
-let interval;
+  <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
+  <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
 
-function countDown(time) {
-  interval = setInterval(function () {
-    $('.timer').html(time);
-    time -= 1;
-    }, 1000);
-  }
+  <script src='http://unpkg.com/babel-standalone'></script>
 
-$('#start').on('click', ()=>countDown(time));
-$('.stop').on('click', ()=>(clearInterval(interval)));
+  <script>
 
-</script>
-{% endblock %}
+    let activity_time = JSON.parse({{ activity_time|tojson }});
+
+    let time;
+    let interval;
+
+    function countDown(time) {
+      interval = setInterval(function () {
+        $('.timer').html(time);
+        time -= 1;
+        }, 1000);
+      }
+
+    $('#start').on('click', ()=>countDown(time));
+    $('.stop').on('click', ()=>(clearInterval(interval)));
+
+  </script>
+
+  <script src='../static/timer.jsx' type='text/jsx'></script>
+  <script src='../static/index.jsx' type="text/jsx"></script>
+
+</body>
+</html>

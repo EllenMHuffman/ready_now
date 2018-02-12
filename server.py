@@ -1,6 +1,7 @@
 """Ready Now web app"""
 
 from jinja2 import StrictUndefined
+import json
 
 from flask import Flask, render_template, redirect, request, session
 from flask_debugtoolbar import DebugToolbarExtension
@@ -55,6 +56,8 @@ def show_timer_page():
         user_id = session['user_id']
 
         activity_time = get_user_avg_timer(user_id, activity_time, act_ids)
+
+    activity_time = json.dumps(activity_time)
 
     return render_template('timer.html', activity_time=activity_time)
 
