@@ -16,13 +16,12 @@
   </div>
 
   <br>
-  <button type='button' id='start'>Start!</button>
   <br>
   <br>
   <div id='root'></div>
 
   <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
-  <script>
+  <script id='login-events'>
 
     $('#home').on('click', ()=> location.href='/');
     $('#register').on('click', ()=> location.href='/register');
@@ -36,26 +35,27 @@
 
   <script src='http://unpkg.com/babel-standalone'></script>
 
-  <script>
+  <script src='../static/timer.jsx' type='text/jsx'></script>
+  <script type='text/jsx' id='js-functions'>
 
     let activity_time = JSON.parse({{ activity_time|tojson }});
+
 
     let time;
     let interval;
 
-    function countDown(time) {
-      interval = setInterval(function () {
-        $('.timer').html(time);
-        time -= 1;
-        }, 1000);
-      }
+    // function countDown(time) {
+    //   interval = setInterval(function () {
+    //     $('#').html(time);
+    //     time -= 1;
+    //     }, 1000);
+    //   }
 
     $('#start').on('click', ()=>countDown(time));
     $('.stop').on('click', ()=>(clearInterval(interval)));
 
   </script>
 
-  <script src='../static/timer.jsx' type='text/jsx'></script>
   <script src='../static/index.jsx' type="text/jsx"></script>
 
 </body>
