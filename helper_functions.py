@@ -69,8 +69,3 @@ def get_user_avg_timer(user_id, activity_time, act_ids):
         activity_time[act_id][1] = int(timedelta.total_seconds())
 
     return activity_time
-
-
-
-
-
