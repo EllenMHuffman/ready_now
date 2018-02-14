@@ -1,13 +1,6 @@
 'use strict';
 
 class ActivitiesContainer extends React.Component {
-  startActivities() {
-    alert('Working!!');
-  }
-
-  stopActivities() {
-    alert('stahhhhhp')
-  }
 
   calculateETA() {
     let timeNow = moment();
@@ -29,10 +22,10 @@ class ActivitiesContainer extends React.Component {
     }
     return (
       <div>
-      <button onClick={this.startActivities} type='button'>Start</button>
+      <ButtonEvent func='start' message='Start' />
       {activities}
       <br />
-      <button onClick={this.stopActivities} type='button'>Stop</button>
+      <ButtonEvent func='stop' message='Stop' />
       <div>Initial ETA: {totalTime.format('h:mm a')}</div>
       </div>
     );
@@ -109,7 +102,7 @@ class Timer extends React.Component {
     return (
       <div>
         m: {this.state.time.m} s: {this.state.time.s}
-        <button onClick={this.startTimer}>Next</button>
+        <button onClick={this.startTimer}>Start</button>
       </div>
     );
   }
@@ -118,6 +111,37 @@ class Timer extends React.Component {
 // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
 // Fabian Schultz
 
+class ButtonEvent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { display: false };
+  }
 
+  actPair = {
+    'start' : this.startActivities,
+    'stop' : this.stopActivities,
+    'next' : this.nextActivity
+  }
+
+  startActivities() {
+    alert('Working!!');
+  }
+
+  stopActivities() {
+    alert('stahhhhhp')
+  }
+
+  nextActivity() {
+    alert('Go to next activity')
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.actPair[this.props.func]} type='button'>{this.props.message}</button>
+      </div>
+    );
+  }
+}
 
 
