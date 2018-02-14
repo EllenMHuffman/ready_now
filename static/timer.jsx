@@ -26,24 +26,97 @@ class ActivitiesContainer extends React.Component {
       activities.push(<Activity id={activity} name={current_activity[0]}
                       time={current_activity[1]} />);
     }
-    return (<div>
-      <button onClick={this.startActivities} type='button' id='start'>Start</button>
+    return (
+      <div>
+      <button onClick={this.startActivities} type='button'>Start</button>
       {activities}
-      <button onClick={this.stopActivities} type='button' id='stop'>Stop</button>
-      <div>Projected ETA: {totalTime.format('h:mm a')}</div>
-      </div>)
+      <br />
+      <button onClick={this.stopActivities} type='button'>Stop</button>
+      <div>Initial ETA: {totalTime.format('h:mm a')}</div>
+      </div>
+    );
   }
 }
 
 class Activity extends React.Component {
   render() {
-    return <div><span> {this.props.name}:</span>
-    <span> {(this.props.time)/60} minutes</span></div>
+    return (
+      <div>
+        <span> {this.props.name}:</span>
+        <span> <Timer /> </span>
+      </div>
+    );
   }
 }
 
 class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { display: false, time: {}, seconds: 5};
+    this.timer = 0;
+    this.toggleDisplay = this.toggleDisplay.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.countDown = this.countDown.bind(this);
+  }
+
+  toggleDisplay() {
+    let newDisplay = this.state.display == false ? true : false;
+    this.setState({ display: newDisplay });
+  }
+
+  secondsToTime(secs) {
+    let hours = Math.floor(secs / (60 * 60));
+
+    let divisor_for_minutes = secs % (60 * 60);
+    let minutes = Math.floor(divisor_for_minutes / 60);
+
+    let divisor_for_seconds = divisor_for_minutes % 60;
+    let seconds = Math.ceil(divisor_for_seconds);
+
+    let obj = {
+      'h': hours,
+      'm': minutes,
+      's': seconds
+    };
+    return obj;
+  }
+
+  componentDidMount() {
+    let timeLeftVar = this.secondsToTime(this.state.seconds);
+    this.setState({ time: timeLeftVar });
+  }
+
+  startTimer() {
+    if (this.timer == 0) {
+      this.timer = setInterval(this.countDown, 1000);
+    }
+  }
+
+  countDown() {
+    let seconds = this.state.seconds - 1;
+    this.setState({
+      time: this.secondsToTime(seconds),
+      seconds: seconds,
+    });
+
+    if (seconds == 0) {
+      clearInterval(this.timer);
+    }
+  }
+
   render() {
-    return
+    return (
+      <div>
+        <button onClick={this.startTimer}>Start</button>
+        m: {this.state.time.m} s: {this.state.time.s}
+      </div>
+    );
   }
 }
+
+// https://stackoverflow.com/questions/40885923/countdown-timer-in-react
+// Fabian Schultz
+
+
+
+

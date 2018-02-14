@@ -18,6 +18,7 @@
   <br>
   <br>
   <div id='root'></div>
+  <div id='timer-test'></div>
 
   <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
   <script id='login-events'>
@@ -43,23 +44,9 @@
     ReactDOM.render(
     <ActivitiesContainer data={ activity_time } />,
     document.getElementById('root')
-    )
-
-    let time;
-    let interval;
-
-    // function countDown(time) {
-    //   interval = setInterval(function () {
-    //     $('#').html(time);
-    //     time -= 1;
-    //     }, 1000);
-    //   }
-
-    // $('#start').on('click', ()=>countDown(time));
-    // $('.stop').on('click', ()=>(clearInterval(interval)));
+    );
 
   </script>
-
   <!-- <script src='../static/index.jsx' type="text/jsx"></script> -->
 
 </body>
