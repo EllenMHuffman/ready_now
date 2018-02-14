@@ -23,8 +23,9 @@ class ActivitiesContainer extends React.Component {
     let activities = [];
     for (let activity in this.props.data) {
       let current_activity = this.props.data[activity];
-      activities.push(<Activity id={activity} name={current_activity[0]}
-                      time={current_activity[1]} />);
+      activities.push(<Activity id={activity}
+                                name={current_activity[0]}
+                                time={current_activity[1]} />);
     }
     return (
       <div>
@@ -43,7 +44,7 @@ class Activity extends React.Component {
     return (
       <div>
         <span> {this.props.name}:</span>
-        <span> <Timer /> </span>
+        <span> <Timer time={this.props.time} /> </span>
       </div>
     );
   }
@@ -52,7 +53,7 @@ class Activity extends React.Component {
 class Timer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { display: false, time: {}, seconds: 5};
+    this.state = { display: false, time: {}, seconds: this.props.time};
     this.timer = 0;
     this.toggleDisplay = this.toggleDisplay.bind(this);
     this.startTimer = this.startTimer.bind(this);
@@ -107,8 +108,8 @@ class Timer extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.startTimer}>Start</button>
         m: {this.state.time.m} s: {this.state.time.s}
+        <button onClick={this.startTimer}>Next</button>
       </div>
     );
   }
