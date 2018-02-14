@@ -2,6 +2,14 @@
 
 class ActivitiesContainer extends React.Component {
 
+  startActivities() {
+    alert('Working!!');
+  }
+
+  stopActivities() {
+    alert('stahhhhhp')
+  }
+
   calculateETA() {
     let timeNow = moment();
     let totalTime = 0;
@@ -22,10 +30,11 @@ class ActivitiesContainer extends React.Component {
     }
     return (
       <div>
-      <ButtonEvent func='start' message='Start' />
+      <button onClick={this.startActivities} type='button'>Begin N/A </button>
       {activities}
       <br />
-      <ButtonEvent func='stop' message='Stop' />
+      <button onClick={this.stopActivities} type='button'>Finish N/A </button>
+      <br />
       <div>Initial ETA: {totalTime.format('h:mm a')}</div>
       </div>
     );
@@ -46,11 +55,16 @@ class Activity extends React.Component {
 class Timer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { display: false, time: {}, seconds: this.props.time};
+    this.state = { display: false,
+                   time: {},
+                   seconds: this.props.time,
+                   stop: false
+                 };
     this.timer = 0;
     this.toggleDisplay = this.toggleDisplay.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
   }
 
   toggleDisplay() {
@@ -93,42 +107,13 @@ class Timer extends React.Component {
       seconds: seconds,
     });
 
-    if (seconds == 0) {
+    if (this.state.stop == true) {
       clearInterval(this.timer);
     }
   }
 
-  render() {
-    return (
-      <div>
-        m: {this.state.time.m} s: {this.state.time.s}
-        <button onClick={this.startTimer}>Start</button>
-      </div>
-    );
-  }
-}
-
-// https://stackoverflow.com/questions/40885923/countdown-timer-in-react
-// Fabian Schultz
-
-class ButtonEvent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { display: false };
-  }
-
-  actPair = {
-    'start' : this.startActivities,
-    'stop' : this.stopActivities,
-    'next' : this.nextActivity
-  }
-
-  startActivities() {
-    alert('Working!!');
-  }
-
-  stopActivities() {
-    alert('stahhhhhp')
+  stopTimer() {
+    this.setState({ stop: true });
   }
 
   nextActivity() {
@@ -138,10 +123,15 @@ class ButtonEvent extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.actPair[this.props.func]} type='button'>{this.props.message}</button>
+        {this.state.time.m}:{this.state.time.s} ....
+        <button onClick={this.startTimer}>Start</button>
+        <button onClick={this.stopTimer}>Stop</button>
       </div>
     );
   }
 }
+
+// https://stackoverflow.com/questions/40885923/countdown-timer-in-react
+// Fabian Schultz
 
 
