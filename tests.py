@@ -4,7 +4,7 @@ from Flask import session
 from models import User, db, connect_to_db
 from server import app
 from seed import load_users, load_activities, load_sessions, load_records
-from helper_functions import add_user, verify_user
+from helper_functions import update_db, verify_user
 
 ################################################################################
 
@@ -42,11 +42,11 @@ class FlaskTestsDatabase(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    def test_add_user(self):
+    def test_update_db(self):
         """Test for successful addition of new user to database."""
 
         matt = User(username='matt', password='password')
-        add_user(matt)
+        update_db(matt)
 
         result = User.query.filter(User.username == 'matt').first()
 

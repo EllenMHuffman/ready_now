@@ -24,7 +24,7 @@ class ActivitiesContainer extends React.Component {
     let activities = [];
     for (let activity in this.props.data) {
       let current_activity = this.props.data[activity];
-      activities.push(<Activity id={activity}
+      activities.push(<Activity act_id={activity}
                                 name={current_activity[0]}
                                 time={current_activity[1]} />);
     }
@@ -46,7 +46,7 @@ class Activity extends React.Component {
     return (
       <div>
         <span> {this.props.name}:</span>
-        <span> <Timer time={this.props.time} /> </span>
+        <span> <Timer time={this.props.time} act_id={this.props.act_id}/> </span>
       </div>
     );
   }
@@ -58,7 +58,9 @@ class Timer extends React.Component {
     this.state = { display: false,
                    time: {},
                    seconds: this.props.time,
-                   stop: false
+                   active: true,
+                   start_t: null,
+                   end_t: null
                  };
     this.timer = 0;
     this.toggleDisplay = this.toggleDisplay.bind(this);
@@ -101,25 +103,33 @@ class Timer extends React.Component {
   }
 
   countDown() {
+    let timeNow = Math.floor(Date.now() / 1000);
     let seconds = this.state.seconds - 1;
     this.setState({
       time: this.secondsToTime(seconds),
       seconds: seconds,
+      start_t: timeNow,
     });
+        console.log(this.state);
 
-    if (this.state.stop == true) {
+
+    if (this.state.active == false) {
       clearInterval(this.timer);
     }
   }
 
   stopTimer() {
-    this.setState({ stop: true });
+    let timeNow = Math.floor(Date.now() / 1000);
+    this.setState({ active: false,
+                    end_t: timeNow
+                  });
+        console.log(this.state);
+
   }
 
   nextActivity() {
     alert('Go to next activity')
   }
-
   render() {
     return (
       <div>

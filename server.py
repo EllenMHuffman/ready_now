@@ -8,7 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
-from helper_functions import (add_user, verify_user, create_activity_times,
+from helper_functions import (update_db, verify_user, create_activity_times,
                               get_user_avg, get_user_avg_timer)
 
 app = Flask(__name__)
@@ -44,14 +44,19 @@ def show_homepage():
 def show_timer_page():
     """Shows activities selected by user and their countdown timers."""
 
+    # Assume user is on guest account
+    user_id = 1
+
     act_ids = request.form.getlist('activity')
 
     activities = db.session.query(Activity.act_id, Activity.act_name,
                                   Activity.default_time).filter(
         Activity.act_id.in_(act_ids)).order_by(Activity.act_id).all()
 
+    # activity_time = {act_id: [act_name, default_time]}
     activity_time = create_activity_times(activities)
 
+    # If user is logged in, use their average activity times
     if 'user_id' in session:
         user_id = session['user_id']
 
@@ -59,7 +64,36 @@ def show_timer_page():
 
     activity_time = json.dumps(activity_time)
 
+    # Update sessions table to obtain unique session ID
+    new_session = Session(user_id=user_id)
+    update_db(new_session)
+    # Store sess_id in session for updating records later
+    session['sess_id'] = new_session.sess_id
+
     return render_template('timer.html', activity_time=activity_time)
+
+
+@app.route('/add-record', methods=['POST'])
+def add_record():
+    """Updates the database each time a user completes an activity."""
+
+    sess_id = session['sess_id']
+    act_id = request.form.get('act_id')
+    start_t = request.form.get('start_t')
+    end_t = request.form.get('end_t')
+
+    # Log records on guest account
+    user_id = 1
+
+    # Log records on user's account
+    if session['user_id']:
+        user_id = session['user_id']
+
+    new_record = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
+                        start_t=start_t, end_t=end_t)
+    update_db(new_record)
+
+    return 'attempted Record update'
 
 
 @app.route('/register')
@@ -78,7 +112,7 @@ def register_user():
     result = User.query.filter(User.username == new_user.username)
 
     if result.count() == 0:
-        add_user(new_user)
+        update_db(new_user)
         session['user_id'] = new_user.user_id
         return redirect('/')
 

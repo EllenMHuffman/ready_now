@@ -49,10 +49,9 @@ def load_sessions():
 
     with open('seed_data/sessions.txt') as f:
         for row in f:
-            row = row.strip()
-            sess_id, user_id = row.split('|')
+            user_id = row.strip()
 
-            entry = Session(sess_id=sess_id, user_id=user_id)
+            entry = Session(user_id=user_id)
 
             db.session.add(entry)
 

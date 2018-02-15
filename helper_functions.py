@@ -5,10 +5,10 @@ import bcrypt
 ################################################################################
 
 
-def add_user(new_user):
+def update_db(new_row):
     """Adds new user to database."""
 
-    db.session.add(new_user)
+    db.session.add(new_row)
     db.session.commit()
     return
 
