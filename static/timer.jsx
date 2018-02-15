@@ -67,6 +67,7 @@ class Timer extends React.Component {
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
+    this.sendData = this.sendData.bind(this);
   }
 
   toggleDisplay() {
@@ -98,20 +99,18 @@ class Timer extends React.Component {
 
   startTimer() {
     if (this.timer == 0) {
+      let timeNow = Math.floor(Date.now() / 1000);
       this.timer = setInterval(this.countDown, 1000);
+      this.setState({start_t: timeNow});
     }
   }
 
   countDown() {
-    let timeNow = Math.floor(Date.now() / 1000);
     let seconds = this.state.seconds - 1;
     this.setState({
       time: this.secondsToTime(seconds),
       seconds: seconds,
-      start_t: timeNow,
     });
-        console.log(this.state);
-
 
     if (this.state.active == false) {
       clearInterval(this.timer);
@@ -123,8 +122,17 @@ class Timer extends React.Component {
     this.setState({ active: false,
                     end_t: timeNow
                   });
-        console.log(this.state);
+  }
 
+  sendData() {
+    let data = {start_t: this.state.start_t,
+           end_t: this.state.end_t,
+           act_id: this.props.act_id};
+
+    // $.ajax('/add-record', {data: data, method: 'POST'});
+    fetch('/add-record', {body: JSON.stringify(data),
+                          method: 'post',
+                          credentials: 'include'});
   }
 
   nextActivity() {
@@ -135,7 +143,7 @@ class Timer extends React.Component {
       <div>
         {this.state.time.m}:{this.state.time.s} ....
         <button onClick={this.startTimer}>Start</button>
-        <button onClick={this.stopTimer}>Stop</button>
+        <button onClick={()=>(this.stopTimer(), this.sendData())}>Stop</button>
       </div>
     );
   }

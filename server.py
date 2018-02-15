@@ -77,16 +77,17 @@ def show_timer_page():
 def add_record():
     """Updates the database each time a user completes an activity."""
 
+    timer_data = json.loads(request.data)
     sess_id = session['sess_id']
-    act_id = request.form.get('act_id')
-    start_t = request.form.get('start_t')
-    end_t = request.form.get('end_t')
+    act_id = timer_data['act_id']
+    start_t = timer_data['start_t']
+    end_t = timer_data['end_t']
 
     # Log records on guest account
     user_id = 1
 
     # Log records on user's account
-    if session['user_id']:
+    if 'user_id' in session:
         user_id = session['user_id']
 
     new_record = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
