@@ -6,26 +6,19 @@
   <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
 
   <script src='http://unpkg.com/babel-standalone'></script>
-  <script src='../static/js/account.jsx' type='text/jsx'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
   <script src='../static/js/timer.jsx' type='text/jsx'></script>
+  <script src='../static/js/navbar.jsx' type='text/jsx'></script>
 </head>
 <body>
 
-  <div id='navbar'>
-  </div>
-
-  <script type='text/jsx'>
-  </script>
+  <div id='home'></div>
   <br>
   <br>
   <div id='root'></div>
-  <div id='timer-test'></div>
 
-
-
-  <script type='text/jsx' id='js-functions'>
-    ReactDOM.render(<NavBar />, document.getElementById('navbar'));
+  <script type='text/jsx'>
+    ReactDOM.render(<Avatart />, document.getElementById('home'));
 
     let activity_time = JSON.parse({{ activity_time|tojson }});
 
@@ -35,7 +28,6 @@
     );
 
   </script>
-  <!-- <script src='../static/index.jsx' type="text/jsx"></script> -->
 
 </body>
 </html>

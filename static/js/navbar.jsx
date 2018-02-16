@@ -1,13 +1,13 @@
 'use strict';
 
-class NavBar extends React.Component {
-  validateUser() {
-    // AJAX request to validate user
-    return response;
-  }
+class Avatart extends React.Component {
+  // validateUser() {
+  //   // AJAX request to validate user
+  //   return response;
+  // }
 
   render() {
-    let response = validateUser();
+    let response = true;
     let buttons = [<button onClick={()=> location.href='/'}>Home</button>];
 
     if (response === true) {
@@ -18,6 +18,6 @@ class NavBar extends React.Component {
       buttons.push(<button onClick={()=> location.href='/login'}>Log In</button>);
     }
 
-    return <div>{buttons}</div>
+    return (<div>{buttons}</div>);
   }
 }

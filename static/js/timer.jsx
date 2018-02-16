@@ -7,7 +7,7 @@ class ActivitiesContainer extends React.Component {
   }
 
   stopActivities() {
-    alert('stahhhhhp')
+    alert('stahhhhhp');
   }
 
   calculateETA() {
