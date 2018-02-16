@@ -7,30 +7,15 @@
 
   <script src='http://unpkg.com/babel-standalone'></script>
   <script src='../static/js/account.jsx' type='text/jsx'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
+  <script src='../static/js/timer.jsx' type='text/jsx'></script>
 </head>
 <body>
 
-  <div id='home'>
-  </div>
-  <div id='register'>
-  </div>
-  <div id='login'>
-  </div>
-  <div id='logout'>
-  </div>
-  <div id='profile'>
+  <div id='navbar'>
   </div>
 
   <script type='text/jsx'>
-    ReactDOM.render(<Home />, document.getElementById('home'));
-
-    if (sessionStorage.getItem('user_id')) {
-      ReactDOM.render(<LogOut />, document.getElementById('logout'));
-      ReactDOM.render(<Profile />, document.getElementById('profile'));
-    } else {
-      ReactDOM.render(<Register />, document.getElementById('register'));
-      ReactDOM.render(<LogIn />, document.getElementById('login'));
-    }
   </script>
   <br>
   <br>
@@ -38,17 +23,16 @@
   <div id='timer-test'></div>
 
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
 
-  <script src='../static/js/timer.jsx' type='text/jsx'></script>
   <script type='text/jsx' id='js-functions'>
+    ReactDOM.render(<NavBar />, document.getElementById('navbar'));
 
-    // let activity_time = JSON.parse({{ activity_time|tojson }});
+    let activity_time = JSON.parse({{ activity_time|tojson }});
 
-    // ReactDOM.render(
-    // <ActivitiesContainer data={ activity_time } />,
-    // document.getElementById('root')
-    // );
+    ReactDOM.render(
+    <ActivitiesContainer data={ activity_time } />,
+    document.getElementById('root')
+    );
 
   </script>
   <!-- <script src='../static/index.jsx' type="text/jsx"></script> -->
