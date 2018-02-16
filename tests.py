@@ -14,12 +14,6 @@ from helper_functions import update_db, verify_user
 #     def test_function(self):
 #         assert importedfile.myfunction(inputs) == output
 ################################################################################
-try:
-    os.system('dropdb testdb')
-except:
-    pass
-
-os.system('createdb testdb')
 
 
 class FlaskTestsDatabase(unittest.TestCase):

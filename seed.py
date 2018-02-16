@@ -1,7 +1,7 @@
 """Utility file to seed readynow database with dummy data in seed_data/"""
 
-from models import User, Session, Activity, Record, Friend, Destination, \
-    connect_to_db, db
+from models import (User, Session, Activity, Record, Friend, Destination,
+                    connect_to_db, db)
 from server import app
 import bcrypt
 
@@ -89,9 +89,6 @@ def load_destinations():
 ################################################################################
 
 if __name__ == '__main__':
-    import os
-    os.system('dropdb readynow')
-    os.system('createdb readynow')
     connect_to_db(app)
     db.create_all()
 

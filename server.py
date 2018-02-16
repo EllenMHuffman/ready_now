@@ -49,6 +49,8 @@ def show_timer_page():
     user_id = 1
 
     act_ids = request.form.getlist('activity')
+    if len(act_ids) == 0:
+        return redirect('/')
 
     activities = db.session.query(Activity.act_id, Activity.act_name,
                                   Activity.default_time).filter(

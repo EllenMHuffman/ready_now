@@ -7,6 +7,7 @@ This is a Flask app that helps users get ready and be out the door on time. User
 ```
 $ pip install requirements.txt
 $ createdb readynow
+$ createdb testdb
 $ python seed.py
 $ python server.py
 ```

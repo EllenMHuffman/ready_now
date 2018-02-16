@@ -7,7 +7,7 @@ class ActivitiesContainer extends React.Component {
   }
 
   stopActivities() {
-    alert('stahhhhhp')
+    alert('stahhhhhp');
   }
 
   calculateETA() {
@@ -138,6 +138,7 @@ class Timer extends React.Component {
   nextActivity() {
     alert('Go to next activity')
   }
+
   render() {
     return (
       <div>

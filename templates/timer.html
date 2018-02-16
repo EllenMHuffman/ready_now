@@ -2,49 +2,53 @@
 <html>
 <head>
   <title>Ready Now</title>
+  <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
+  <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
+
+  <script src='http://unpkg.com/babel-standalone'></script>
+  <script src='../static/js/account.jsx' type='text/jsx'></script>
 </head>
 <body>
 
-  <div>
-    <button type='button' id='home'>Home</button>
-    {% if session.get('user_id'): %}
-    <button type='button' id='logout'>Log out</button>
-    {% else %}
-    <button type='button' id='register'>Register</button>
-    <button type='button' id='login'>Log in</button>
-    {% endif %}
+  <div id='home'>
+  </div>
+  <div id='register'>
+  </div>
+  <div id='login'>
+  </div>
+  <div id='logout'>
+  </div>
+  <div id='profile'>
   </div>
 
+  <script type='text/jsx'>
+    ReactDOM.render(<Home />, document.getElementById('home'));
+
+    if (sessionStorage.getItem('user_id')) {
+      ReactDOM.render(<LogOut />, document.getElementById('logout'));
+      ReactDOM.render(<Profile />, document.getElementById('profile'));
+    } else {
+      ReactDOM.render(<Register />, document.getElementById('register'));
+      ReactDOM.render(<LogIn />, document.getElementById('login'));
+    }
+  </script>
   <br>
   <br>
   <div id='root'></div>
   <div id='timer-test'></div>
 
-  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
-  <script id='login-events'>
 
-    $('#home').on('click', ()=> location.href='/');
-    $('#register').on('click', ()=> location.href='/register');
-    $('#logout').on('click', ()=> location.href='/logout');
-    $('#login').on('click', ()=> location.href='/login');
-
-  </script>
-
-  <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
-  <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
-
-  <script src='http://unpkg.com/babel-standalone'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
 
-  <script src='../static/timer.jsx' type='text/jsx'></script>
+  <script src='../static/js/timer.jsx' type='text/jsx'></script>
   <script type='text/jsx' id='js-functions'>
 
-    let activity_time = JSON.parse({{ activity_time|tojson }});
+    // let activity_time = JSON.parse({{ activity_time|tojson }});
 
-    ReactDOM.render(
-    <ActivitiesContainer data={ activity_time } />,
-    document.getElementById('root')
-    );
+    // ReactDOM.render(
+    // <ActivitiesContainer data={ activity_time } />,
+    // document.getElementById('root')
+    // );
 
   </script>
   <!-- <script src='../static/index.jsx' type="text/jsx"></script> -->
