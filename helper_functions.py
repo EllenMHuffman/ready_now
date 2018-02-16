@@ -1,5 +1,6 @@
 from models import db, Record
 from sqlalchemy.sql import func
+from datetime import datetime
 import bcrypt
 
 ################################################################################
@@ -69,3 +70,9 @@ def get_user_avg_timer(user_id, activity_time, act_ids):
         activity_time[act_id][1] = int(timedelta.total_seconds())
 
     return activity_time
+
+
+def convert_to_datetime(js_time):
+    """Takes integer of JavaScript time and converts to datetime object."""
+
+    return datetime.fromtimestamp(js_time/1000)

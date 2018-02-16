@@ -9,7 +9,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
 from helper_functions import (update_db, verify_user, create_activity_times,
-                              get_user_avg, get_user_avg_timer)
+                              get_user_avg, get_user_avg_timer,
+                              convert_to_datetime)
 
 app = Flask(__name__)
 
@@ -80,8 +81,12 @@ def add_record():
     timer_data = json.loads(request.data)
     sess_id = session['sess_id']
     act_id = timer_data['act_id']
-    start_t = timer_data['start_t']
-    end_t = timer_data['end_t']
+    js_start = timer_data['start_t']
+    print js_start
+    start_t = convert_to_datetime(js_start)
+    js_end = timer_data['end_t']
+    print js_end
+    end_t = convert_to_datetime(js_end)
 
     # Log records on guest account
     user_id = 1

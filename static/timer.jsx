@@ -99,7 +99,7 @@ class Timer extends React.Component {
 
   startTimer() {
     if (this.timer == 0) {
-      let timeNow = Math.floor(Date.now() / 1000);
+      let timeNow = Math.floor(Date.now());
       this.timer = setInterval(this.countDown, 1000);
       this.setState({start_t: timeNow});
     }
@@ -118,21 +118,21 @@ class Timer extends React.Component {
   }
 
   stopTimer() {
-    let timeNow = Math.floor(Date.now() / 1000);
+    let timeNow = Math.floor(Date.now());
     this.setState({ active: false,
                     end_t: timeNow
                   });
   }
 
   sendData() {
-    let data = {start_t: this.state.start_t,
-           end_t: this.state.end_t,
-           act_id: this.props.act_id};
-
-    // $.ajax('/add-record', {data: data, method: 'POST'});
-    fetch('/add-record', {body: JSON.stringify(data),
-                          method: 'post',
-                          credentials: 'include'});
+    setTimeout( ()=> {
+      let data = {start_t: this.state.start_t,
+             end_t: this.state.end_t,
+             act_id: this.props.act_id};
+      fetch('/add-record', {body: JSON.stringify(data),
+                            method: 'post',
+                            credentials: 'include'});
+    }, 2000);
   }
 
   nextActivity() {
