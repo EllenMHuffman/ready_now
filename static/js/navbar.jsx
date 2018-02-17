@@ -5,7 +5,7 @@ class NavBar extends React.Component {
     super(props);
     this.state = {'response': false};
     this.validateUser = this.validateUser.bind(this);
-    this.validateUser()
+    this.validateUser();
   }
 
   validateUser() {
@@ -16,14 +16,19 @@ class NavBar extends React.Component {
   }
 
   render() {
-    let buttons = [<button onClick={()=> location.href='/'}>Home</button>];
+    let buttons = [<button key='home'
+                    onClick={()=> location.href='/'}>Home</button>];
 
     if (this.state['response'] === true) {
-      buttons.push(<button onClick={()=> location.href='/logout'}>Log Out</button>);
-      buttons.push(<button onClick={()=> location.href='/profile'}>Profile</button>);
+      buttons.push(<button key='logout'
+                    onClick={()=> location.href='/logout'}>Log Out</button>);
+      buttons.push(<button key='profile'
+                    onClick={()=> location.href='/profile'}>Profile</button>);
     } else {
-      buttons.push(<button onClick={()=> location.href='/register'}>Register</button>);
-      buttons.push(<button onClick={()=> location.href='/login'}>Log In</button>);
+      buttons.push(<button key='register'
+                    onClick={()=> location.href='/register'}>Register</button>);
+      buttons.push(<button key='login'
+                    onClick={()=> location.href='/login'}>Log In</button>);
     }
 
     return (<div>{buttons}</div>);

@@ -24,7 +24,8 @@ class ActivitiesContainer extends React.Component {
     let activities = [];
     for (let activity in this.props.data) {
       let current_activity = this.props.data[activity];
-      activities.push(<Activity act_id={activity}
+      activities.push(<Activity key={activity}
+                                act_id={activity}
                                 name={current_activity[0]}
                                 time={current_activity[1]} />);
     }
@@ -46,7 +47,8 @@ class Activity extends React.Component {
     return (
       <div>
         <span> {this.props.name}:</span>
-        <span> <Timer time={this.props.time} act_id={this.props.act_id}/> </span>
+        <span> <Timer time={this.props.time}
+                      act_id={this.props.act_id}/> </span>
       </div>
     );
   }
