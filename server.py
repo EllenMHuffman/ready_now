@@ -3,7 +3,7 @@
 from jinja2 import StrictUndefined
 import json
 
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
@@ -177,6 +177,16 @@ def show_user_page():
         return render_template('profile.html', user=user)
 
     return redirect('/')
+
+
+@app.route('/validate-user', methods=['POST'])
+def validate_user():
+    """Check if user is logged in."""
+
+    if 'user_id' in session:
+        return jsonify({'value': True})
+
+    return jsonify({'value': False})
 
 
 ################################################################################

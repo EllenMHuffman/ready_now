@@ -1,16 +1,24 @@
 'use strict';
 
-class Avatart extends React.Component {
-  // validateUser() {
-  //   // AJAX request to validate user
-  //   return response;
-  // }
+class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {'response': false};
+    this.validateUser = this.validateUser.bind(this);
+    this.validateUser()
+  }
+
+  validateUser() {
+    fetch('/validate-user', {method: 'post',
+                             credentials: 'include'})
+                   .then((response)=> response.json())
+                   .then((data)=>  this.setState({'response': data.value}));
+  }
 
   render() {
-    let response = true;
     let buttons = [<button onClick={()=> location.href='/'}>Home</button>];
 
-    if (response === true) {
+    if (this.state['response'] === true) {
       buttons.push(<button onClick={()=> location.href='/logout'}>Log Out</button>);
       buttons.push(<button onClick={()=> location.href='/profile'}>Profile</button>);
     } else {
