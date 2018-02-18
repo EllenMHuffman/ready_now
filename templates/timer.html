@@ -9,25 +9,24 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
   <script src='../static/js/timer.jsx' type='text/jsx'></script>
   <script src='../static/js/navbar.jsx' type='text/jsx'></script>
-</head>
-<body>
-
-  <div id='home'></div>
-  <br>
-  <br>
-  <div id='root'></div>
-
   <script type='text/jsx'>
-    ReactDOM.render(<NavBar />, document.getElementById('home'));
+    ReactDOM.render(<NavBar />, document.getElementById('nav'));
 
     let activity_time = JSON.parse({{ activity_time|tojson }});
 
     ReactDOM.render(
-    <ActivitiesContainer data={ activity_time } />,
+    <TimersContainer data={ activity_time } />,
     document.getElementById('root')
     );
-
   </script>
+</head>
+<body>
+
+  <div id='nav'></div>
+  <br>
+  <br>
+  <div id='root'></div>
+
 
 </body>
 </html>

@@ -2,42 +2,30 @@
 <html>
 <head>
   <title>Ready Now</title>
+  <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
+  <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
+
+  <script src='http://unpkg.com/babel-standalone'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
+  <script src='../static/js/navbar.jsx' type='text/jsx'></script>
+  <script src='../static/js/homepage.jsx' type='text/jsx'></script>
+  <script src='../static/js/timer.jsx' type='text/jsx'></script>
+  <script type='text/jsx'>
+  // NEED TO WRAP REACT IN WINDOW.ONLOAD TO LOAD LAST
+    ReactDOM.render(<NavBar />, document.getElementById('nav'));
+
+    // ReactDOM.render(<TimersContainer data={ activity_time } />,
+    //   document.getElementById('timer'));
+
+  </script>
 </head>
 <body>
 
-  <div>
-    <button type='button' id='home'>Home</button>
-    {% if session.get('user_id'): %}
-    <button type='button' id='logout'>Log out</button>
-    <button type='button' id='profile'>Profile</button>
-    {% else %}
-    <button type='button' id='register'>Register</button>
-    <button type='button' id='login'>Log in</button>
-    {% endif %}
-  </div>
+  <div id='nav'></div>
   <br>
-
-  {% block content %} CONTENT GOES HERE {% endblock %}
-
-  <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
-
-  <script>
-
-    $('#home').on('click', ()=> location.href='/');
-    $('#register').on('click', ()=> location.href='/register');
-    $('#logout').on('click', ()=> location.href='/logout');
-    $('#login').on('click', ()=> location.href='/login');
-    $('#profile').on('click', ()=> location.href='/profile');
-
-  </script>
-  {% block js %}
-
-  {% endblock %}
+  <br>
+  <div id='homepage'></div>
+  <div id='timer'></div>
 
 </body>
 </html>
-
-ReactDOM.render(
-  <ActivitiesContainer data={ activity_time } />,
-  document.getElementById('root')
-);

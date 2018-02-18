@@ -1,6 +1,6 @@
 'use strict';
 
-class ActivitiesContainer extends React.Component {
+class TimersContainer extends React.Component {
 
   startActivities() {
     alert('Working!!');
@@ -31,10 +31,10 @@ class ActivitiesContainer extends React.Component {
     }
     return (
       <div>
-      <button onClick={this.startActivities} type='button'>Begin N/A </button>
+      <button onClick={this.startActivities}>Begin N/A </button>
       {activities}
       <br />
-      <button onClick={this.stopActivities} type='button'>Finish N/A </button>
+      <button onClick={this.stopActivities}>Finish N/A </button>
       <br />
       <div>Initial ETA: {totalTime.format('h:mm a')}</div>
       </div>
