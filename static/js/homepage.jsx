@@ -3,14 +3,18 @@
 class ActivitiesContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {act_id: {'name':'name', 'time':'time', 'clicked':'t/f'}, act_id{}....}
+    this.state = {}
     this.fetchActivities = this.fetchActivities.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.fetchActivities()
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchActivities();
   }
 
   fetchActivities() {
-    // AJAX REQUEST TO FETCH DICTIONARY LIST OF ACTIVITIES
+    fetch('/api/get-activities', {method: 'post',
+                                  credentials: 'include'})
+      .then((response)=> response.json())
+      .then((data)=>  this.setState({data}));
   }
 
   handleClick() {
@@ -21,23 +25,30 @@ class ActivitiesContainer extends React.Component {
 
   handleSubmit() {
     // HANDLE SUBMIT, PREVENT DEFAULT
+    console.log('handleSubmit loaded');
   }
 
   render() {
     let activities = [];
-    for (let activity in this.state) {
-      activities.push(<ActivityForm key={activity}
-                                    dataTime={this.state[activity][1]}
-                                    display={this.state[activity][0]} />);
+    for (let act_id in this.state.data) {
+      activities.push(<ActivityForm key={act_id}
+                                    time={this.state.data[act_id]['time']}
+                                    name={this.state.data[act_id]['name']}
+                                    handleClick={this.handleClick}
+                                    handleSubmit={this.handleSubmit} />);
     }
     return (
       <div>
         <h1>Welcome to Ready Now!</h1>
         <br />
-        <h2>What do you need to do before youre ready?</h2>
-        <form action='/timer'>
+        <h2>What do you need to do?</h2>
+        <form>
           {activities}
-          <input type='submit' value='Go!' />
+          <div>
+            <b>Total time:</b>
+            <span id='UPDATEWITHCLASS'></span>
+          </div>
+          <button type='submit' onSubmit={this.props.handleSubmit}>Go!</button>
         </form>
       </div>
     );
@@ -48,9 +59,8 @@ class ActivityForm extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.handleClick}>
-        <label> {this.props.display}:
-          est. {this.props.dataTime/60}mins</label>
+        <button onClick={this.props.handleClick}>{this.props.name}:
+                         ~{this.props.time/60} mins</button>
       </div>
     );
   }

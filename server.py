@@ -23,6 +23,12 @@ app.jinja_env.undefined = StrictUndefined
 ################################################################################
 
 
+@app.route('/index')
+def show_index():
+
+    return render_template('index.html')
+
+
 @app.route('/')
 def show_homepage():
     """Displays the homepage for Ready Now."""
@@ -76,7 +82,7 @@ def show_timer_page():
     return render_template('timer.html', activity_time=activity_time)
 
 
-@app.route('/add-record', methods=['POST'])
+@app.route('/api/add-record', methods=['POST'])
 def add_record():
     """Updates the database each time a user completes an activity."""
 
@@ -179,7 +185,7 @@ def show_user_page():
     return redirect('/')
 
 
-@app.route('/validate-user', methods=['POST'])
+@app.route('/api/validate-user', methods=['POST'])
 def validate_user():
     """Check if user is logged in."""
 
@@ -187,6 +193,24 @@ def validate_user():
         return jsonify({'value': True})
 
     return jsonify({'value': False})
+
+
+@app.route('/api/get-activities', methods=['POST'])
+def get_activities():
+    """Gets list of activities from the database, including user times."""
+
+    activities = db.session.query(Activity.act_id, Activity.act_name,
+                                  Activity.default_time)
+
+    activity_time = create_activity_times(activities)
+    # activity time = {act_id: {'name':'name', 'time':'time', 'clicked':'t/f'}, ...}
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        activity_time = get_user_avg(user_id, activity_time)
+
+    return jsonify(activity_time)
 
 
 ################################################################################

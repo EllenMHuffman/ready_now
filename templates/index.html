@@ -11,11 +11,21 @@
   <script src='../static/js/homepage.jsx' type='text/jsx'></script>
   <script src='../static/js/timer.jsx' type='text/jsx'></script>
   <script type='text/jsx'>
-  // NEED TO WRAP REACT IN WINDOW.ONLOAD TO LOAD LAST
-    ReactDOM.render(<NavBar />, document.getElementById('nav'));
 
-    // ReactDOM.render(<TimersContainer data={ activity_time } />,
-    //   document.getElementById('timer'));
+    function startInit() {
+      ReactDOM.render(
+        <NavBar />, document.getElementById('nav'))
+      ReactDOM.render(
+        <ActivitiesContainer />, document.getElementById('homepage'));
+    }
+
+    window.onload = startInit;
+
+
+    // ReactDOM.render(
+    //   <TimersContainer />, document.getElementById('timer'))
+
+
 
   </script>
 </head>

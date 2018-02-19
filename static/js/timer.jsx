@@ -131,7 +131,7 @@ class Timer extends React.Component {
       let data = {start_t: this.state.start_t,
              end_t: this.state.end_t,
              act_id: this.props.act_id};
-      fetch('/add-record', {body: JSON.stringify(data),
+      fetch('/api/add-record', {body: JSON.stringify(data),
                             method: 'post',
                             credentials: 'include'});
     }, 2000);

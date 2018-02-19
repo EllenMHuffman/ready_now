@@ -36,7 +36,9 @@ def create_activity_times(activities):
     activity_time = {}
 
     for act_id, act_name, default_time in activities:
-        activity_time[act_id] = [act_name, default_time]
+        activity_time[act_id] = {'name': act_name,
+                                 'time': default_time,
+                                 'clicked': False}
 
     return activity_time
 
@@ -51,7 +53,7 @@ def get_user_avg(user_id, activity_time):
     avg_diffs = records.group_by(Record.act_id).all()
 
     for act_id, timedelta in avg_diffs:
-        activity_time[act_id][1] = int(timedelta.total_seconds())
+        activity_time[act_id]['time'] = int(timedelta.total_seconds())
 
     return activity_time
 
@@ -67,7 +69,7 @@ def get_user_avg_timer(user_id, activity_time, act_ids):
     avg_diffs = records.group_by(Record.act_id).all()
 
     for act_id, timedelta in avg_diffs:
-        activity_time[act_id][1] = int(timedelta.total_seconds())
+        activity_time[act_id]['time'] = int(timedelta.total_seconds())
 
     return activity_time
 

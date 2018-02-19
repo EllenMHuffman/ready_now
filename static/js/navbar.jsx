@@ -9,10 +9,10 @@ class NavBar extends React.Component {
   }
 
   validateUser() {
-    fetch('/validate-user', {method: 'post',
-                             credentials: 'include'})
-                   .then((response)=> response.json())
-                   .then((data)=>  this.setState({'response': data.value}));
+    fetch('/api/validate-user', {method: 'post',
+                                 credentials: 'include'})
+      .then((response)=> response.json())
+      .then((data)=>  this.setState({'response': data.value}));
   }
 
   render() {
