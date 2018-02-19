@@ -3,7 +3,7 @@
 class ActivitiesContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {'visible': true}
     this.fetchActivities = this.fetchActivities.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,7 +37,9 @@ class ActivitiesContainer extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log('handleSubmit');
+    console.log(this.state.data)
+    ReactDOM.render(<TimersContainer data={this.state.data} />,
+                    document.getElementById('root'));
   }
 
   render() {

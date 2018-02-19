@@ -1,9 +1,13 @@
 'use strict';
 
 class TimersContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    // this.state = this.props.state;
+  }
 
   startActivities() {
-    alert('Working!!');
+    console.log(this.props.data);
   }
 
   stopActivities() {
@@ -13,8 +17,8 @@ class TimersContainer extends React.Component {
   calculateETA() {
     let timeNow = moment();
     let totalTime = 0;
-    for (let activity in this.props.data) {
-      totalTime += this.props.data[activity][1];
+    for (let act_id in this.props.data) {
+      totalTime += this.props.data[act_id]['time'];
     }
     return timeNow.add(totalTime, 's');
   }
@@ -22,21 +26,21 @@ class TimersContainer extends React.Component {
   render() {
     let totalTime = this.calculateETA();
     let activities = [];
-    for (let activity in this.props.data) {
-      let current_activity = this.props.data[activity];
-      activities.push(<Activity key={activity}
-                                act_id={activity}
-                                name={current_activity[0]}
-                                time={current_activity[1]} />);
+    for (let act_id in this.props.data) {
+      if (this.props.data[act_id]['clicked'] === true) {
+      activities.push(<Activity key={act_id}
+                                act_id={act_id}
+                                name={this.props.data[act_id]['name']}
+                                time={this.props.data[act_id]['time']} />);
+      }
     }
     return (
       <div>
-      <button onClick={this.startActivities}>Begin N/A </button>
-      {activities}
-      <br />
-      <button onClick={this.stopActivities}>Finish N/A </button>
-      <br />
-      <div>Initial ETA: {totalTime.format('h:mm a')}</div>
+        <h2>Click 'Start' and 'Stop' for each step</h2>
+        {activities}
+        <br />
+        <br />
+        <div>Initial ETA: {totalTime.format('h:mm a')}</div>
       </div>
     );
   }
@@ -57,7 +61,7 @@ class Activity extends React.Component {
 class Timer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { display: false,
+    this.state = { visible: true,
                    time: {},
                    seconds: this.props.time,
                    active: true,
@@ -65,16 +69,16 @@ class Timer extends React.Component {
                    end_t: null
                  };
     this.timer = 0;
-    this.toggleDisplay = this.toggleDisplay.bind(this);
+    this.toggleVisible = this.toggleVisible.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.sendData = this.sendData.bind(this);
   }
 
-  toggleDisplay() {
-    let newDisplay = this.state.display == false ? true : false;
-    this.setState({ display: newDisplay });
+  toggleVisible() {
+    let newVisible = this.state.visible == false ? true : false;
+    this.setState({ visible: newVisible });
   }
 
   secondsToTime(secs) {
@@ -103,7 +107,8 @@ class Timer extends React.Component {
     if (this.timer == 0) {
       let timeNow = Math.floor(Date.now());
       this.timer = setInterval(this.countDown, 1000);
-      this.setState({start_t: timeNow});
+      this.setState({start_t: timeNow,
+                     visible: false});
     }
   }
 

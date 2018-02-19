@@ -23,28 +23,10 @@ app.jinja_env.undefined = StrictUndefined
 ################################################################################
 
 
-@app.route('/index')
+@app.route('/')
 def show_index():
 
     return render_template('index.html')
-
-
-@app.route('/')
-def show_homepage():
-    """Displays the homepage for Ready Now."""
-
-    activities = db.session.query(Activity.act_id, Activity.act_name,
-                                  Activity.default_time)
-
-    activity_time = create_activity_times(activities)
-    # activity time = {act_id: [act_name, default_time], ...}
-
-    if 'user_id' in session:
-        user_id = session['user_id']
-
-        activity_time = get_user_avg(user_id, activity_time)
-
-    return render_template('homepage.html', activity_time=activity_time)
 
 
 @app.route('/timer', methods=['POST'])
