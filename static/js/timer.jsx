@@ -3,7 +3,6 @@
 class TimersContainer extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = this.props.state;
   }
 
   calculateETA() {
@@ -124,7 +123,7 @@ class Timer extends React.Component {
   }
 
   sendData() {
-    setTimeout( ()=> {
+    setTimeout( () => {
       let data = {start_t: this.state.start_t,
              end_t: this.state.end_t,
              act_id: this.props.act_id};
@@ -139,7 +138,7 @@ class Timer extends React.Component {
       <div>
         {this.state.time.m}:{this.state.time.s} ....
         <button onClick={this.startTimer}>Start</button>
-        <button onClick={()=>(this.stopTimer(), this.sendData())}>Stop</button>
+        <button onClick={() =>(this.stopTimer(), this.sendData())}>Stop</button>
       </div>
     );
   }

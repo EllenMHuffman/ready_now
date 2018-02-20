@@ -3,6 +3,7 @@
 class Login extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {username: '',
                   password: ''};
     this.handleChange = this.handleChange.bind(this);
@@ -24,11 +25,7 @@ class Login extends React.Component {
                          body: JSON.stringify(data),
                          credentials: 'include'})
       .then((response)=> response.json())
-      .then((data)=>  data.value
-                      ? alert('Successful login')
-                      : alert('Login unsuccessful. Please try again.'));
-    this.props.validateUser();
-    location.reload();
+      .then((data)=>  this.props.setLoggedIn(data.value));
   }
 
   render() {
@@ -88,58 +85,64 @@ class Register extends React.Component {
 
   handleSubmit(event){
     event.preventDefault();
-    let data = {fname: this.state.fname,
-                lname: this.state.lname,
-                username: this.state.username,
-                password: this.state.password,
-                gender: this.state.gender,
-                phone: this.state.phone,
-                street: this.state.street,
-                city: this.state.city,
-                state: this.state.state,
-                zipcode: this.state.zipcode};
-    console.log(data);
+
+    let data = {
+      fname: this.state.fname,
+      lname: this.state.lname,
+      username: this.state.username,
+      password: this.state.password,
+      gender: this.state.gender,
+      phone: this.state.phone,
+      street: this.state.street,
+      city: this.state.city,
+      state: this.state.state,
+      zipcode: this.state.zipcode
+    };
+
     fetch('/api/register', {method: 'POST',
                          body: JSON.stringify(data),
                          credentials: 'include'})
       .then((response)=> response.json())
-      .then((data)=>  data.value
-                      ? alert('Successful registration')
-                      : alert('Username already exists. Please try again.'));
-    // this.props.validateUser();
-    // location.reload();
+      .then((data)=>  {
+          data.value
+              ? alert('Successful registration')
+              : alert('Username already exists. Please try again.');
+          this.props.setLoggedIn(data.value);
+      });
   }
 
   render() {
-    let info = [['fname', 'First Name: ', ''],
-                ['lname', 'Last Name: ', ''],
-                ['username', 'Username*: ', 'required'],
-                ['password', 'Password*: ', 'required']
-               ]
-    let contact = [['phone', 'Phone number: ', ''],
-                 ['street', 'Street: ', ''],
-                 ['city', 'City: ', ''],
-                 ['state', 'State abbreviation: ', ''],
-                 ['zipcode', 'Zipcode: ', '']
-               ]
+    let info = [
+      ['fname', 'First Name: ', ''],
+      ['lname', 'Last Name: ', ''],
+      ['username', 'Username*: ', 'required'],
+      ['password', 'Password*: ', 'required']
+    ];
+    let contact = [
+      ['phone', 'Phone number: ', ''],
+      ['street', 'Street: ', ''],
+      ['city', 'City: ', ''],
+      ['state', 'State abbreviation: ', ''],
+      ['zipcode', 'Zipcode: ', '']
+    ];
 
-    let infoFields = []
-    let contactFields = []
+    let infoFields = [];
+    let contactFields = [];
 
-    for (let i in info) {
-      infoFields.push(<InputField key={info[i][0]}
-                                  name={info[i][0]}
-                                  display={info[i][1]}
-                                  req={info[i][2]}
+    for (let i of info) {
+      infoFields.push(<InputField key={i[0]}
+                                  name={i[0]}
+                                  display={i[1]}
+                                  req={i[2]}
                                   handleChange={this.handleChange}
                                   state={this.state} />);
     }
 
-    for (let c in contact) {
-      contactFields.push(<InputField key={contact[c][0]}
-                                     name={contact[c][0]}
-                                     display={contact[c][1]}
-                                     req={contact[c][2]}
+    for (let c of contact) {
+      contactFields.push(<InputField key={c[0]}
+                                     name={c[0]}
+                                     display={c[1]}
+                                     req={c[2]}
                                      handleChange={this.handleChange}
                                      state={this.state} />);
     }
@@ -150,18 +153,21 @@ class Register extends React.Component {
         <form onSubmit={this.handleSubmit}>
 
           {infoFields}
-          Gender:
-          <select name='gender'
-                  value={this.state.value}
-                  onChange={this.handleChange}>
-            <option value='decline'> - </option>
-            <option value='female'> Female </option>
-            <option value='male'> Male </option>
-            <option value='other'> Other </option>
-          </select>
-          <br/>
+          <label>
+            Gender:
+            <select name='gender'
+                    value={this.state.value}
+                    onChange={this.handleChange}>
+              <option value='decline'> - </option>
+              <option value='female'> Female </option>
+              <option value='male'> Male </option>
+              <option value='other'> Other </option>
+            </select>
+          </label>
+          <br />
           {contactFields}
 
+          <input type='submit' value='Register' />
         </form>
       </div>
     );
@@ -170,14 +176,14 @@ class Register extends React.Component {
 
 class InputField extends React.Component {
   render() {
-    let name = this.props.name
-    let value = this.props.state[name]
+    let name = this.props.name;
+    let value = this.props.state[name];
 
     return (
       <label>
-        {this.props.display}: <input
+        {this.props.display} <input
                                 name={name}
-                                type='text'
+                                type={name === 'password' ? 'password' : 'text'}
                                 value={value}
                                 required={this.props.req}
                                 onChange={this.props.handleChange} />

@@ -7,31 +7,21 @@
 
   <script src='http://unpkg.com/babel-standalone'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js'></script>
-  <script src='../static/js/navbar.jsx' type='text/jsx'></script>
+  <script src='../static/js/readyNow.jsx' type='text/jsx'></script>
   <script src='../static/js/account.jsx' type='text/jsx'></script>
-  <script src='../static/js/homepage.jsx' type='text/jsx'></script>
+  <script src='../static/js/activity.jsx' type='text/jsx'></script>
   <script src='../static/js/timer.jsx' type='text/jsx'></script>
+  <script src='../static/js/profile.jsx' type='text/jsx'></script>
   <script type='text/jsx'>
 
-    function startInit() {
-      ReactDOM.render(
-        <NavBar />, document.getElementById('nav'));
-      ReactDOM.render(
-        <ActivitiesContainer />, document.getElementById('root'))
-    }
-
-    window.onload = startInit;
+    window.onload = () => ReactDOM.render(
+        <ReadyNow />, document.getElementById('main'));
 
   </script>
 </head>
 <body>
 
-  <div id='nav'></div>
-  <br>
-  <div id='account'></div>
-  <br>
-  <br>
-  <div id='root'></div>
+  <div id='main'></div>
 
 </body>
 </html>

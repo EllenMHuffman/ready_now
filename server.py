@@ -5,6 +5,7 @@ import json
 
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy import exc
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
@@ -77,15 +78,20 @@ def add_record():
 def register_user():
     """Creates a new user, adds them to the database, and logs them in."""
 
-    new_user = User.create_user(request.form)
-    result = User.query.filter(User.username == new_user.username)
+    user_data = json.loads(request.data)
+    new_user = User.create_user(user_data)
+    # result = User.query.filter(User.username == new_user.username)
 
-    if result.count() == 0:
+    # if result.count() == 0:
+    try:
         update_db(new_user)
-        session['user_id'] = new_user.user_id
-        return redirect('/')
 
-    return redirect('/register?validation=False')
+    except exc.IntegrityError as e:
+        print e
+        return jsonify({'value': False})
+
+    session['user_id'] = new_user.user_id
+    return jsonify({'value': True})
 
 
 @app.route('/api/validate-user', methods=['POST'])

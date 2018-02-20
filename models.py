@@ -31,8 +31,8 @@ class User(db.Model):
     destinations = db.relationship('Destination', backref='user')
 
     @classmethod
-    def create_user(cls, request_form):
-        """Instantiates a User object given a registration POST request.
+    def create_user(cls, user_data):
+        """Instantiates a User object given user registration data.
 
             >>> info = ImmutableMultiDict({'username': 'newuser', 'password':\
                                            'newpassword'})
@@ -42,16 +42,16 @@ class User(db.Model):
 
         """
 
-        fname = request_form.get('fname')
-        lname = request_form.get('lname')
-        username = (request_form.get('username')).lower()
-        password = request_form.get('password')
-        gender = request_form.get('gender')
-        phone = request_form.get('phone')
-        street = request_form.get('street')
-        city = request_form.get('city')
-        state = request_form.get('state')
-        zipcode = request_form.get('zipcode')
+        fname = user_data['fname']
+        lname = user_data['lname']
+        username = (user_data['username']).lower()
+        password = user_data['password']
+        gender = user_data['gender']
+        phone = user_data['phone']
+        street = user_data['street']
+        city = user_data['city']
+        state = user_data['state']
+        zipcode = user_data['zipcode']
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                         bcrypt.gensalt(10))
