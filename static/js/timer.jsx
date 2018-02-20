@@ -6,14 +6,6 @@ class TimersContainer extends React.Component {
     // this.state = this.props.state;
   }
 
-  startActivities() {
-    console.log(this.props.data);
-  }
-
-  stopActivities() {
-    alert('stahhhhhp');
-  }
-
   calculateETA() {
     let timeNow = moment();
     let totalTime = 0;
@@ -137,13 +129,9 @@ class Timer extends React.Component {
              end_t: this.state.end_t,
              act_id: this.props.act_id};
       fetch('/api/add-record', {body: JSON.stringify(data),
-                            method: 'post',
-                            credentials: 'include'});
+                                method: 'post',
+                                credentials: 'include'});
     }, 2000);
-  }
-
-  nextActivity() {
-    alert('Go to next activity')
   }
 
   render() {

@@ -37,7 +37,6 @@ class ActivitiesContainer extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.data)
     ReactDOM.render(<TimersContainer data={this.state.data} />,
                     document.getElementById('root'));
   }
@@ -57,14 +56,16 @@ class ActivitiesContainer extends React.Component {
         <h1>Welcome to Ready Now!</h1>
         <br />
         <h2>What do you need to do?</h2>
-        <div>
-          {activities}
-            <br />
-            <b>Total time: </b>
-            <span id='UPDATEWITHCLASS'>{this.calculateTime()}</span>
-            <br />
-          <button id='submit' onClick={this.handleSubmit}>Go!</button>
-        </div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            {activities}
+              <br />
+              <b>Total time: </b>
+              <span id='total-time'>{this.calculateTime()}</span>
+              <br />
+            <input type='submit' value='Go!' />
+          </label>
+        </form>
       </div>
     );
   }
@@ -75,7 +76,7 @@ class ActivityForm extends React.Component {
     return (
       <div>
         <button value={this.props.act_id} onClick={this.props.handleClick}>{this.props.name}:
-                         ~{this.props.time/60} mins</button>
+                         ~{(this.props.time/60).toFixed(2)} mins</button>
       </div>
     );
   }

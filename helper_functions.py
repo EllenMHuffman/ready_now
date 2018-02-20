@@ -58,22 +58,6 @@ def get_user_avg(user_id, activity_time):
     return activity_time
 
 
-def get_user_avg_timer(user_id, activity_time, act_ids):
-    """Calcuates avg user time for specified activities, updates dictionary."""
-
-    records = db.session.query(Record.act_id,
-                               func.avg(Record.end_t - Record.start_t).label
-                               ('diff')).filter((Record.user_id == user_id) &
-                                                (Record.act_id.in_(act_ids)))
-
-    avg_diffs = records.group_by(Record.act_id).all()
-
-    for act_id, timedelta in avg_diffs:
-        activity_time[act_id]['time'] = int(timedelta.total_seconds())
-
-    return activity_time
-
-
 def convert_to_datetime(js_time):
     """Takes integer of JavaScript time and converts to datetime object."""
 
