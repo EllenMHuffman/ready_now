@@ -1,6 +1,6 @@
 ## About Ready Now
 
-This is a Flask app that helps users get ready and be out the door on time. Users select activities they need to accomplish to finish being ready, and the app uses a timer to guide them through these activities. The app records users' actual times to generate predictive task completion times. If the user starts running late, the app can automatically text a specified friend with the user's updated ETA.
+This Flask-React SPA helps users anticipate how long it will take to get ready and keeps them on track to complete each step. Users select activities, the JavaScript front end determines how long those steps will take, and timers track each step. When logged in, the app learns about the user by recording actual times for each step in the PostgreSQL database, and later queries that information with SQLAlchemy to provide better time estimates. If the user falls behind the initial projected completion time, the app can automatically text an updated ETA to the user's friend through the Twilio API. Users can also view their profile page that features D3 data visualizations of the different steps and completion times.
 
 ## Getting Started
 

@@ -135,17 +135,20 @@ def logout_user():
     return jsonify({'value': False})
 
 
-@app.route('/profile')
+@app.route('/api/profile')
 def show_user_page():
     """Shows user profile page when logged in."""
 
     if 'user_id' in session:
         user_id = session['user_id']
 
-        user = User.query.filter(User.user_id == user_id).one()
-        return render_template('profile.html', user=user)
+        user_info = db.session.query(User.fname, User.lname, User.username)    \
+                              .filter(User.user_id == user_id).first()
+        user_records = db.session.query(Record).filter(Record.user_id ==
+                        user_id)
+        return
 
-    return redirect('/')
+    return jsonify({'value': False})
 
 
 ################################################################################

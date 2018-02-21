@@ -31,7 +31,12 @@ def verify_user(user, password):
 
 
 def create_activity_times(activities):
-    """Takes a list of activity tuples and creates a dictionary of name and time."""
+    """Takes list of activity tuples and creates a dictionary of name and time.
+
+        >>> create_activity_times([(1, 'Shower', 600), (3, 'Shave', 300)])
+        {1: {'clicked': False, 'name': 'Shower', 'time': 600}, 3: {'clicked': False, 'name': 'Shave', 'time': 300}}
+
+    """
 
     activity_time = {}
 
@@ -59,6 +64,11 @@ def get_user_avg(user_id, activity_time):
 
 
 def convert_to_datetime(js_time):
-    """Takes integer of JavaScript time and converts to datetime object."""
+    """Takes integer of JavaScript time and converts to datetime object.
+
+        >>> convert_to_datetime(15192000000000)
+        datetime.datetime(2451, 6, 1, 8, 0)
+
+    """
 
     return datetime.fromtimestamp(js_time/1000)

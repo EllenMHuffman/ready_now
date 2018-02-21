@@ -42,16 +42,16 @@ class User(db.Model):
 
         """
 
-        fname = user_data['fname']
-        lname = user_data['lname']
+        fname = user_data.get('fname', None)
+        lname = user_data.get('lname', None)
         username = (user_data['username']).lower()
         password = user_data['password']
-        gender = user_data['gender']
-        phone = user_data['phone']
-        street = user_data['street']
-        city = user_data['city']
-        state = user_data['state']
-        zipcode = user_data['zipcode']
+        gender = user_data.get('gender', None)
+        phone = user_data.get('phone', None)
+        street = user_data.get('street', None)
+        city = user_data.get('city', None)
+        state = user_data.get('state', None)
+        zipcode = user_data.get('zipcode', None)
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                         bcrypt.gensalt(10))

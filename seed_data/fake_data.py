@@ -4,6 +4,7 @@ import random
 
 fake = Faker()
 fake.seed(7890)
+random.seed(1234)
 
 # Users- 8 users ###############################################################
 # for _ in range(0, 5):
@@ -38,7 +39,7 @@ days = [1519200000, 1519200000, 1519200000, 1519200000, 1519113600,
         1518163200, 1518163200, 1518076800, 1517990400, 1517904000]
 
 for i, user_id in enumerate(user_ids):
-    act_qty = random.randint(3, 10)
+    act_qty = random.randint(4, 12)
     day = days[-1]
     start = day + 33000
     total_time = 0
