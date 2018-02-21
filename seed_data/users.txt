@@ -1,3 +1,8 @@
 ||guest|password||||||
 Jane|Doe|janedoe|password|female|504-555-5309|123 Sesame St.|San Francsico|CA|94110
 John|Smith|johnsmith|longpassword|male|415-555-7777|321 Sutter St.|San Francisco|CA|94332
+John|Koch|hsmith|&#k3RgTq(L|thank|592-842-8476x97627|3245 Wright Crest Suite 308|North Richardborough|CO|29734
+Ashley|Pratt|rushdaniel|^6mwNlwODy|degree|112.088.7632|3731 Felicia Points|South Michael|GA|49420
+Deborah|Jones|whitneykenneth|Z$N8JFGFHv|me|+04(2)7354148749|4385 Jackson Camp Suite 166|Lake Valeriebury|AR|81786
+Elizabeth|Huffman|jordanconnie|A4GCF#^c+_|on|221.149.6739x201|685 Brown Fork|Jamesshire|NH|74020
+Garrett|Smith|sherrykirby|%1ugzBK3Ta|piece|+01(0)9556091847|196 Steven Roads|Hilltown|GU|22604

@@ -31,7 +31,7 @@ def verify_user(user, password):
 
 
 def create_activity_times(activities):
-    """Takes a list of activities and creates a dictionary of name and time."""
+    """Takes a list of activity tuples and creates a dictionary of name and time."""
 
     activity_time = {}
 

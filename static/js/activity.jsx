@@ -3,9 +3,7 @@
 class ActivitiesContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      'currentView': 'activities'
-    }
+    this.state = {}
     this.fetchActivities = this.fetchActivities.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,15 +37,11 @@ class ActivitiesContainer extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    ReactDOM.render(<TimersContainer data={this.state.data} />,
-                    document.getElementById('main'));
-    // set state to determine if activities container is rendered or
-    // if timers container is rendered; this handleSubmit flips state
+    this.props.setTimers(this.state.data);
   }
 
   render() {
     let activities = [];
-    console.log(this.state.data);
     for (let act_id in this.state.data) {
       activities.push(<ActivityForm key={act_id}
                                     act_id={act_id}
@@ -61,12 +55,12 @@ class ActivitiesContainer extends React.Component {
         <br />
         <h2>What do you need to do?</h2>
         <form onSubmit={this.handleSubmit}>
+          {activities}
+          <br />
+          <b>Total time: </b>
+          <span id='total-time'>{this.calculateTime()}</span>
+          <br />
           <label>
-            {activities}
-              <br />
-              <b>Total time: </b>
-              <span id='total-time'>{this.calculateTime()}</span>
-              <br />
             <input type='submit' value='Go!' />
           </label>
         </form>
@@ -79,8 +73,8 @@ class ActivityForm extends React.Component {
   render() {
     return (
       <div>
-        <button value={this.props.act_id} onClick={this.props.handleClick}>{this.props.name}:
-                         ~{(this.props.time/60).toFixed(2)} mins</button>
+        <button value={this.props.act_id} onClick={this.props.handleClick}>
+          {this.props.name}: ~{(this.props.time/60).toFixed(2)} mins</button>
       </div>
     );
   }

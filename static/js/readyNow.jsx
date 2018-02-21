@@ -10,7 +10,8 @@ class ReadyNow extends React.Component {
     };
     this.validateUser = this.validateUser.bind(this);
     this.setLoggedIn = this.setLoggedIn.bind(this);
-    this.showMainView = this.showMainView.bind(this);
+    this.showActivities = this.showActivities.bind(this);
+    this.setTimers = this.setTimers.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
     this.showRegister = this.showRegister.bind(this);
     this.showLogin = this.showLogin.bind(this);
@@ -28,22 +29,31 @@ class ReadyNow extends React.Component {
   setLoggedIn(value) {
     this.setState({
       ['loggedIn']: value,
-      ['accountView']: null
+      ['accountView']: null,
+      ['mainView']: 'actLoggedIn'
     });
   }
 
-  showMainView(event) {
+  showActivities(event) {
     this.setState({
       ['accountView']: null,
       ['mainView']: 'activities',
     });
   }
 
+  setTimers(data) {
+    this.setState({['timerData']: data});
+    this.setState({['mainView']: 'timers'});
+  }
+
   logoutUser(event) {
     fetch('/api/logout', {credentials: 'include'})
       .then((response)=> response.json())
-      .then((data)=>  this.setState({'loggedIn': data.value}));
-    this.showMainView();
+      .then((data)=>  this.setState({
+        'loggedIn': data.value,
+        'mainView': 'actLoggedOut'
+      }));
+    // this.showActivities();
   }
 
   showRegister(event) {
@@ -60,7 +70,7 @@ class ReadyNow extends React.Component {
 
   render() {
     let buttons = [<button key='home'
-                    onClick={this.showMainView}>Home</button>];
+                    onClick={this.showActivities}>Home</button>];
     if (this.state['loggedIn']) {
       buttons.push(<button key='logout'
                     onClick={this.logoutUser}>Log Out</button>);
@@ -85,10 +95,14 @@ class ReadyNow extends React.Component {
     }
 
     let mainView
-    if (this.state['mainView'] === 'activities') {
-      mainView = <ActivitiesContainer />
+    if (['activities', 'actLoggedIn', 'actLoggedOut'].includes(
+      this.state['mainView'])) {
+        console.log(this.state['mainView']);
+        mainView = <ActivitiesContainer setTimers={this.setTimers}/>;
+    } else if (this.state['mainView'] === 'timers') {
+      mainView = <TimersContainer data={this.state.timerData} />;
     } else if (this.state['mainView'] === 'profile') {
-      mainView = <ProfileContainer />
+      mainView = <ProfileContainer />;
     }
 
     return (

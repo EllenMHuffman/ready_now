@@ -4,15 +4,16 @@ from Flask import session
 from models import User, db, connect_to_db
 from server import app
 from seed import load_users, load_activities, load_sessions, load_records
-from helper_functions import update_db, verify_user
+from helper_functions import (update_db, verify_user, create_activity_times,
+                              get_user_avg)
 
 ################################################################################
+# DocTests
 
+    >>> create_activity_times([(1, 'Shower', 600), (3, 'Shave', 300)])
+    {1: {'name': 'Shower', 'time': 600, 'clicked': False},
+     3: {'name': 'Shave', 'time': 300, 'clicked': False}}
 
-# class AGROUPOFTESTS(unittest.TestCase):
-
-#     def test_function(self):
-#         assert importedfile.myfunction(inputs) == output
 ################################################################################
 
 
@@ -65,6 +66,15 @@ class FlaskTestsDatabase(unittest.TestCase):
         boolean = verify_user(timmy, u'wrong')
 
         self.assertFalse(boolean)
+
+    # def test_get_user_avg(self):
+    #     """Test for dictionary creation from db query."""
+
+    #     activity_time = {1: {'name': 'Shower', 'time': 600, 'clicked': False},
+    #                      3: {'name': 'Shave', 'time': 300, 'clicked': False}}
+    #     result = get_user_avg(1, activity_time)
+
+    #     self.assertIn(2, result)
 
 
 ################################################################################
