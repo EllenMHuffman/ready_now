@@ -11,10 +11,12 @@ class ActivitiesContainer extends React.Component {
   }
 
   fetchActivities() {
-    fetch('/api/get-activities', {method: 'post',
-                                  credentials: 'include'})
-      .then((response)=> response.json())
-      .then((data)=>  this.setState({data}));
+    fetch('/api/get-activities', {
+      method: 'post',
+      credentials: 'include'
+    })
+    .then((response)=> response.json())
+    .then((data)=>  this.setState({data}));
   }
 
   calculateTime() {
@@ -37,6 +39,10 @@ class ActivitiesContainer extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    fetch('/api/add-session', {
+      method: 'post',
+      credentials: 'include'
+    });
     this.props.setTimers(this.state.data);
   }
 

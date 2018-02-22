@@ -9,9 +9,13 @@ import bcrypt
 def update_db(new_row):
     """Adds new user to database."""
 
-    db.session.add(new_row)
+    try:
+        db.session.add(new_row)
+    except:
+        return False
+
     db.session.commit()
-    return
+    return True
 
 
 def verify_user(user, password):

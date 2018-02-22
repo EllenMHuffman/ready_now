@@ -1,15 +1,22 @@
 'use strict';
 
 class ProfileContainer extends React.Component {
-  // fetchUser() {
-  //   // need to ping an API to get user object back of logged in user
-  //   return
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      'currentView': 'stats'
+    };
+  }
 
   render() {
+    let currentView;
+    if (this.state['currentView'] === 'stats') {
+      currentView = [];
+    }
+
     return (
       <div>
-        <h1>User Info</h1>
+        <h1>Your Profile</h1>
 
           "user_id"
           <br />
@@ -17,9 +24,6 @@ class ProfileContainer extends React.Component {
           <br />
           <br />
       </div>
-          // <div>
-          //   <a href='/'>Get ready now</a>
-          // </div>
     );
   }
 }

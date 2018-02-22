@@ -5,7 +5,9 @@ import json
 
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy.sql import func
 from sqlalchemy import exc
+
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
@@ -38,7 +40,6 @@ def get_activities():
                                   Activity.default_time)
 
     activity_time = create_activity_times(activities)
-    # activity time = {act_id: {'name':'name', 'time':'time', 'clicked':'t/f'}, ...}
 
     if 'user_id' in session:
         user_id = session['user_id']
@@ -46,6 +47,24 @@ def get_activities():
         activity_time = get_user_avg(user_id, activity_time)
 
     return jsonify(activity_time)
+
+
+@app.route('/api/add-session', methods=['POST'])
+def add_session():
+    """Creates new session for later use in user activity records."""
+
+    # Log sessions on guest account
+    user_id = 1
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+    new_session = Session(user_id=user_id)
+
+    value = update_db(new_session)
+    session['sess_id'] = new_session.sess_id
+
+    return jsonify({'value': value})
 
 
 @app.route('/api/add-record', methods=['POST'])
@@ -69,9 +88,9 @@ def add_record():
 
     new_record = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
                         start_t=start_t, end_t=end_t)
-    update_db(new_record)
+    value = update_db(new_record)
 
-    return 'attempted Record update'
+    return jsonify({'value': value})
 
 
 @app.route('/api/register', methods=['POST'])
@@ -135,18 +154,24 @@ def logout_user():
     return jsonify({'value': False})
 
 
-@app.route('/api/profile')
+@app.route('/api/profile', methods=['POST'])
 def show_user_page():
     """Shows user profile page when logged in."""
 
     if 'user_id' in session:
         user_id = session['user_id']
 
-        user_info = db.session.query(User.fname, User.lname, User.username)    \
-                              .filter(User.user_id == user_id).first()
-        user_records = db.session.query(Record).filter(Record.user_id ==
-                        user_id)
-        return
+        user_info = (db.session.query(User.fname, User.lname, User.username)
+                               .filter(User.user_id == user_id).first())
+        user_recs = (db.session.query(Record.sess_id,
+                                      Record.act_id,
+                                      func.avg(Record.end_t - Record.start_t)
+                               .label('diff')).filter(Record.user_id == user_id)
+                       .group_by(Record.sess_id, Record.act_id).all())
+
+        # NEED TO WRITE HELPER FUNCTION TO CONVERT DB OBJECTS INTO DICTS
+
+        return jsonify({'user_info': user_info, 'user_records': user_recs})
 
     return jsonify({'value': False})
 

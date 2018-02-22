@@ -16,6 +16,7 @@ class ReadyNow extends React.Component {
     this.showRegister = this.showRegister.bind(this);
     this.showLogin = this.showLogin.bind(this);
     this.showProfile = this.showProfile.bind(this);
+    this.showSettings = this.showSettings.bind(this);
     this.validateUser();
   }
 
@@ -57,15 +58,19 @@ class ReadyNow extends React.Component {
   }
 
   showRegister(event) {
-    this.setState({['accountView']: 'register'})
+    this.setState({['accountView']: 'register'});
   }
 
   showLogin(event) {
-    this.setState({['accountView']: 'login'})
+    this.setState({['accountView']: 'login'});
   }
 
   showProfile(event) {
-    this.setState({['mainView']: 'profile'})
+    this.setState({['mainView']: 'profile'});
+  }
+
+  showSettings(event) {
+    this.setState({['mainView']: 'settings'});
   }
 
   render() {
@@ -76,6 +81,8 @@ class ReadyNow extends React.Component {
                     onClick={this.logoutUser}>Log Out</button>);
       buttons.push(<button key='profile'
                     onClick={this.showProfile}>Profile</button>);
+      buttons.push(<button key='settings'
+                    onClick={this.showSettings}>Settings</button>);
     } else {
       buttons.push(<button key='register'
                     onClick={this.showRegister}>Register</button>);
@@ -103,6 +110,8 @@ class ReadyNow extends React.Component {
       mainView = <TimersContainer data={this.state.timerData} />;
     } else if (this.state['mainView'] === 'profile') {
       mainView = <ProfileContainer />;
+    } else if (this.state['mainView'] === 'settings') {
+      mainView = <SettingsContainer />;
     }
 
     return (

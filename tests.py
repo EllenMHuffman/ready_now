@@ -1,6 +1,5 @@
-import os
+import json
 import unittest
-import doctest
 from Flask import session
 from models import User, db, connect_to_db
 from server import app
@@ -9,14 +8,7 @@ from helper_functions import (update_db, verify_user, create_activity_times,
                               get_user_avg, convert_to_datetime)
 
 ################################################################################
-# DocTests
 
-    >>> create_activity_times([(1, 'Shower', 600), (3, 'Shave', 300)])
-    {1: {'name': 'Shower', 'time': 600, 'clicked': False},
-     3: {'name': 'Shave', 'time': 300, 'clicked': False}}
-
-    >>> convert_to_datetime(15192000000000)
-    datetime.datetime(2451, 6, 1, 8 0)
 
 ################################################################################
 
@@ -28,8 +20,8 @@ class FlaskTestsDatabase(unittest.TestCase):
         """Prepare for each test before execution."""
 
         connect_to_db(app, 'postgresql:///testdb')
-        db.create_all()
 
+        db.create_all()
         load_users()
         load_activities()
         load_sessions()
@@ -49,9 +41,9 @@ class FlaskTestsDatabase(unittest.TestCase):
 
         result = User.query.filter(User.username == 'matt').first()
 
-        self.assertEqual(matt.user_id, result.user_id)
-        self.assertEqual(matt.username, result.username)
-        self.assertEqual(matt.password, result.password)
+        self.assertEqual(result.user_id, matt.user_id)
+        self.assertEqual(result.username, matt.username)
+        self.assertEqual(result.password, matt.password)
 
     def test_verify_user_accept(self):
         """Test for validation of existing login credentials."""
@@ -92,29 +84,175 @@ class FlaskTestsDatabase(unittest.TestCase):
 
         result = get_user_avg(1, activity_time)
 
-        self.assertEqual(range(1, 14), result.keys())
+        self.assertEqual(result.keys(), range(1, 14))
         self.assertEqual(result[1]['clicked'], False)
         self.assertEqual(result[6]['name'], u'Skin Care')
-        self.assertEqual(result[13]['time'], 696)
+        self.assertEqual(result[13]['time'], 875)
 
 
 ################################################################################
 
 
-class FlaskTests(unittest.TestCase):
-    """Flask tests for web app."""
+class FlaskTestsLoggedIn(unittest.TestCase):
+    """Flask tests for logged in user on Ready Now web app."""
 
     def setUp(self):
         """Prepare for each test before execution."""
 
+        self.app = app.test_client()
         app.config['TESTING'] = True
         app.config['SECRET_KEY'] = 'key'
-        self.client = app.test_client()
+
+        connect_to_db(app, 'postgresql:///testdb')
+
+        db.create_all()
+        load_users()
+        load_activities()
+        load_sessions()
+        load_records()
+
+        with self.app as c:
+            with c.session_transaction() as sess:
+                sess['user_id'] = 2
+                sess['sess_id'] = 40
 
     def tearDown(self):
         """Execute at the end of each test."""
 
-        pass
+        db.session.close()
+        db.drop_all()
+
+    def test_api_get_activities(self):
+        """Test for return of user's activity_time."""
+
+        result = self.app.post('/api/get-activities')
+
+        self.assertIn("Shower", result.data)
+        self.assertIn("clicked", result.data)
+        self.assertIn("time", result.data)
+        self.assertIn("12", result.data)
+
+    def test_api_add_session(self):
+        """Test for database update for new session for later records."""
+
+        result = self.app.post('/api/add-session')
+
+        self.assertIn('true', result.data)
+
+    def test_api_add_record(self):
+        """Test for database update for each new user record."""
+
+        data = {'act_id': 1, 'start_t': 15192000000000, 'end_t': 15192002000000}
+        result = self.app.post('/api/add-record',
+                               data=json.dumps(data),
+                               content_type='application/json')
+
+        self.assertIn('true', result.data)
+
+    def test_api_validate_user_pass(self):
+        """Test for True response when user is logged in."""
+
+        result = self.app.post('/api/validate-user')
+
+        self.assertIn('true', result.data)
+
+    def test_api_logout(self):
+        """Test for False response when user is logged out."""
+
+        result = self.app.get('/api/logout')
+
+        self.assertIn('false', result.data)
+
+    # def test_api_profile_pass(self):
+    #     """Test for user info returned when user is logged in."""
+
+    #     result = self.app.post('/api/profile')
+
+    #     self.assertIn('user_info', result.data)
+    #     self.assertIn('user_records', result.data)
+
+
+################################################################################
+
+
+class FlaskTestsLoggedOut(unittest.TestCase):
+    """Flask tests for guest user on Ready Now web app."""
+
+    def setUp(self):
+        """Prepare for each test before execution."""
+
+        self.app = app.test_client()
+        app.config['TESTING'] = True
+        app.config['SECRET_KEY'] = 'key'
+
+        connect_to_db(app, 'postgresql:///testdb')
+
+        db.create_all()
+        load_users()
+        load_activities()
+        load_sessions()
+        load_records()
+
+    def tearDown(self):
+        """Execute at the end of each test."""
+
+        db.session.close()
+        db.drop_all()
+
+    def test_api_register_pass(self):
+        """Test for successful registration of new username."""
+
+        data = {'username': 'newuser', 'password': 'password'}
+        result = self.app.post('/api/register',
+                               data=json.dumps(data),
+                               content_type='application/json')
+
+        self.assertIn('true', result.data)
+
+    def test_api_register_fail(self):
+        """Test for rejected registration of existing username."""
+
+        data = {'username': 'janedoe', 'password': 'password'}
+        result = self.app.post('/api/register',
+                               data=json.dumps(data),
+                               content_type='application/json')
+
+        self.assertIn('false', result.data)
+
+    def test_api_validate_user_fail(self):
+        """Test for False response when user is not logged in."""
+
+        result = self.app.post('/api/validate-user')
+
+        self.assertIn('false', result.data)
+
+    def test_api_login_pass(self):
+        """Test for successful login of user with correct credentials."""
+
+        data = {'username': 'janedoe', 'password': 'password'}
+        result = self.app.post('/api/login',
+                               data=json.dumps(data),
+                               content_type='application/json')
+
+        self.assertIn('true', result.data)
+
+    def test_api_login_fail(self):
+        """Test for rejected login of user with incorrect credentials."""
+
+        data = {'username': 'janedoe', 'password': 'wrongpassword'}
+        result = self.app.post('/api/login',
+                               data=json.dumps(data),
+                               content_type='application/json')
+
+        self.assertIn('false', result.data)
+
+    def test_api_profile_fail(self):
+        """Test for false response when user is not logged in."""
+
+        result = self.app.post('/api/profile')
+
+        self.assertIn('false', result.data)
+
 
 ################################################################################
 

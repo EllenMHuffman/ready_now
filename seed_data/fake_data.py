@@ -39,13 +39,18 @@ days = [1519200000, 1519200000, 1519200000, 1519200000, 1519113600,
         1518163200, 1518163200, 1518076800, 1517990400, 1517904000]
 
 for i, user_id in enumerate(user_ids):
-    act_qty = random.randint(4, 12)
-    day = days[-1]
-    start = day + 33000
-    total_time = 0
+    act_qty = random.randint(5, 13)
+    selected_activities = set()
 
     for _ in range(0, act_qty):
         act_id = random.randint(1, 13)
+        selected_activities.add(act_id)
+
+    day = days[-(i + 1)]
+    start = day + 33000
+    total_time = 0
+
+    for act_id in selected_activities:
         act_time = random.randint(120, 1000)
 
         start_t = start + total_time
