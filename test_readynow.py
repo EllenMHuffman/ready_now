@@ -5,7 +5,7 @@ from models import User, db, connect_to_db
 from server import app
 from seed import load_users, load_activities, load_sessions, load_records
 from helper_functions import (update_db, verify_user, create_activity_times,
-                              get_user_avg, convert_to_datetime)
+                              get_user_avg, convert_to_datetime, create_user)
 
 ################################################################################
 
@@ -49,7 +49,7 @@ class TestFlaskDatabase(unittest.TestCase):
         """Test for validation of existing login credentials."""
 
         info = {'username': 'timmy', 'password': u'password'}
-        timmy = User.create_user(info)
+        timmy = create_user(info)
         boolean = verify_user(timmy, u'password')
 
         self.assertTrue(boolean)
@@ -58,7 +58,7 @@ class TestFlaskDatabase(unittest.TestCase):
         """Test for rejection of incorrect password in login credentials."""
 
         info = {'username': 'timmy', 'password': u'password'}
-        timmy = User.create_user(info)
+        timmy = create_user(info)
         boolean = verify_user(timmy, u'wrong')
 
         self.assertFalse(boolean)

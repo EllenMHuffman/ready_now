@@ -1,7 +1,6 @@
 """Models and database functions for Ready Now project"""
 
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug import ImmutableMultiDict
 
 db = SQLAlchemy()
 ################################################################################
