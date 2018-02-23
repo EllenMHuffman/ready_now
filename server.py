@@ -3,7 +3,7 @@
 from jinja2 import StrictUndefined
 import json
 
-from flask import Flask, render_template, redirect, request, session, jsonify
+from flask import Flask, render_template, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.sql import func
 from sqlalchemy import exc
@@ -11,8 +11,10 @@ from sqlalchemy import exc
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
-from helper_functions import (update_db, verify_user, create_activity_times,
-                              get_user_avg, convert_to_datetime)
+from helper_functions import (create_user, update_db, verify_user,
+                              create_activity_times, get_user_avg,
+                              convert_to_datetime, clean_phone_number,
+                              twilio_ping, create_friend_info)
 
 app = Flask(__name__)
 
@@ -98,10 +100,8 @@ def register_user():
     """Creates a new user, adds them to the database, and logs them in."""
 
     user_data = json.loads(request.data)
-    new_user = User.create_user(user_data)
-    # result = User.query.filter(User.username == new_user.username)
+    new_user = create_user(user_data)
 
-    # if result.count() == 0:
     try:
         update_db(new_user)
 
@@ -170,10 +170,53 @@ def show_user_page():
                        .group_by(Record.sess_id, Record.act_id).all())
 
         # NEED TO WRITE HELPER FUNCTION TO CONVERT DB OBJECTS INTO DICTS
+        # OR MAYBE IT SHOULD BE CLASS METHODS?
 
         return jsonify({'user_info': user_info, 'user_records': user_recs})
 
     return jsonify({'value': False})
+
+
+@app.route('/api/add-friend', methods=['POST'])
+def add_friend():
+    """Add contact information for a friend into the database."""
+
+    friend_data = json.loads(request.data)
+    name = friend_data['name']
+    phone = clean_phone_number(friend_data['phone'])
+    value = False
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        new_friend = Friend(user_id=user_id, name=name, phone=phone)
+        value = update_db(new_friend)
+
+    return jsonify({'value': value})
+
+
+@app.route('/api/list-friends', methods=['POST'])
+def list_friends():
+    """List given user's friend information."""
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        friends = db.session.query(Friend.friend_id, Friend.name, Friend.phone
+                                   ).filter(Friend.user_id == user_id).all()
+        friend_phone = create_friend_info(friends)
+
+        return jsonify(friend_phone)
+
+    return jsonify({'value': False})
+
+
+@app.route('/api/text-friend', methods=['POST'])
+def text_friend():
+    """Send sms to user's specified friend with provided message."""
+
+    text_data = json.loads(request.data)
+    phone
 
 
 ################################################################################

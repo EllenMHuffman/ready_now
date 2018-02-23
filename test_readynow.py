@@ -13,7 +13,7 @@ from helper_functions import (update_db, verify_user, create_activity_times,
 ################################################################################
 
 
-class FlaskTestsDatabase(unittest.TestCase):
+class TestFlaskDatabase(unittest.TestCase):
     """Flask tests that use the database."""
 
     def setUp(self):
@@ -93,7 +93,7 @@ class FlaskTestsDatabase(unittest.TestCase):
 ################################################################################
 
 
-class FlaskTestsLoggedIn(unittest.TestCase):
+class TestFlaskLoggedIn(unittest.TestCase):
     """Flask tests for logged in user on Ready Now web app."""
 
     def setUp(self):
@@ -175,7 +175,7 @@ class FlaskTestsLoggedIn(unittest.TestCase):
 ################################################################################
 
 
-class FlaskTestsLoggedOut(unittest.TestCase):
+class TestsFlaskLoggedOut(unittest.TestCase):
     """Flask tests for guest user on Ready Now web app."""
 
     def setUp(self):

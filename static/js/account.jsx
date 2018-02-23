@@ -17,12 +17,17 @@ class Login extends React.Component {
 
   handleSubmit(event){
     event.preventDefault();
-    let data = {username: this.state.username,
-                password: this.state.password};
-    console.log(data);
-    fetch('/api/login', {method: 'POST',
-                         body: JSON.stringify(data),
-                         credentials: 'include'})
+
+    let data = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
       .then((response)=> response.json())
       .then((data)=>  this.props.setLoggedIn(data.value));
   }
@@ -62,16 +67,18 @@ class Login extends React.Component {
 class Register extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {fname: '',
-                  lname: '',
-                  username: '',
-                  password: '',
-                  gender: '',
-                  phone: '',
-                  street: '',
-                  city: '',
-                  state: '',
-                  zipcode: ''};
+    this.state = {
+      fname: '',
+      lname: '',
+      username: '',
+      password: '',
+      gender: '',
+      phone: '',
+      street: '',
+      city: '',
+      state: '',
+      zipcode: ''
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -98,15 +105,17 @@ class Register extends React.Component {
       zipcode: this.state.zipcode
     };
 
-    fetch('/api/register', {method: 'POST',
-                         body: JSON.stringify(data),
-                         credentials: 'include'})
-      .then((response)=> response.json())
-      .then((data)=>  {
-          data.value
-              ? alert('Successful registration')
-              : alert('Username already exists. Please try again.');
-          this.props.setLoggedIn(data.value);
+    fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .then((data) =>  {
+        data.value
+            ? alert('Successful registration')
+            : alert('Username already exists. Please try again.');
+      this.props.setLoggedIn(data.value);
       });
   }
 

@@ -3,6 +3,7 @@
 class TimersContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {'friends': null}
   }
 
   calculateETA() {
@@ -25,6 +26,7 @@ class TimersContainer extends React.Component {
                                 time={this.props.data[act_id]['time']} />);
       }
     }
+    let friendList;
     return (
       <div>
         <h2>Click 'Start' and 'Stop' for each step</h2>
@@ -32,6 +34,7 @@ class TimersContainer extends React.Component {
         <br />
         <br />
         <div>Initial ETA: {totalTime.format('h:mm a')}</div>
+        {friendList}
       </div>
     );
   }
@@ -115,22 +118,26 @@ class Timer extends React.Component {
     }
   }
 
-  stopTimer() {
-    let timeNow = Math.floor(Date.now());
-    this.setState({ active: false,
-                    end_t: timeNow
-                  });
+  sendData(data) {
+    fetch('/api/add-record', {
+      body: JSON.stringify(data),
+      method: 'post',
+      credentials: 'include'
+    });
   }
 
-  sendData() {
-    setTimeout( () => {
-      let data = {start_t: this.state.start_t,
-             end_t: this.state.end_t,
-             act_id: this.props.act_id};
-      fetch('/api/add-record', {body: JSON.stringify(data),
-                                method: 'post',
-                                credentials: 'include'});
-    }, 2000);
+  stopTimer() {
+    let timeNow = Math.floor(Date.now());
+    this.setState({
+      active: false,
+      end_t: timeNow
+    });
+    let data = {
+      start_t: this.state.start_t,
+      end_t: timeNow,
+      act_id: this.props.act_id};
+    console.log(data);
+    this.sendData(data);
   }
 
   render() {
@@ -138,7 +145,7 @@ class Timer extends React.Component {
       <div>
         {this.state.time.m}:{this.state.time.s} ....
         <button onClick={this.startTimer}>Start</button>
-        <button onClick={() =>(this.stopTimer(), this.sendData())}>Stop</button>
+        <button onClick={this.stopTimer}>Stop</button>
       </div>
     );
   }
@@ -147,4 +154,65 @@ class Timer extends React.Component {
 // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
 // Fabian Schultz
 
+class Friend extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
+  fetchFriends() {
+    fetch('/api/get-friends', {
+      method: 'post',
+      credentials: 'include'
+    })
+    .then((response) => response.json())
+    .then((data) => this.setState({data}));
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+
+    let data = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
+    fetch('/api/text-friend', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+      // .then((response)=> response.json())
+      // .then((data)=>  this.props.setLoggedIn(data.value));
+  }
+
+  render() {
+    let friends = [];
+    for (let friend in this.state.data) {
+      friends.push(<FriendSelect value={this.state.value} name={this.state.name} />)
+    }
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            <h3>Message a friend:</h3>
+            <select name='friend'
+                    value={this.state.value}
+                    onChange={this.handleChange}>
+              {friends}
+            </select>
+          </label>
+        </form>
+      </div>
+    );
+  }
+}
+
+class FriendSelect extends React.Component {
+  render() {
+    return (
+      <option value={this.props.value}>{this.props.name}</option>
+    );
+  }
+}

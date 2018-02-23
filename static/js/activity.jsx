@@ -15,8 +15,8 @@ class ActivitiesContainer extends React.Component {
       method: 'post',
       credentials: 'include'
     })
-    .then((response)=> response.json())
-    .then((data)=>  this.setState({data}));
+    .then((response) => response.json())
+    .then((data) =>  this.setState({data}));
   }
 
   calculateTime() {

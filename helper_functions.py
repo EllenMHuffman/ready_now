@@ -1,9 +1,44 @@
-from models import db, Record
+import os
+from models import db, Record, User
 from sqlalchemy.sql import func
 from datetime import datetime
+from twilio.rest import Client
 import bcrypt
+import re
 
 ################################################################################
+
+
+def create_user(user_data):
+    """Instantiates a User object given user registration data.
+
+        >>> from werkzeug import ImmutableMultiDict
+
+        >>> info = ImmutableMultiDict({'username': 'newuser', 'password':\
+                                       'newpassword'})
+        >>> new_user = create_user(info)
+        >>> new_user.username
+        'newuser'
+
+    """
+
+    fname = user_data.get('fname', None)
+    lname = user_data.get('lname', None)
+    username = (user_data['username']).lower()
+    password = user_data['password']
+    gender = user_data.get('gender', None)
+    phone = clean_phone_number(user_data.get('phone', ''))
+    street = user_data.get('street', None)
+    city = user_data.get('city', None)
+    state = user_data.get('state', None)
+    zipcode = user_data.get('zipcode', None)
+
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                                    bcrypt.gensalt(10))
+
+    return User(fname=fname, lname=lname, username=username,
+                password=hashed_password, gender=gender, phone=phone,
+                street=street, city=city, state=state, zipcode=zipcode)
 
 
 def update_db(new_row):
@@ -76,3 +111,47 @@ def convert_to_datetime(js_time):
     """
 
     return datetime.fromtimestamp(js_time/1000)
+
+
+def clean_phone_number(number_string):
+    """Takes user input phone number and returns a string of only digits.
+
+        >>> clean_phone_number('(555) 876-5432')
+        '5558765432'
+    """
+
+    return re.sub("[^0-9]", "", number_string)
+
+
+def twilio_ping(phone, message):
+    """Send given message to given phone number via Twilio API."""
+
+    ACCOUNT_SID = os.environ['ACCOUNT_SID']
+    AUTH_TOKEN = os.environ['AUTH_TOKEN']
+    MY_PHONE = phone
+    TWILIO_PHONE = os.environ['TWILIO_PHONE']
+
+    client = Client(ACCOUNT_SID, AUTH_TOKEN)
+
+    message = client.messages.create(
+        to=MY_PHONE,
+        from_=TWILIO_PHONE,
+        body=message)
+
+
+def create_friend_info(friends):
+    """Takes list of friend tuples and creates a dictionary of name and phone.
+
+        >>> create_friend_info([])
+        {}
+
+    """
+
+    friend_phone = {}
+
+    for friend_id, name, phone in friends:
+        friend_phone[friend_id] = {'name': name,
+                                   'phone': phone,
+                                   'selected': False}
+
+    return friend_phone

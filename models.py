@@ -2,7 +2,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import ImmutableMultiDict
-import bcrypt
 
 db = SQLAlchemy()
 ################################################################################
@@ -29,36 +28,6 @@ class User(db.Model):
     records = db.relationship('Record', backref='user')
     friends = db.relationship('Friend', backref='user')
     destinations = db.relationship('Destination', backref='user')
-
-    @classmethod
-    def create_user(cls, user_data):
-        """Instantiates a User object given user registration data.
-
-            >>> info = ImmutableMultiDict({'username': 'newuser', 'password':\
-                                           'newpassword'})
-            >>> new_user = User.create_user(info)
-            >>> new_user.username
-            'newuser'
-
-        """
-
-        fname = user_data.get('fname', None)
-        lname = user_data.get('lname', None)
-        username = (user_data['username']).lower()
-        password = user_data['password']
-        gender = user_data.get('gender', None)
-        phone = user_data.get('phone', None)
-        street = user_data.get('street', None)
-        city = user_data.get('city', None)
-        state = user_data.get('state', None)
-        zipcode = user_data.get('zipcode', None)
-
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'),
-                                        bcrypt.gensalt(10))
-
-        return cls(fname=fname, lname=lname, username=username,
-                   password=hashed_password, gender=gender, phone=phone,
-                   street=street, city=city, state=state, zipcode=zipcode)
 
     def __repr__(self):
         """Display user information"""
@@ -101,8 +70,8 @@ class Activity(db.Model):
     def __repr__(self):
         """Display activity information"""
 
-        return '<Activity act_id={} act_name={} default_time={}>'.\
-            format(self.act_id, self.act_name, self.default_time)
+        return '<Activity act_id={} act_name={} default_time={}>'.format(
+            self.act_id, self.act_name, self.default_time)
 
 
 class Record(db.Model):

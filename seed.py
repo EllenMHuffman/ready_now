@@ -2,6 +2,7 @@
 
 from models import (User, Session, Activity, Record, Friend, Destination,
                     connect_to_db, db)
+from helper_functions import clean_phone_number
 from server import app
 import bcrypt
 
@@ -77,7 +78,19 @@ def load_records():
 def load_friends():
     """Reads in friends.txt and adds to database."""
 
-    pass
+    with open('seed_data/friends.txt') as f:
+        for row in f:
+            row = row.strip()
+            user_id, name, raw_phone = row.split('|')
+
+            phone_split = raw_phone.split('x')
+            phone = clean_phone_number(phone_split[0])
+
+            entry = Friend(user_id=user_id, name=name, phone=phone)
+
+            db.session.add(entry)
+
+    db.session.commit()
 
 
 def load_destinations():
@@ -96,8 +109,4 @@ if __name__ == '__main__':
     load_activities()
     load_sessions()
     load_records()
-
-#########
-# After my database is loaded with the dummy data I want, I need to do:
-# >>>pg_dump dbname > outfile
-# add resulting sql file to repo
+    load_friends()
