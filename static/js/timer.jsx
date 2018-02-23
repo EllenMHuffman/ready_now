@@ -26,7 +26,7 @@ class TimersContainer extends React.Component {
                                 time={this.props.data[act_id]['time']} />);
       }
     }
-    let friendList;
+    let friendList = <FriendSelect />
     return (
       <div>
         <h2>Click 'Start' and 'Stop' for each step</h2>
@@ -154,11 +154,14 @@ class Timer extends React.Component {
 // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
 // Fabian Schultz
 
-class Friend extends React.Component {
+class FriendSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.fetchFriends = this.fetchFriends.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchFriends();
   }
 
   fetchFriends() {
@@ -170,12 +173,18 @@ class Friend extends React.Component {
     .then((data) => this.setState({data}));
   }
 
+  handleChange(event) {
+    const value = event.target.value;
+    const name = event.target.name;
+    this.setState({[name]: value});
+  }
+
   handleSubmit(event){
     event.preventDefault();
 
     let data = {
-      username: this.state.username,
-      password: this.state.password
+      phone: this.state.phone,
+      message: this.state.message
     };
 
     fetch('/api/text-friend', {
@@ -189,30 +198,45 @@ class Friend extends React.Component {
 
   render() {
     let friends = [];
-    for (let friend in this.state.data) {
-      friends.push(<FriendSelect value={this.state.value} name={this.state.name} />)
+    for (let friend_id in this.state.data) {
+      friends.push(<FriendOption key={this.state.data[friend_id]['phone']}
+                                 phone={this.state.data[friend_id]['phone']}
+                                 name={this.state.data[friend_id]['name']} />);
     }
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label>
-            <h3>Message a friend:</h3>
-            <select name='friend'
-                    value={this.state.value}
-                    onChange={this.handleChange}>
-              {friends}
-            </select>
-          </label>
+            <h3>Message a friend</h3>
+            <label>
+              Choose friend:
+              <br />
+              <select name='phone'
+                      value={this.state.value}
+                      onChange={this.handleChange}>
+                <option value='null'> -- </option>
+                {friends}
+              </select>
+            </label>
+            <br />
+            <label>
+              Write your message:
+              <br />
+              <textarea name='message'
+                        value={this.state.value}
+                        onChange={this.handleChange} />
+            </label>
+            <br />
+            <input type='submit' value='Send text' />
         </form>
       </div>
     );
   }
 }
 
-class FriendSelect extends React.Component {
+class FriendOption extends React.Component {
   render() {
     return (
-      <option value={this.props.value}>{this.props.name}</option>
+      <option value={this.props.phone}>{this.props.name}</option>
     );
   }
 }

@@ -195,7 +195,7 @@ def add_friend():
     return jsonify({'value': value})
 
 
-@app.route('/api/list-friends', methods=['POST'])
+@app.route('/api/get-friends', methods=['POST'])
 def list_friends():
     """List given user's friend information."""
 
@@ -204,6 +204,7 @@ def list_friends():
 
         friends = db.session.query(Friend.friend_id, Friend.name, Friend.phone
                                    ).filter(Friend.user_id == user_id).all()
+
         friend_phone = create_friend_info(friends)
 
         return jsonify(friend_phone)
@@ -216,7 +217,10 @@ def text_friend():
     """Send sms to user's specified friend with provided message."""
 
     text_data = json.loads(request.data)
-    phone
+    phone = text_data['phone']
+    message = text_data['message']
+
+    twilio_ping(phone, message)
 
 
 ################################################################################
