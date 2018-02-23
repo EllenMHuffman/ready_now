@@ -133,10 +133,16 @@ def twilio_ping(phone, message):
 
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    message = client.messages.create(
-        to=MY_PHONE,
-        from_=TWILIO_PHONE,
-        body=message)
+    try:
+        message = client.messages.create(
+            to=MY_PHONE,
+            from_=TWILIO_PHONE,
+            body=message)
+
+        return True
+
+    except:
+        return False
 
 
 def create_friend_info(friends):

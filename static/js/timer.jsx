@@ -9,8 +9,8 @@ class TimersContainer extends React.Component {
   calculateETA() {
     let timeNow = moment();
     let totalTime = 0;
-    for (let act_id in this.props.data) {
-      totalTime += this.props.data[act_id]['time'];
+    for (let actId in this.props.data) {
+      totalTime += this.props.data[actId]['time'];
     }
     return timeNow.add(totalTime, 's');
   }
@@ -18,15 +18,15 @@ class TimersContainer extends React.Component {
   render() {
     let totalTime = this.calculateETA();
     let activities = [];
-    for (let act_id in this.props.data) {
-      if (this.props.data[act_id]['clicked'] === true) {
-      activities.push(<Activity key={act_id}
-                                act_id={act_id}
-                                name={this.props.data[act_id]['name']}
-                                time={this.props.data[act_id]['time']} />);
+    for (let actId in this.props.data) {
+      if (this.props.data[actId]['clicked'] === true) {
+      activities.push(<Timer key={actId}
+                                actId={actId}
+                                name={this.props.data[actId]['name']}
+                                time={this.props.data[actId]['time']} />);
       }
     }
-    let friendList = <FriendSelect />
+    let messageFriend = <FriendSelect />
     return (
       <div>
         <h2>Click 'Start' and 'Stop' for each step</h2>
@@ -34,23 +34,23 @@ class TimersContainer extends React.Component {
         <br />
         <br />
         <div>Initial ETA: {totalTime.format('h:mm a')}</div>
-        {friendList}
+        {messageFriend}
       </div>
     );
   }
 }
 
-class Activity extends React.Component {
-  render() {
-    return (
-      <div>
-        <span> {this.props.name}:</span>
-        <span> <Timer time={this.props.time}
-                      act_id={this.props.act_id}/> </span>
-      </div>
-    );
-  }
-}
+// class Activity extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <span> {this.props.name}:</span>
+//         <span> <Timer time={this.props.time}
+//                       actId={this.props.actId}/> </span>
+//       </div>
+//     );
+//   }
+// }
 
 class Timer extends React.Component {
   constructor(props) {
@@ -59,8 +59,8 @@ class Timer extends React.Component {
                    time: {},
                    seconds: this.props.time,
                    active: true,
-                   start_t: null,
-                   end_t: null
+                   startTime: null,
+                   endTime: null
                  };
     this.timer = 0;
     this.toggleVisible = this.toggleVisible.bind(this);
@@ -101,7 +101,7 @@ class Timer extends React.Component {
     if (this.timer == 0) {
       let timeNow = Math.floor(Date.now());
       this.timer = setInterval(this.countDown, 1000);
-      this.setState({start_t: timeNow,
+      this.setState({startTime: timeNow,
                      visible: false});
     }
   }
@@ -130,22 +130,24 @@ class Timer extends React.Component {
     let timeNow = Math.floor(Date.now());
     this.setState({
       active: false,
-      end_t: timeNow
+      endTime: timeNow
     });
     let data = {
-      start_t: this.state.start_t,
-      end_t: timeNow,
-      act_id: this.props.act_id};
-    console.log(data);
+      startTime: this.state.startTime,
+      endTime: timeNow,
+      actId: this.props.actId};
     this.sendData(data);
   }
 
   render() {
     return (
       <div>
-        {this.state.time.m}:{this.state.time.s} ....
-        <button onClick={this.startTimer}>Start</button>
-        <button onClick={this.stopTimer}>Stop</button>
+        <div> {this.props.name}:</div>
+        <span>{this.state.time.m}:{this.state.time.s} ....</span>
+        <div>
+          <button onClick={this.startTimer}>Start</button>
+          <button onClick={this.stopTimer}>Stop</button>
+        </div>
       </div>
     );
   }
@@ -153,90 +155,3 @@ class Timer extends React.Component {
 
 // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
 // Fabian Schultz
-
-class FriendSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.fetchFriends = this.fetchFriends.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.fetchFriends();
-  }
-
-  fetchFriends() {
-    fetch('/api/get-friends', {
-      method: 'post',
-      credentials: 'include'
-    })
-    .then((response) => response.json())
-    .then((data) => this.setState({data}));
-  }
-
-  handleChange(event) {
-    const value = event.target.value;
-    const name = event.target.name;
-    this.setState({[name]: value});
-  }
-
-  handleSubmit(event){
-    event.preventDefault();
-
-    let data = {
-      phone: this.state.phone,
-      message: this.state.message
-    };
-
-    fetch('/api/text-friend', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      credentials: 'include'
-    })
-      // .then((response)=> response.json())
-      // .then((data)=>  this.props.setLoggedIn(data.value));
-  }
-
-  render() {
-    let friends = [];
-    for (let friend_id in this.state.data) {
-      friends.push(<FriendOption key={this.state.data[friend_id]['phone']}
-                                 phone={this.state.data[friend_id]['phone']}
-                                 name={this.state.data[friend_id]['name']} />);
-    }
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-            <h3>Message a friend</h3>
-            <label>
-              Choose friend:
-              <br />
-              <select name='phone'
-                      value={this.state.value}
-                      onChange={this.handleChange}>
-                <option value='null'> -- </option>
-                {friends}
-              </select>
-            </label>
-            <br />
-            <label>
-              Write your message:
-              <br />
-              <textarea name='message'
-                        value={this.state.value}
-                        onChange={this.handleChange} />
-            </label>
-            <br />
-            <input type='submit' value='Send text' />
-        </form>
-      </div>
-    );
-  }
-}
-
-class FriendOption extends React.Component {
-  render() {
-    return (
-      <option value={this.props.phone}>{this.props.name}</option>
-    );
-  }
-}

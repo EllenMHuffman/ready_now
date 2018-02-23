@@ -1,11 +1,10 @@
 import json
 import unittest
-from Flask import session
+# from Flask import session
 from models import User, db, connect_to_db
 from server import app
 from seed import load_users, load_activities, load_sessions, load_records
-from helper_functions import (update_db, verify_user, create_activity_times,
-                              get_user_avg, convert_to_datetime, create_user)
+from helper_functions import (update_db, verify_user, get_user_avg, create_user)
 
 ################################################################################
 

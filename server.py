@@ -75,10 +75,10 @@ def add_record():
 
     timer_data = json.loads(request.data)
     sess_id = session['sess_id']
-    act_id = timer_data['act_id']
-    js_start = timer_data['start_t']
+    act_id = timer_data['actId']
+    js_start = timer_data['startTime']
     start_t = convert_to_datetime(js_start)
-    js_end = timer_data['end_t']
+    js_end = timer_data['endTime']
     end_t = convert_to_datetime(js_end)
 
     # Log records on guest account
@@ -220,7 +220,9 @@ def text_friend():
     phone = text_data['phone']
     message = text_data['message']
 
-    twilio_ping(phone, message)
+    value = twilio_ping(phone, message)
+
+    return jsonify({'value': value})
 
 
 ################################################################################
