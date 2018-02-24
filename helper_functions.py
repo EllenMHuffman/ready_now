@@ -102,15 +102,15 @@ def get_user_avg(user_id, activity_time):
     return activity_time
 
 
-def convert_to_datetime(js_time):
+def convert_to_datetime(unix_seconds):
     """Takes integer of JavaScript time and converts to datetime object.
 
-        >>> convert_to_datetime(15192000000000)
+        >>> convert_to_datetime(15192000000)
         datetime.datetime(2451, 6, 1, 8, 0)
 
     """
 
-    return datetime.fromtimestamp(js_time/1000)
+    return datetime.fromtimestamp(unix_seconds)
 
 
 def clean_phone_number(number_string):

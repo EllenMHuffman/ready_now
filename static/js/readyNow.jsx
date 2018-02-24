@@ -10,9 +10,10 @@ class ReadyNow extends React.Component {
     };
     this.validateUser = this.validateUser.bind(this);
     this.setLoggedIn = this.setLoggedIn.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
     this.showActivities = this.showActivities.bind(this);
     this.setTimers = this.setTimers.bind(this);
-    this.logoutUser = this.logoutUser.bind(this);
+    this.getFilteredTimerData = this.getFilteredTimerData.bind(this);
     this.showRegister = this.showRegister.bind(this);
     this.showLogin = this.showLogin.bind(this);
     this.showProfile = this.showProfile.bind(this);
@@ -35,6 +36,16 @@ class ReadyNow extends React.Component {
     });
   }
 
+  logoutUser(event) {
+    fetch('/api/logout', {credentials: 'include'})
+      .then((response)=> response.json())
+      .then((data)=>  this.setState({
+        'loggedIn': data.value,
+        'mainView': 'actLoggedOut'
+      }));
+    // this.showActivities();
+  }
+
   showActivities(event) {
     this.setState({
       ['accountView']: null,
@@ -47,14 +58,15 @@ class ReadyNow extends React.Component {
     this.setState({['mainView']: 'timers'});
   }
 
-  logoutUser(event) {
-    fetch('/api/logout', {credentials: 'include'})
-      .then((response)=> response.json())
-      .then((data)=>  this.setState({
-        'loggedIn': data.value,
-        'mainView': 'actLoggedOut'
-      }));
-    // this.showActivities();
+  getFilteredTimerData() {
+    let data = this.state.timerData;
+    let clickedTimerData = {};
+    for (let actId in data) {
+      if (data[actId]['clicked'] === true) {
+        clickedTimerData[actId] = data[actId];
+      }
+    }
+    return clickedTimerData;
   }
 
   showRegister(event) {
@@ -93,10 +105,10 @@ class ReadyNow extends React.Component {
     let accountView
     if (this.state['accountView'] === 'login') {
       accountView = <Login validateUser={this.validateUser}
-             setLoggedIn={this.setLoggedIn} />
+          setLoggedIn={this.setLoggedIn} />
     } else if (this.state['accountView'] === 'register') {
       accountView = <Register validateUser={this.validateUser}
-                setLoggedIn={this.setLoggedIn} />
+          setLoggedIn={this.setLoggedIn} />
     } else {
       accountView = null
     }
@@ -105,10 +117,11 @@ class ReadyNow extends React.Component {
     if (['activities', 'actLoggedIn', 'actLoggedOut'].includes(
       this.state['mainView'])) {
         console.log(this.state['mainView']);
-        mainView = <ActivitiesContainer setTimers={this.setTimers}/>;
+        mainView = <ActivitiesContainer
+            setTimers={this.setTimers}/>;
     } else if (this.state['mainView'] === 'timers') {
-      mainView = <TimersContainer data={this.state.timerData}
-                                  updateTime={this.updateTime} />;
+      mainView = <TimersContainer
+          timerData={this.getFilteredTimerData()} />;
     } else if (this.state['mainView'] === 'profile') {
       mainView = <ProfileContainer />;
     } else if (this.state['mainView'] === 'settings') {

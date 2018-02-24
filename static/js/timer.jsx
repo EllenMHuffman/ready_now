@@ -3,44 +3,43 @@
 class TimersContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {'friends': null};
-    this.updateEta = this.updateEta.bind(this);
+    this.calculateETA = this.calculateETA.bind(this);
+    this.calculateProjectedETA = this.calculateProjectedETA.bind(this);
+    let eta = this.calculateETA();
+    this.state = {
+      'friends': null,
+      'initialETA': eta,
+      'projectedETA': eta
+    };
   }
 
   calculateETA() {
     let timeNow = moment();
     let totalTime = 0;
-    for (let actId in this.props.data) {
-      totalTime += this.props.data[actId]['time'];
+    for (let actId in this.props.timerData) {
+      totalTime += this.props.timerData[actId]['time'];
     }
     return timeNow.add(totalTime, 's');
   }
 
-  calculateProjectedETA() {
-    let timeNow = moment();
-    let newTime = 0;
-    for (let actId in this.state) {
-
-    }
-  }
-
-  updateEta(data) {
-    actId = data['actId'];
-    time = data['endTime'] - data['startTime'];
-    this.setState({[actId]: time});
+  calculateProjectedETA(data) {
+    let actualTime = data.endTime - data.startTime;
+    let difference = (this.props.timerData[data.actId]['time'] - actualTime);
+    let newETA = moment(this.state['projectedETA'] - difference * 1000);
+    this.setState({['projectedETA']: newETA});
   }
 
   render() {
-    let totalTime = this.calculateETA();
+    let initialTime = this.state['initialETA'];
+    let projectedTime = this.state['projectedETA'];
     let activities = [];
-    for (let actId in this.props.data) {
-      if (this.props.data[actId]['clicked'] === true) {
+
+    for (let actId in this.props.timerData) {
       activities.push(<Timer key={actId}
-                                actId={actId}
-                                name={this.props.data[actId]['name']}
-                                time={this.props.data[actId]['time']}
-                                updateEta={this.updateEta} />);
-      }
+                             actId={actId}
+                             name={this.props.timerData[actId]['name']}
+                             time={this.props.timerData[actId]['time']}
+                             calculateProjectedETA={this.calculateProjectedETA} />);
     }
     let messageFriend = <FriendSelect />
     return (
@@ -49,8 +48,8 @@ class TimersContainer extends React.Component {
         {activities}
         <br />
         <br />
-        <div>Initial ETA: {totalTime.format('h:mm a')}</div>
-        <div>Projected ETA: </div>
+        <div>Initial ETA: {initialTime.format('h:mm a')}</div>
+        <div>Projected ETA: {projectedTime.format('h:mm a')}</div>
         {messageFriend}
       </div>
     );
@@ -68,7 +67,7 @@ class Timer extends React.Component {
                    seconds: this.props.time,
                    active: true,
                    startTime: null,
-                   endTime: null
+                   // endTime: null
                  };
     this.timer = 0;
     this.toggleVisible = this.toggleVisible.bind(this);
@@ -107,7 +106,7 @@ class Timer extends React.Component {
 
   startTimer() {
     if (this.timer == 0) {
-      let timeNow = Math.floor(Date.now());
+      let timeNow = moment();
       this.timer = setInterval(this.countDown, 1000);
       this.setState({startTime: timeNow,
                      visible: false});
@@ -135,17 +134,17 @@ class Timer extends React.Component {
   }
 
   stopTimer() {
-    let timeNow = Math.floor(Date.now());
+    let timeNow = moment();
     this.setState({
       active: false,
-      endTime: timeNow
+      // endTime: timeNow.unix()
     });
     let data = {
-      startTime: this.state.startTime,
-      endTime: timeNow,
+      startTime: this.state.startTime.unix(),
+      endTime: timeNow.unix(),
       actId: this.props.actId};
     this.sendData(data);
-    this.props.updateEta(data);
+    this.props.calculateProjectedETA(data);
   }
 
   render() {

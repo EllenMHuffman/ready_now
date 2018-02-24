@@ -21,9 +21,9 @@ class ActivitiesContainer extends React.Component {
 
   calculateTime() {
     let totalTime = 0;
-    for (let act_id in this.state.data) {
-      if (this.state.data[act_id]['clicked'] === true) {
-        totalTime += this.state.data[act_id]['time'];
+    for (let actId in this.state.data) {
+      if (this.state.data[actId]['clicked'] === true) {
+        totalTime += this.state.data[actId]['time'];
       }
     }
     return (totalTime/60).toFixed(2);
@@ -31,9 +31,9 @@ class ActivitiesContainer extends React.Component {
 
   handleClick(event) {
     event.preventDefault();
-    let act_id = event.target.value;
+    let actId = event.target.value;
     let nextState = this.state.data;
-    nextState[act_id]['clicked'] = !(nextState[act_id]['clicked']);
+    nextState[actId]['clicked'] = !(nextState[actId]['clicked']);
     this.setState(nextState);
   }
 
@@ -48,11 +48,11 @@ class ActivitiesContainer extends React.Component {
 
   render() {
     let activities = [];
-    for (let act_id in this.state.data) {
-      activities.push(<ActivityForm key={act_id}
-                                    act_id={act_id}
-                                    time={this.state.data[act_id]['time']}
-                                    name={this.state.data[act_id]['name']}
+    for (let actId in this.state.data) {
+      activities.push(<ActivityForm key={actId}
+                                    actId={actId}
+                                    time={this.state.data[actId]['time']}
+                                    name={this.state.data[actId]['name']}
                                     handleClick={this.handleClick} />);
     }
     return (
@@ -79,7 +79,7 @@ class ActivityForm extends React.Component {
   render() {
     return (
       <div>
-        <button value={this.props.act_id} onClick={this.props.handleClick}>
+        <button value={this.props.actId} onClick={this.props.handleClick}>
           {this.props.name}: ~{(this.props.time/60).toFixed(2)} mins</button>
       </div>
     );
