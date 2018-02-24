@@ -107,7 +107,8 @@ class ReadyNow extends React.Component {
         console.log(this.state['mainView']);
         mainView = <ActivitiesContainer setTimers={this.setTimers}/>;
     } else if (this.state['mainView'] === 'timers') {
-      mainView = <TimersContainer data={this.state.timerData} />;
+      mainView = <TimersContainer data={this.state.timerData}
+                                  updateTime={this.updateTime} />;
     } else if (this.state['mainView'] === 'profile') {
       mainView = <ProfileContainer />;
     } else if (this.state['mainView'] === 'settings') {

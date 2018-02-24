@@ -3,7 +3,8 @@
 class TimersContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {'friends': null}
+    this.state = {'friends': null};
+    this.updateEta = this.updateEta.bind(this);
   }
 
   calculateETA() {
@@ -15,6 +16,20 @@ class TimersContainer extends React.Component {
     return timeNow.add(totalTime, 's');
   }
 
+  calculateProjectedETA() {
+    let timeNow = moment();
+    let newTime = 0;
+    for (let actId in this.state) {
+
+    }
+  }
+
+  updateEta(data) {
+    actId = data['actId'];
+    time = data['endTime'] - data['startTime'];
+    this.setState({[actId]: time});
+  }
+
   render() {
     let totalTime = this.calculateETA();
     let activities = [];
@@ -23,7 +38,8 @@ class TimersContainer extends React.Component {
       activities.push(<Timer key={actId}
                                 actId={actId}
                                 name={this.props.data[actId]['name']}
-                                time={this.props.data[actId]['time']} />);
+                                time={this.props.data[actId]['time']}
+                                updateEta={this.updateEta} />);
       }
     }
     let messageFriend = <FriendSelect />
@@ -34,23 +50,15 @@ class TimersContainer extends React.Component {
         <br />
         <br />
         <div>Initial ETA: {totalTime.format('h:mm a')}</div>
+        <div>Projected ETA: </div>
         {messageFriend}
       </div>
     );
   }
 }
 
-// class Activity extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         <span> {this.props.name}:</span>
-//         <span> <Timer time={this.props.time}
-//                       actId={this.props.actId}/> </span>
-//       </div>
-//     );
-//   }
-// }
+////////////////////////////////////////////////////////////////////////////////
+
 
 class Timer extends React.Component {
   constructor(props) {
@@ -137,6 +145,7 @@ class Timer extends React.Component {
       endTime: timeNow,
       actId: this.props.actId};
     this.sendData(data);
+    this.props.updateEta(data);
   }
 
   render() {
