@@ -217,7 +217,13 @@ def text_friend():
     """Send sms to user's specified friend with provided message."""
 
     text_data = json.loads(request.data)
-    phone = text_data['phone']
+
+    try:
+        phone = text_data['phone']
+    except KeyError as e:
+        print e
+        return jsonify({'value': False})
+
     message = text_data['message']
 
     value = twilio_ping(phone, message)
