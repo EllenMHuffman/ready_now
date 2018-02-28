@@ -1,7 +1,8 @@
 env
 *.pyc
-*secret*.*
+*secret*
 DS_Store
 *.DS_Store
 .coverage
 .pytest*
+*node_modules*

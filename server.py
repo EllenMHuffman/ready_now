@@ -154,29 +154,6 @@ def logout_user():
     return jsonify({'value': False})
 
 
-@app.route('/api/profile', methods=['POST'])
-def show_user_page():
-    """Shows user profile page when logged in."""
-
-    if 'user_id' in session:
-        user_id = session['user_id']
-
-        user_info = (db.session.query(User.fname, User.lname, User.username)
-                               .filter(User.user_id == user_id).first())
-        user_recs = (db.session.query(Record.sess_id,
-                                      Record.act_id,
-                                      func.avg(Record.end_t - Record.start_t)
-                               .label('diff')).filter(Record.user_id == user_id)
-                       .group_by(Record.sess_id, Record.act_id).all())
-
-        # NEED TO WRITE HELPER FUNCTION TO CONVERT DB OBJECTS INTO DICTS
-        # OR MAYBE IT SHOULD BE CLASS METHODS?
-
-        return jsonify({'user_info': user_info, 'user_records': user_recs})
-
-    return jsonify({'value': False})
-
-
 @app.route('/api/add-friend', methods=['POST'])
 def add_friend():
     """Add contact information for a friend into the database."""
@@ -229,6 +206,43 @@ def text_friend():
     value = twilio_ping(phone, message)
 
     return jsonify({'value': value})
+
+
+@app.route('/api/get-user-info', methods=['POST'])
+def get_user_info():
+    """Retrieves user info when logged in."""
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        user_info = (db.session.query(User.fname, User.lname, User.username)
+                       .filter(User.user_id == user_id).first())
+        return user_info
+
+
+@app.route('/api/get-average-times', methods=['POST'])
+def get_user_activity_averages():
+    """Retrieves user average activity times when logged in."""
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        user_recs = (db.session.query(
+            func.avg(Record.end_t - Record.start_t).label('diff'),
+            Activity.act_name)
+            .join(Activity)
+            .filter(Record.user_id == user_id)
+            .group_by(Record.act_id).all())
+
+        activity_averages = []
+
+        for time_delta, act_name in user_recs:
+            activity_averages.append({'x': act_name,
+                                      'y': time_delta.total_seconds()})
+
+        return jsonify({'value': activity_averages})
+
+    return jsonify({'value': False})
 
 
 ################################################################################

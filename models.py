@@ -1,9 +1,29 @@
 """Models and database functions for Ready Now project"""
 
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 db = SQLAlchemy()
 ################################################################################
+
+
+class ToDictMixin(object):
+    """Convert an object into a dict with attributes"""
+
+    def to_dict(self):
+
+        object_info = {}
+
+        # loop through columns, set key as column name and value as attribute value
+        for column_name in self.__mapper__.column_attrs.keys():
+            attribute = getattr(self, column_name, None)
+            object_info[column_name] = attribute
+
+        return object_info
+
+    def to_json(self):
+
+        return json.dumps(self.to_dict())
 
 
 class User(db.Model):
@@ -53,7 +73,7 @@ class Session(db.Model):
                                                         self.user_id)
 
 
-class Activity(db.Model):
+class Activity(db.Model, ToDictMixin):
     """The various activities users can select for each session.
 
     default_time is stored in seconds"""
@@ -73,7 +93,7 @@ class Activity(db.Model):
             self.act_id, self.act_name, self.default_time)
 
 
-class Record(db.Model):
+class Record(db.Model, ToDictMixin):
     """Records of each activity completed by users."""
 
     __tablename__ = 'records'

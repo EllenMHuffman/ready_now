@@ -1,5 +1,15 @@
 'use strict';
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Login from './Login';
+import Register from './Register';
+import ActivitiesContainer from './ActivitiesContainer';
+import TimersContainer from './TimersContainer';
+import ProfileContainer from './ProfileContainer';
+import SettingsContainer from './SettingsContainer';
+
+
 class ReadyNow extends React.Component {
   constructor(props) {
     super(props);
@@ -137,3 +147,5 @@ class ReadyNow extends React.Component {
     );
   }
 }
+
+ReactDOM.render(<ReadyNow />, document.getElementById('main'));

@@ -1,6 +1,10 @@
 'use strict';
 
-class ActivitiesContainer extends React.Component {
+import React from 'react';
+import ActivityButton from './ActivityButton';
+
+
+export default class ActivitiesContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
@@ -49,11 +53,11 @@ class ActivitiesContainer extends React.Component {
   render() {
     let activities = [];
     for (let actId in this.state.data) {
-      activities.push(<ActivityForm key={actId}
-                                    actId={actId}
-                                    time={this.state.data[actId]['time']}
-                                    name={this.state.data[actId]['name']}
-                                    handleClick={this.handleClick} />);
+      activities.push(<ActivityButton key={actId}
+                                      actId={actId}
+                                      time={this.state.data[actId]['time']}
+                                      name={this.state.data[actId]['name']}
+                                      handleClick={this.handleClick} />);
     }
     return (
       <div>
@@ -70,17 +74,6 @@ class ActivitiesContainer extends React.Component {
             <input type='submit' value='Go!' />
           </label>
         </form>
-      </div>
-    );
-  }
-}
-
-class ActivityForm extends React.Component {
-  render() {
-    return (
-      <div>
-        <button value={this.props.actId} onClick={this.props.handleClick}>
-          {this.props.name}: ~{(this.props.time/60).toFixed(2)} mins</button>
       </div>
     );
   }

@@ -1,6 +1,10 @@
 'use strict';
 
-class FriendSelect extends React.Component {
+import React from 'react';
+import FriendOption from './FriendOption';
+
+
+export default class FriendSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -81,14 +85,6 @@ class FriendSelect extends React.Component {
             <input type='submit' value='Send text' />
         </form>
       </div>
-    );
-  }
-}
-
-class FriendOption extends React.Component {
-  render() {
-    return (
-      <option value={this.props.phone}>{this.props.name}</option>
     );
   }
 }
