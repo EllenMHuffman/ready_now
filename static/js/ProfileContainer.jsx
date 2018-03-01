@@ -4,6 +4,7 @@ import React from 'react';
 import FriendList from './FriendList';
 import DestinationList from './DestinationList';
 import AvgTimesBarChart from './AvgTimesBarChart';
+import ActivitySelect from './ActivitySelect';
 import ActivityTimeLineChart from './ActivityTimeLineChart';
 
 
@@ -39,10 +40,11 @@ export default class ProfileContainer extends React.Component {
           <br />
           <br />
           <AvgTimesBarChart />
-          <ActivityTimeLineChart />
+          <ActivitySelect />
           <FriendList />
           <DestinationList />
       </div>
     );
   }
 }
+          // <ActivityTimeLineChart />

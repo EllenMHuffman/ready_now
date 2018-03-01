@@ -53,10 +53,10 @@ export default class FriendSelect extends React.Component {
 
   render() {
     let friends = [];
-    for (let friend_id in this.state.data) {
-      friends.push(<SelectOption key={this.state.data[friend_id]['phone']}
-                                 value={this.state.data[friend_id]['phone']}
-                                 displayText={this.state.data[friend_id]['name']} />);
+    for (let friendId in this.state.data) {
+      friends.push(<SelectOption key={friendId}
+                                 value={this.state.data[friendId]['phone']}
+                                 displayText={this.state.data[friendId]['name']} />);
     }
 
     return (

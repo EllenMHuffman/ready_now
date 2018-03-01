@@ -14,7 +14,8 @@ from models import (User, Session, Activity, Record, Friend, Destination, db,
 from helper_functions import (create_user, update_db, verify_user,
                               create_activity_times, get_user_avg,
                               convert_to_datetime, clean_phone_number,
-                              twilio_ping, create_friend_info)
+                              twilio_ping, create_friend_info,
+                              create_user_activity_names)
 
 app = Flask(__name__)
 
@@ -245,9 +246,25 @@ def get_user_activity_averages():
     return jsonify({'value': False})
 
 
+@app.route('/api/get-user-activities', methods=['POST'])
+def get_user_activities():
+    """Get list of activities that user has completed."""
+
+    user_id = session['user_id']
+
+    activities = (db.session.query(Record.act_id, Activity.act_name)
+                    .join(Activity)
+                    .filter(Record.user_id == user_id)
+                    .distinct())
+
+    activity_name = create_user_activity_names(activities)
+
+    return jsonify({'activityNames': activity_name})
+
+
 @app.route('/api/get-activity-session-time', methods=['POST'])
 def get_activity_session_time():
-    """Retrieves user's activity time for each session."""
+    """Retrieves user's specified activity time for each session."""
 
     if 'user_id' in session:
         user_id = session['user_id']

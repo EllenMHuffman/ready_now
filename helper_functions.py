@@ -87,6 +87,17 @@ def create_activity_times(activities):
     return activity_time
 
 
+def create_user_activity_names(activities):
+    """Takes list of activity tuples and creates a dictionary of name."""
+
+    activity_name = {}
+
+    for act_id, act_name in activities:
+        activity_name[act_id] = {'name': act_name}
+
+    return activity_name
+
+
 def get_user_avg(user_id, activity_time):
     """Calculates avg user time for exisiting activities, updates dictionary."""
 
