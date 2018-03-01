@@ -7,13 +7,13 @@ import moment from 'moment';
 export default class Timer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { visible: true,
-                   time: {},
-                   seconds: this.props.time,
-                   active: true,
-                   startTime: null,
-                   // endTime: null
-                 };
+    this.state = {
+      visible: true,
+      time: {},
+      seconds: this.props.time,
+      active: true,
+      startTime: null,
+    };
     this.timer = 0;
     this.toggleVisible = this.toggleVisible.bind(this);
     this.startTimer = this.startTimer.bind(this);

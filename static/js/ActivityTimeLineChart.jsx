@@ -16,27 +16,16 @@ export default class ActivityTimeLineChart extends React.Component {
     this.state = {
       activity: 1
     };
-    this.getActivitySessionTime = this.getActivitySessionTime.bind(this);
-    this.getActivitySessionTime();
-  }
-
-  getActivitySessionTime() {
-    fetch('/api/get-activity-session-time', {
-      method: 'POST',
-      credentials: 'include'
-    })
-    .then((response) => response.json())
-    .then((data) => this.setState(data));
   }
 
   render() {
-    let times = this.state.activitySessions;
-    let tickLabels = this.state.startTimes;
+    let times = this.props.activitySessions;
+    let tickLabels = this.props.startTimes;
     return (
       <div className="LineChart">
         <h3>Activity Time by Session</h3>
         <XYPlot
-          margin={{bottom: 65}}
+          margin={{bottom: 65, left: 50}}
           width={300}
           height={300}>
           <XAxis tickFormat={v => tickLabels[v]} tickLabelAngle={-45} />

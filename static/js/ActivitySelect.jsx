@@ -2,6 +2,7 @@
 
 import React from 'react';
 import SelectOption from './SelectOption';
+import ActivityTimeLineChart from './ActivityTimeLineChart';
 
 
 export default class ActivitySelect extends React.Component {
@@ -26,20 +27,23 @@ export default class ActivitySelect extends React.Component {
   handleChange(event) {
     const value = event.target.value;
     const name = event.target.name;
-    this.setState({[name]: value});
-    this.getActivitySessionTime(value);
+    this.setState({'chartActivities': {[name]: {['act_id']: value}}});
+    this.getActivitySessionTime(value, name);
   }
 
-  getActivitySessionTime(value) {
+  getActivitySessionTime(value, name) {
     fetch('/api/get-activity-session-time', {
       method: 'POST',
       body: JSON.stringify(value),
       credentials: 'include'
     })
     .then((response) => response.json())
-    .then((data) => this.setState(data));
+    .then((data) => {
+      let nextState = this.state;
+      nextState['chartActivities'][name]['chartTimes'] = data;
+      this.setState(nextState);
+    });
   }
-
 
   render() {
     let activities = [];
@@ -48,6 +52,7 @@ export default class ActivitySelect extends React.Component {
                                     value={actId}
                                     displayText={this.state.activityNames[actId]['name']} />);
     }
+    debugger;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -75,6 +80,8 @@ export default class ActivitySelect extends React.Component {
             </label>
             <br />
         </form>
+        <ActivityTimeLineChart activityNames={this.state.activityNames}
+                               chartActivities={this.state.chartActivities} />
       </div>
     );
   }

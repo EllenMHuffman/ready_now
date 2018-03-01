@@ -266,31 +266,29 @@ def get_user_activities():
 def get_activity_session_time():
     """Retrieves user's specified activity time for each session."""
 
-    if 'user_id' in session:
-        user_id = session['user_id']
+    user_id = session['user_id']
 
-        act_ids = [1, 3]
-        user_recs = (db.session.query(
-            (Record.end_t - Record.start_t).label('diff'),
-            Record.start_t)
-            .filter((Record.user_id == user_id) & (Record.act_id.in_(act_ids)))
-            .order_by(Record.sess_id).all())
+    act_id = json.loads(request.data)
 
-        i = 1
-        start_times = ['']
-        activity_sessions = []
+    user_recs = (db.session.query(
+        (Record.end_t - Record.start_t).label('diff'),
+        Record.start_t)
+        .filter((Record.user_id == user_id) & (Record.act_id == act_id))
+        .order_by(Record.sess_id).all())
 
-        for time_delta, start_t in user_recs:
-            start_times.append(start_t.strftime('%b %d, %Y'))
-            activity_sessions.append({'x': i,
-                                      'y': (time_delta.total_seconds() / 60)})
-            i += 1
+    i = 1
+    start_times = ['']
+    activity_sessions = []
 
-        return json.dumps(
-            {'activitySessions': activity_sessions,
-             'startTimes': start_times})
+    for time_delta, start_t in user_recs:
+        start_times.append(start_t.strftime('%b %d, %Y'))
+        activity_sessions.append({'x': i,
+                                  'y': (time_delta.total_seconds() / 60)})
+        i += 1
 
-    return jsonify({'value': False})
+    return json.dumps(
+        {'activitySessions': activity_sessions,
+         'startTimes': start_times})
 
 
 ################################################################################
