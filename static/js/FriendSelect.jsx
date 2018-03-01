@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import FriendOption from './FriendOption';
+import SelectOption from './SelectOption';
 
 
 export default class FriendSelect extends React.Component {
@@ -54,9 +54,9 @@ export default class FriendSelect extends React.Component {
   render() {
     let friends = [];
     for (let friend_id in this.state.data) {
-      friends.push(<FriendOption key={this.state.data[friend_id]['phone']}
-                                 phone={this.state.data[friend_id]['phone']}
-                                 name={this.state.data[friend_id]['name']} />);
+      friends.push(<SelectOption key={this.state.data[friend_id]['phone']}
+                                 value={this.state.data[friend_id]['phone']}
+                                 displayText={this.state.data[friend_id]['name']} />);
     }
 
     return (

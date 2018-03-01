@@ -3,6 +3,8 @@
 import React from 'react';
 import FriendList from './FriendList';
 import DestinationList from './DestinationList';
+import AvgTimesBarChart from './AvgTimesBarChart';
+import ActivityTimeLineChart from './ActivityTimeLineChart';
 
 
 export default class ProfileContainer extends React.Component {
@@ -36,6 +38,8 @@ export default class ProfileContainer extends React.Component {
           "first name" "last name"
           <br />
           <br />
+          <AvgTimesBarChart />
+          <ActivityTimeLineChart />
           <FriendList />
           <DestinationList />
       </div>

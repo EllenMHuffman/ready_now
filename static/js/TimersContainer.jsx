@@ -3,6 +3,7 @@
 import React from 'react';
 import moment from 'moment';
 import Timer from './Timer';
+import FriendSelect from './FriendSelect';
 
 
 export default class TimersContainer extends React.Component {

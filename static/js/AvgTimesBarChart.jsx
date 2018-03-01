@@ -1,56 +1,50 @@
 'use strict';
 
-
-
 import React, { Component } from 'react';
-import './App.css';
-import '../node_modules/react-vis/dist/style.css';
 import {
   XYPlot,
   XAxis,
   YAxis,
-  HorizontalGridLines,
-  VerticalGridLines,
   VerticalBarSeries
 } from 'react-vis';
 
-class BarChart extends Component {
+
+export default class AvgTimesBarChart extends Component {
   constructor(props) {
       super(props);
       this.state = {};
       this.getAverageTimes = this.getAverageTimes.bind(this);
+      this.getAverageTimes();
   }
 
   getAverageTimes() {
     fetch('/api/get-average-times', {
-        methods: 'POST',
+        method: 'POST',
         credentials: 'include'
     })
     .then((response) => response.json())
-    .then((data) => this.setState(data.value))
+    .then((data) => this.setState(data))
   }
 
   render() {
-    let data = this.state
+    let data = this.state.activityAverages;
+    console.log(this.state.activityAverages);
     return (
       <div className="BarChart">
+        <h3>Average Minutes per Activity</h3>
         <XYPlot
+          margin={{bottom: 80}}
           xType="ordinal"
           width={300}
           height={300}
-          xDistance={100}
-          >
-          <VerticalGridLines />
-          <HorizontalGridLines />
-          <XAxis />
+          xDistance={100} >
+          <XAxis tickLabelAngle={-45} />
           <YAxis />
           <VerticalBarSeries
             className="vertical-bar-series"
-            data={data}/>
+            data={data} />
         </XYPlot>
       </div>
     );
   }
 }
-
-export default BarChart;

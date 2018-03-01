@@ -232,15 +232,16 @@ def get_user_activity_averages():
             Activity.act_name)
             .join(Activity)
             .filter(Record.user_id == user_id)
-            .group_by(Record.act_id).all())
+            .group_by(Activity.act_name).all())
 
         activity_averages = []
 
         for time_delta, act_name in user_recs:
             activity_averages.append({'x': act_name,
-                                      'y': time_delta.total_seconds()})
+                                      'y': time_delta.total_seconds()/60})
 
-        return jsonify({'value': activity_averages})
+        print {'value': activity_averages}
+        return json.dumps({'activityAverages': activity_averages})
 
     return jsonify({'value': False})
 
