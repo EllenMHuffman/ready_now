@@ -28,7 +28,6 @@ export default class AvgTimesBarChart extends Component {
 
   render() {
     let data = this.state.activityAverages;
-    console.log(this.state.activityAverages);
     return (
       <div className="BarChart">
         <h3>Average Minutes per Activity</h3>
@@ -39,7 +38,7 @@ export default class AvgTimesBarChart extends Component {
           height={300}
           xDistance={100} >
           <XAxis tickLabelAngle={-45} />
-          <YAxis />
+          <YAxis title='Minutes' />
           <VerticalBarSeries
             className="vertical-bar-series"
             data={data} />
