@@ -3,7 +3,7 @@
 import React from 'react';
 
 
-export default class RegisterInputField extends React.Component {
+export default class InputField extends React.Component {
   render() {
     let name = this.props.name;
     let value = this.props.state[name];

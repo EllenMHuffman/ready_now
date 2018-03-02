@@ -96,7 +96,17 @@ def load_friends():
 def load_destinations():
     """Reads in destinations.txt and adds to database."""
 
-    pass
+    with open('seed_data/destinations.txt') as f:
+        for row in f:
+            row = row.strip()
+            user_id, name, street, city, state, zipcode = row.split('|')
+
+            entry = Destination(user_id=user_id, name=name, street=street,
+                                city=city, state=state, zipcode=zipcode)
+
+            db.session.add(entry)
+
+    db.session.commit()
 
 
 ################################################################################
@@ -110,3 +120,4 @@ if __name__ == '__main__':
     load_sessions()
     load_records()
     load_friends()
+    load_destinations()

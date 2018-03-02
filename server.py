@@ -7,7 +7,6 @@ from flask import Flask, render_template, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.sql import func
 from sqlalchemy import exc
-from datetime import timedelta
 
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
@@ -15,8 +14,9 @@ from models import (User, Session, Activity, Record, Friend, Destination, db,
 from helper_functions import (create_user, update_db, verify_user,
                               create_activity_times, get_user_avg,
                               convert_to_datetime, clean_phone_number,
-                              twilio_ping, create_friend_info,
-                              create_user_activity_names)
+                              twilio_ping, create_friend_info, create_dest_info,
+                              create_user_activity_names, find_min_max_dates,
+                              create_tick_labels)
 
 app = Flask(__name__)
 
@@ -211,6 +211,48 @@ def text_friend():
     return jsonify({'value': value})
 
 
+@app.route('/api/add-destination', methods=['POST'])
+def add_destination():
+    """Add destination information given by user into the database."""
+
+    dest_data = json.loads(request.data)
+    name = dest_data['name']
+    street = dest_data['street']
+    city = dest_data['city']
+    state = dest_data['state']
+    zipcode = dest_data['zipcode']
+    value = False
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        new_dest = Destination(user_id=user_id, name=name, street=street,
+                               city=city, state=state, zipcode=zipcode)
+        value = update_db(new_dest)
+
+    return jsonify({'value': value})
+
+
+@app.route('/api/get-destinations', methods=['POST'])
+def list_destinations():
+    """List given user's destination inputs."""
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        destinations = (db.session.query(Destination.dest_id, Destination.name,
+                                         Destination.street, Destination.city,
+                                         Destination.state, Destination.zipcode)
+                          .filter(Destination.user_id == user_id).all())
+
+        dest_info = create_dest_info(destinations)
+
+        print destinations
+        return jsonify(dest_info)
+
+    return jsonify({'value': False})
+
+
 @app.route('/api/get-user-info', methods=['POST'])
 def get_user_info():
     """Retrieves user info when logged in."""
@@ -278,30 +320,9 @@ def get_activity_session_time():
         .filter((Record.user_id == user_id) & (Record.act_id == act_id))
         .order_by(Record.sess_id).all())
 
-    session_times = []
+    min_day, max_day = find_min_max_dates(user_recs, input_name)
 
-    for _, start_t in user_recs:
-        session_times.append(start_t)
-
-    min_day = min(session_times)
-    max_day = max(session_times)
-    session['session_range'] = session.get('session_range', {})
-    session['session_range'][input_name] = {'min_day': min_day, 'max_day': max_day}
-
-    if len(session['session_range']) > 1:
-        min_days = []
-        max_days = []
-        for activity in session['session_range']:
-            min_days.append(session['session_range'][activity]['min_day'])
-            max_days.append(session['session_range'][activity]['max_day'])
-        min_day = min(min_days)
-        max_day = max(max_days)
-
-    dates = []
-    date_range = max_day - min_day
-    for i in range(date_range.days + 1):
-        tick_date = (min_day + timedelta(days=i)).strftime('%b %d, %Y')
-        dates.append(tick_date)
+    dates = create_tick_labels(min_day, max_day)
 
     activity_sessions = []
 
@@ -311,7 +332,7 @@ def get_activity_session_time():
                                   'y': (time_delta.total_seconds() / 60)})
     return json.dumps(
         {'activitySessions': activity_sessions,
-         'startTimes': dates})
+         'dates': dates})
 
 
 ################################################################################

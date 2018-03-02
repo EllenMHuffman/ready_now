@@ -79,7 +79,7 @@ def fake_record_data():
 def fake_friend_data():
     """Synthesize fake user friend information."""
 
-    for _ in range(0, 15):
+    for _ in range(0, 35):
         user_id = random.randint(1, 8)
         name = fake.name()
         phone = fake.phone_number()
@@ -87,8 +87,20 @@ def fake_friend_data():
         print (str(user_id) + '|' + name + '|' + phone)
 
 
+def fake_destination_data():
+    """Synthesize fake destination data for users."""
+
+    for _ in range(0, 35):
+        user_id = random.randint(1, 8)
+
+        print (str(user_id) + '|' + fake.company() + '|' + fake.street_address()
+               + '|' + fake.city() + '|' + fake.state_abbr() + '|' +
+               fake.postalcode())
+
+
 if __name__ == '__main__':
     # fake_user_data()
     # fake_session_data()
     # fake_record_data()
-    fake_friend_data()
+    # fake_friend_data()
+    fake_destination_data()

@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import RegisterInputField from './RegisterInputField';
+import InputField from './InputField';
 
 
 export default class Register extends React.Component {
@@ -78,21 +78,21 @@ export default class Register extends React.Component {
     let contactFields = [];
 
     for (let i of info) {
-      infoFields.push(<RegisterInputField key={i[0]}
-                                          name={i[0]}
-                                          display={i[1]}
-                                          req={i[2]}
-                                          handleChange={this.handleChange}
-                                          state={this.state} />);
+      infoFields.push(<InputField key={i[0]}
+                                  name={i[0]}
+                                  display={i[1]}
+                                  req={i[2]}
+                                  handleChange={this.handleChange}
+                                  state={this.state} />);
     }
 
     for (let c of contact) {
-      contactFields.push(<RegisterInputField key={c[0]}
-                                             name={c[0]}
-                                             display={c[1]}
-                                             req={c[2]}
-                                             handleChange={this.handleChange}
-                                             state={this.state} />);
+      contactFields.push(<InputField key={c[0]}
+                                     name={c[0]}
+                                     display={c[1]}
+                                     req={c[2]}
+                                     handleChange={this.handleChange}
+                                     state={this.state} />);
     }
 
     return (

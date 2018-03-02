@@ -1,5 +1,7 @@
 import os
 from models import db, Record, User
+from datetime import timedelta
+from flask import session
 from sqlalchemy.sql import func
 from datetime import datetime
 from twilio.rest import Client
@@ -172,3 +174,56 @@ def create_friend_info(friends):
                                    'selected': False}
 
     return friend_phone
+
+
+def create_dest_info(dests):
+    """Takes list of destination tuples and creates dict of info."""
+
+    dest_info = {}
+
+    for dest_id, name, street, city, state, zipcode in dests:
+        dest_info[dest_id] = {'name': name,
+                              'street': street,
+                              'city': city,
+                              'state': state,
+                              'zipcode': zipcode,
+                              'selected': False}
+
+    return dest_info
+
+
+def find_min_max_dates(user_recs, input_name):
+    """Take in a set of user records and store min, max days in session."""
+
+    session_times = []
+
+    for _, start_t in user_recs:
+        session_times.append(start_t)
+
+    min_day = min(session_times)
+    max_day = max(session_times)
+    session['session_range'] = session.get('session_range', {})
+    session['session_range'][input_name] = {'min_day': min_day, 'max_day': max_day}
+
+    if len(session['session_range']) > 1:
+        min_days = []
+        max_days = []
+        for activity in session['session_range']:
+            min_days.append(session['session_range'][activity]['min_day'])
+            max_days.append(session['session_range'][activity]['max_day'])
+        min_day = min(min_days)
+        max_day = max(max_days)
+
+    return min_day, max_day
+
+
+def create_tick_labels(min_day, max_day):
+    """Create tick labels for each day between given min and max dates."""
+
+    dates = []
+    date_range = max_day - min_day
+    for i in range(date_range.days + 1):
+        tick_date = (min_day + timedelta(days=i)).strftime('%b %d, %Y')
+        dates.append(tick_date)
+
+    return dates

@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import ActivityLineSeries from './ActivityLineSeries';
 import {
   XYPlot,
   XAxis,
@@ -32,7 +31,7 @@ export default class ActivityTimeLineChart extends React.Component {
             data={chartActivities[activity]['chartTimes']['activitySessions']}/>
     )}
 
-    let tickLabels = chartActivities[latestActivity]['chartTimes']['startTimes'];
+    let tickLabels = chartActivities[latestActivity]['chartTimes']['dates'];
 
     return (
       <div className="LineChart">

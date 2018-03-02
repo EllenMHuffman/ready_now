@@ -142,11 +142,11 @@ class Destination(db.Model):
     dest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
                         nullable=False)
-    name = db.Column(db.String(25), nullable=False)
-    street = db.Column(db.String(30), nullable=False)
-    city = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    street = db.Column(db.String(50), nullable=False)
+    city = db.Column(db.String(25), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    zipcode = db.Column(db.String(5), nullable=False)
+    zipcode = db.Column(db.String(10), nullable=False)
 
     def __repr__(self):
         """Display destination information"""
