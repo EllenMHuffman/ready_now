@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-// import ActivitySeries from './ActivitySeries';
+import ActivityLineSeries from './ActivityLineSeries';
 import {
   XYPlot,
   XAxis,
@@ -13,14 +13,27 @@ import {
 export default class ActivityTimeLineChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      activity: 1
-    };
+    this.state = {};
   }
 
   render() {
-    let times = this.props.activitySessions;
-    let tickLabels = this.props.startTimes;
+    let chartActivities = this.props.chartActivities;
+    let latestActivity = this.props.latestChoice;
+    console.log(chartActivities);
+    let activitySeries = [];
+    const COLORS = ['green', 'blue', 'purple'];
+
+    for (let activity in chartActivities) {
+      activitySeries.push(<LineMarkSeries
+            key={chartActivities[activity]['actId']}
+            className={chartActivities[activity]['actId']}
+            style={{stroke: v => COLORS[v]}}
+            curve={'curveMonotoneX'}
+            data={chartActivities[activity]['chartTimes']['activitySessions']}/>
+    )}
+
+    let tickLabels = chartActivities[latestActivity]['chartTimes']['startTimes'];
+
     return (
       <div className="LineChart">
         <h3>Activity Time by Session</h3>
@@ -30,23 +43,9 @@ export default class ActivityTimeLineChart extends React.Component {
           height={300}>
           <XAxis tickFormat={v => tickLabels[v]} tickLabelAngle={-45} />
           <YAxis />
-          <LineMarkSeries
-            className="Activity 1"
-            curve={'curveMonotoneX'}
-            data={times}/>
+          {activitySeries}
         </XYPlot>
       </div>
     );
   }
 }
-
-          // <LineMarkSeries
-          //   className="linemark-series-example"
-          //   style={{
-          //     stroke: 'white'
-          //   }}
-          //   data={[
-          //     {x: 1, y: 10},
-          //     {x: 2, y: 5},
-          //     {x: 3, y: 15}
-          //   ]}/>

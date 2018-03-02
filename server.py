@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.sql import func
 from sqlalchemy import exc
+from datetime import timedelta
 
 
 from models import (User, Session, Activity, Record, Friend, Destination, db,
@@ -149,6 +150,7 @@ def logout_user():
 
     try:
         del session['user_id']
+
     except KeyError:
         pass
 
@@ -268,7 +270,7 @@ def get_activity_session_time():
 
     user_id = session['user_id']
 
-    act_id = json.loads(request.data)
+    act_id, input_name = json.loads(request.data)
 
     user_recs = (db.session.query(
         (Record.end_t - Record.start_t).label('diff'),
@@ -276,19 +278,40 @@ def get_activity_session_time():
         .filter((Record.user_id == user_id) & (Record.act_id == act_id))
         .order_by(Record.sess_id).all())
 
-    i = 1
-    start_times = ['']
+    session_times = []
+
+    for _, start_t in user_recs:
+        session_times.append(start_t)
+
+    min_day = min(session_times)
+    max_day = max(session_times)
+    session['session_range'] = session.get('session_range', {})
+    session['session_range'][input_name] = {'min_day': min_day, 'max_day': max_day}
+
+    if len(session['session_range']) > 1:
+        min_days = []
+        max_days = []
+        for activity in session['session_range']:
+            min_days.append(session['session_range'][activity]['min_day'])
+            max_days.append(session['session_range'][activity]['max_day'])
+        min_day = min(min_days)
+        max_day = max(max_days)
+
+    dates = []
+    date_range = max_day - min_day
+    for i in range(date_range.days + 1):
+        tick_date = (min_day + timedelta(days=i)).strftime('%b %d, %Y')
+        dates.append(tick_date)
+
     activity_sessions = []
 
     for time_delta, start_t in user_recs:
-        start_times.append(start_t.strftime('%b %d, %Y'))
-        activity_sessions.append({'x': i,
+        tick_int = start_t - min_day
+        activity_sessions.append({'x': tick_int.days,
                                   'y': (time_delta.total_seconds() / 60)})
-        i += 1
-
     return json.dumps(
         {'activitySessions': activity_sessions,
-         'startTimes': start_times})
+         'startTimes': dates})
 
 
 ################################################################################

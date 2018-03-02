@@ -8,10 +8,13 @@ import ActivityTimeLineChart from './ActivityTimeLineChart';
 export default class ActivitySelect extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showChart: false,
+      chartActivities: {},
+      latestChoice: null
+    };
     this.fetchActivities = this.fetchActivities.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getActivitySessionTime = this.getActivitySessionTime.bind(this);
     this.fetchActivities();
   }
 
@@ -27,20 +30,17 @@ export default class ActivitySelect extends React.Component {
   handleChange(event) {
     const value = event.target.value;
     const name = event.target.name;
-    this.setState({'chartActivities': {[name]: {['act_id']: value}}});
-    this.getActivitySessionTime(value, name);
-  }
-
-  getActivitySessionTime(value, name) {
     fetch('/api/get-activity-session-time', {
       method: 'POST',
-      body: JSON.stringify(value),
+      body: JSON.stringify([value, name]),
       credentials: 'include'
     })
     .then((response) => response.json())
     .then((data) => {
       let nextState = this.state;
-      nextState['chartActivities'][name]['chartTimes'] = data;
+      nextState['chartActivities'][name] = {'actId': value, 'chartTimes': data};
+      nextState['showChart'] = true;
+      nextState['latestChoice'] = name;
       this.setState(nextState);
     });
   }
@@ -52,7 +52,15 @@ export default class ActivitySelect extends React.Component {
                                     value={actId}
                                     displayText={this.state.activityNames[actId]['name']} />);
     }
-    debugger;
+
+    let lineChart;
+    if (this.state.showChart === true) {
+      lineChart = <ActivityTimeLineChart
+                      activityNames={this.state.activityNames}
+                      chartActivities={this.state.chartActivities}
+                      latestChoice={this.state.latestChoice} />;
+    }
+
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -80,8 +88,7 @@ export default class ActivitySelect extends React.Component {
             </label>
             <br />
         </form>
-        <ActivityTimeLineChart activityNames={this.state.activityNames}
-                               chartActivities={this.state.chartActivities} />
+        {lineChart}
       </div>
     );
   }
