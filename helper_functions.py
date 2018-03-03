@@ -166,12 +166,10 @@ def create_friend_info(friends):
 
     """
 
-    friend_phone = {}
+    friend_phone = []
 
     for friend_id, name, phone in friends:
-        friend_phone[friend_id] = {'name': name,
-                                   'phone': phone,
-                                   'selected': False}
+        friend_phone.append({'name': name, 'phone': phone, 'id': friend_id})
 
     return friend_phone
 

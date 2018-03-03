@@ -2,12 +2,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './Login';
-import Register from './Register';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import ActivitiesContainer from './ActivitiesContainer';
-import TimersContainer from './TimersContainer';
+import Login from './Login';
 import ProfileContainer from './ProfileContainer';
+import Register from './Register';
 import SettingsContainer from './SettingsContainer';
+import TimersContainer from './TimersContainer';
 
 
 class ReadyNow extends React.Component {
@@ -126,7 +129,6 @@ class ReadyNow extends React.Component {
     let mainView
     if (['activities', 'actLoggedIn', 'actLoggedOut'].includes(
       this.state['mainView'])) {
-        console.log(this.state['mainView']);
         mainView = <ActivitiesContainer
             setTimers={this.setTimers}/>;
     } else if (this.state['mainView'] === 'timers') {
@@ -148,4 +150,13 @@ class ReadyNow extends React.Component {
   }
 }
 
-ReactDOM.render(<ReadyNow />, document.getElementById('main'));
+const App = () => (
+  <MuiThemeProvider>
+    <ReadyNow />
+  </MuiThemeProvider>
+);
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
