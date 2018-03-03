@@ -154,7 +154,8 @@ def twilio_ping(phone, message):
 
         return True
 
-    except:
+    except Exception as e:
+        print e
         return False
 
 

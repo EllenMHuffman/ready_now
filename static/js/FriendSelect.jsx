@@ -3,22 +3,16 @@
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar'
 
 import SelectOption from './SelectOption';
 
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+const style = {
+  margin: 12
+};
 
 export default class FriendSelect extends React.Component {
   constructor(props) {
@@ -27,6 +21,7 @@ export default class FriendSelect extends React.Component {
       friendInfo: [],
       phones: [],
       message: '',
+      open: false,
     };
     this.fetchFriends = this.fetchFriends.bind(this);
     this.handleChangePhone = this.handleChangePhone.bind(this);
@@ -49,31 +44,32 @@ export default class FriendSelect extends React.Component {
     this.setState({['phones']: values});
   }
 
-  handleChangeMessage(event) {
-    const value = event.target.value;
-    this.setState({['message']: value});
+  handleChangeMessage(event, values) {
+    this.setState({['message']: values});
   }
 
   handleSubmit(event){
+    // ADD THE SNACKBAR HANDLE CLICK FUNCTION TO THIS FUNCTION; NEED TO
+    // IMPLEMENT THE HANDLEACTION FUNCTIONS AS WELL
     event.preventDefault();
 
     let data = {
-      phone: this.state.phone,
+      phones: this.state.phones,
       message: this.state.message
     };
 
-    // fetch('/api/text-friend', {
-    //   method: 'POST',
-    //   body: JSON.stringify(data),
-    //   credentials: 'include'
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     data.value
-    //         ? alert('Message sent!')
-    //         : alert('Error. Please try again.')
-    //   });
-    // this.setState({['value']: ''});
+    fetch('/api/text-friend', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        data.value
+            ? alert('Message sent!')
+            : alert('Error. Please try again.')
+      });
+    this.setState({['phones']: '', ['message']: ''});
   }
 
   menuItems() {
@@ -106,15 +102,26 @@ export default class FriendSelect extends React.Component {
             </label>
             <br />
             <label>
-              Write your message:
               <br />
-              <textarea name='message'
-                        value={this.state.value}
-                        onChange={this.handleChangeMessage} />
+              <TextField
+                hintText="message"
+                floatingLabelText="Write your message:"
+                multiLine={true}
+                rows={2}
+                value={this.state.message}
+                onChange={this.handleChangeMessage}
+              />
             </label>
             <br />
-            <input type='submit' value='Send text' />
+            <RaisedButton type='submit' label='Send text' style={style} />
         </form>
+        <Snackbar
+          open={this.state.open}
+          message="Message sent!"
+          autoHideDuration={this.state.autoHideDuration}
+          onActionClick={this.handleActionClick}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
   }

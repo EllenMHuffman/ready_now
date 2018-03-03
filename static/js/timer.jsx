@@ -11,20 +11,14 @@ export default class Timer extends React.Component {
       visible: true,
       time: {},
       seconds: this.props.time,
-      active: true,
+      status: 'idle',
       startTime: null,
     };
     this.timer = 0;
-    this.toggleVisible = this.toggleVisible.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.sendData = this.sendData.bind(this);
-  }
-
-  toggleVisible() {
-    let newVisible = this.state.visible == false ? true : false;
-    this.setState({ visible: newVisible });
   }
 
   secondsToTime(secs) {
@@ -54,7 +48,7 @@ export default class Timer extends React.Component {
       let timeNow = moment();
       this.timer = setInterval(this.countDown, 1000);
       this.setState({startTime: timeNow,
-                     visible: false});
+                     status: 'pending'});
     }
   }
 
@@ -65,7 +59,7 @@ export default class Timer extends React.Component {
       seconds: seconds,
     });
 
-    if (this.state.active == false) {
+    if (this.state.status == 'completed') {
       clearInterval(this.timer);
     }
   }
@@ -81,8 +75,7 @@ export default class Timer extends React.Component {
   stopTimer() {
     let timeNow = moment();
     this.setState({
-      active: false,
-      // endTime: timeNow.unix()
+      status: 'completed',
     });
     let data = {
       startTime: this.state.startTime.unix(),
@@ -93,13 +86,27 @@ export default class Timer extends React.Component {
   }
 
   render() {
+    let button;
+    switch (this.state.status) {
+      case 'idle':
+        button = <button onClick={this.startTimer}>Start</button>;
+        break;
+      case 'pending':
+        button = <button onClick={this.stopTimer}>Stop</button>;
+        break;
+      case 'completed':
+        button = null;
+    }
+
+    let seconds = this.state.time.s;
+    seconds = ("0" + seconds).slice(-2);
+
     return (
       <div>
         <div> {this.props.name}:</div>
-        <span>{this.state.time.m}:{this.state.time.s} ....</span>
+        <span>{this.state.time.m}:{seconds} ....</span>
         <div>
-          <button onClick={this.startTimer}>Start</button>
-          <button onClick={this.stopTimer}>Stop</button>
+          {button}
         </div>
       </div>
     );
