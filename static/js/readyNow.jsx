@@ -133,7 +133,8 @@ class ReadyNow extends React.Component {
             setTimers={this.setTimers}/>;
     } else if (this.state['mainView'] === 'timers') {
       mainView = <TimersContainer
-          timerData={this.getFilteredTimerData()} />;
+          timerData={this.getFilteredTimerData()}
+          loggedIn={this.state.loggedIn} />;
     } else if (this.state['mainView'] === 'profile') {
       mainView = <ProfileContainer />;
     } else if (this.state['mainView'] === 'settings') {

@@ -1,11 +1,12 @@
 'use strict';
 
 import React from 'react';
-import SelectField from 'material-ui/SelectField';
+
 import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
 import Snackbar from 'material-ui/Snackbar'
+import TextField from 'material-ui/TextField';
 
 import SelectOption from './SelectOption';
 
@@ -22,6 +23,7 @@ export default class FriendSelect extends React.Component {
       phones: [],
       message: '',
       open: false,
+      autoHideDuration: 4000,
     };
     this.fetchFriends = this.fetchFriends.bind(this);
     this.handleChangePhone = this.handleChangePhone.bind(this);
@@ -48,9 +50,7 @@ export default class FriendSelect extends React.Component {
     this.setState({['message']: values});
   }
 
-  handleSubmit(event){
-    // ADD THE SNACKBAR HANDLE CLICK FUNCTION TO THIS FUNCTION; NEED TO
-    // IMPLEMENT THE HANDLEACTION FUNCTIONS AS WELL
+  handleSubmit(event) {
     event.preventDefault();
 
     let data = {
@@ -66,10 +66,14 @@ export default class FriendSelect extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         data.value
-            ? alert('Message sent!')
+            ? this.setState({
+                ['phones']: '',
+                ['message']: '',
+                ['open']: true,
+              })
             : alert('Error. Please try again.')
       });
-    this.setState({['phones']: '', ['message']: ''});
+
   }
 
   menuItems() {
@@ -86,42 +90,53 @@ export default class FriendSelect extends React.Component {
 
   render() {
     console.log(this.state);
+    let textingAbility;
+    switch (this.state.friendInfo.length) {
+      case 0:
+        textingAbility = (<p>If you'd like the ability to text your ETA to a
+          friend, please add their contact information under Settings.</p>);
+        break;
+      default:
+        textingAbility = (
+          <div>
+            <form onSubmit={this.handleSubmit}>
+              <h3>Message a friend</h3>
+              <label>
+                <SelectField
+                  multiple={true}
+                  hintText='Choose one or more friends'
+                  value={this.state.phones}
+                  onChange={this.handleChangePhone}
+                >
+                  {this.menuItems()}
+                </SelectField>
+              </label>
+              <br />
+              <label>
+                <br />
+                <TextField
+                  hintText="message"
+                  floatingLabelText="Write your message:"
+                  multiLine={true}
+                  rows={2}
+                  value={this.state.message}
+                  onChange={this.handleChangeMessage}
+                />
+              </label>
+              <br />
+              <RaisedButton type='submit' label='Send text' style={style} />
+            </form>
+            <Snackbar
+              open={this.state.open}
+              message='Text sent!'
+              autoHideDuration={this.state.autoHideDuration}
+            />
+          </div>
+        );
+    }
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-            <h3>Message a friend</h3>
-            <label>
-              <SelectField
-                multiple={true}
-                hintText='Choose one or more friends'
-                value={this.state.phones}
-                onChange={this.handleChangePhone}
-              >
-                {this.menuItems()}
-              </SelectField>
-            </label>
-            <br />
-            <label>
-              <br />
-              <TextField
-                hintText="message"
-                floatingLabelText="Write your message:"
-                multiLine={true}
-                rows={2}
-                value={this.state.message}
-                onChange={this.handleChangeMessage}
-              />
-            </label>
-            <br />
-            <RaisedButton type='submit' label='Send text' style={style} />
-        </form>
-        <Snackbar
-          open={this.state.open}
-          message="Message sent!"
-          autoHideDuration={this.state.autoHideDuration}
-          onActionClick={this.handleActionClick}
-          onRequestClose={this.handleRequestClose}
-        />
+        {textingAbility}
       </div>
     );
   }

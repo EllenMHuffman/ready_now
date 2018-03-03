@@ -2,6 +2,8 @@
 
 import React from 'react';
 import moment from 'moment';
+import TableRowColumn from 'material-ui/Table';
+
 
 
 export default class Timer extends React.Component {
@@ -102,13 +104,11 @@ export default class Timer extends React.Component {
     seconds = ("0" + seconds).slice(-2);
 
     return (
-      <div>
-        <div> {this.props.name}:</div>
-        <span>{this.state.time.m}:{seconds} ....</span>
-        <div>
-          {button}
-        </div>
-      </div>
+      <span>
+        <TableRowColumn> {this.props.name}:</TableRowColumn>
+        <TableRowColumn>{this.state.time.m}:{seconds} ....</TableRowColumn>
+        <TableRowColumn>{button}</TableRowColumn>
+      </span>
     );
   }
 }

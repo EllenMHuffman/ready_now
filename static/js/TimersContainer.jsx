@@ -1,9 +1,19 @@
 'use strict';
 
-import React from 'react';
 import moment from 'moment';
-import Timer from './Timer';
+import React from 'react';
+
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
+
 import FriendSelect from './FriendSelect';
+import Timer from './Timer';
 
 
 export default class TimersContainer extends React.Component {
@@ -13,7 +23,6 @@ export default class TimersContainer extends React.Component {
     this.calculateProjectedETA = this.calculateProjectedETA.bind(this);
     let eta = this.calculateETA();
     this.state = {
-      'friends': null,
       'initialETA': eta,
       'projectedETA': eta
     };
@@ -41,17 +50,37 @@ export default class TimersContainer extends React.Component {
     let activities = [];
 
     for (let actId in this.props.timerData) {
-      activities.push(<Timer key={actId}
-                             actId={actId}
-                             name={this.props.timerData[actId]['name']}
-                             time={this.props.timerData[actId]['time']}
-                             calculateProjectedETA={this.calculateProjectedETA} />);
+      activities.push(
+        <TableRow key={actId}>
+          <Timer key={actId}
+                 actId={actId}
+                 name={this.props.timerData[actId]['name']}
+                 time={this.props.timerData[actId]['time']}
+                 calculateProjectedETA={this.calculateProjectedETA} />
+        </TableRow>
+      );
     }
-    let messageFriend = <FriendSelect />
+
+    let messageFriend = null;
+    if (this.props.loggedIn) {
+        messageFriend = <FriendSelect />;
+    }
+
     return (
       <div>
         <h2>Click 'Start' and 'Stop' for each step</h2>
-        {activities}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHeaderColumn>Activity</TableHeaderColumn>
+              <TableHeaderColumn>Time Alotted</TableHeaderColumn>
+              <TableHeaderColumn>Click to Begin</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {activities}
+          </TableBody>
+        </Table>
         <br />
         <br />
         <div>Initial ETA: {initialTime.format('h:mm a')}</div>
