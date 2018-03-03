@@ -24,11 +24,13 @@ export default class FriendSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: [],
-      friendInfo: []
+      friendInfo: [],
+      phones: [],
+      message: '',
     };
     this.fetchFriends = this.fetchFriends.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChangePhone = this.handleChangePhone.bind(this);
+    this.handleChangeMessage = this.handleChangeMessage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.menuItems = this.menuItems.bind(this);
     this.fetchFriends();
@@ -43,13 +45,13 @@ export default class FriendSelect extends React.Component {
     .then((data) => this.setState({['friendInfo']: data}));
   }
 
-  handleChange(event, index, values) {
-    // const value = event.target.value;
-    // const name = event.target.name;
-    // this.setState({[name]: values});
-    // debugger;
-    this.setState({values});
-    // console.log((this.state));
+  handleChangePhone(event, index, values) {
+    this.setState({['phones']: values});
+  }
+
+  handleChangeMessage(event) {
+    const value = event.target.value;
+    this.setState({['message']: value});
   }
 
   handleSubmit(event){
@@ -79,33 +81,14 @@ export default class FriendSelect extends React.Component {
       <MenuItem
         key={friend.id}
         insetChildren={true}
-        checked={this.state.values.indexOf(friend.phone) > -1}
+        checked={this.state.phones.indexOf(friend.phone) > -1}
         value={friend.phone}
         primaryText={friend.name}
       />
     ));
   }
 
-  // menuItems(values) {
-  //   // let friends = Object.entries(this.state.data)
-  //   // return friends.map((friend) => (
-  //   //   <MenuItem
-  //   //     key={friend.key}
-  //   //     insetChildren={true}
-  //   //     checked={values && values.indexOf(friend.key) > -1}
-  //   //     value={friend.value['phone']}
-  //   //     primaryText={friend.value['name']}
-  //   //   />
-  //   // ));
-  // }
-
   render() {
-    const {values} = this.state;
-    const {data} = this.state;
-    // console.log(data);
-    // console.log(this.state.values);
-    // console.log(this.state.data);
-    // console.log(values);
     console.log(this.state);
     return (
       <div>
@@ -115,9 +98,8 @@ export default class FriendSelect extends React.Component {
               <SelectField
                 multiple={true}
                 hintText='Choose one or more friends'
-                name='phone'
-                value={values}
-                onChange={this.handleChange}
+                value={this.state.phones}
+                onChange={this.handleChangePhone}
               >
                 {this.menuItems()}
               </SelectField>
@@ -128,7 +110,7 @@ export default class FriendSelect extends React.Component {
               <br />
               <textarea name='message'
                         value={this.state.value}
-                        onChange={this.handleChange} />
+                        onChange={this.handleChangeMessage} />
             </label>
             <br />
             <input type='submit' value='Send text' />
