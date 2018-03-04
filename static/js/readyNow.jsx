@@ -115,7 +115,7 @@ class ReadyNow extends React.Component {
                     onClick={this.showLogin}>Log In</button>);
     }
 
-    let accountView
+    let accountView;
     if (this.state['accountView'] === 'login') {
       accountView = <Login validateUser={this.validateUser}
           setLoggedIn={this.setLoggedIn} />
@@ -126,7 +126,7 @@ class ReadyNow extends React.Component {
       accountView = null
     }
 
-    let mainView
+    let mainView;
     if (['activities', 'actLoggedIn', 'actLoggedOut'].includes(
       this.state['mainView'])) {
         mainView = <ActivitiesContainer

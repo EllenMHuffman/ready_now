@@ -6,3 +6,4 @@ DS_Store
 .coverage
 .pytest*
 *node_modules*
+bundle.js

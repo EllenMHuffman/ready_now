@@ -89,7 +89,6 @@ export default class FriendSelect extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let textingAbility;
     switch (this.state.friendInfo.length) {
       case 0:

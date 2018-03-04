@@ -16,9 +16,10 @@ def load_activities():
     with open('seed_data/activities.txt') as f:
         for row in f:
             row = row.strip()
-            activity, time = row.split('|')
+            activity, time, pair, img = row.split('|')
 
-            entry = Activity(act_name=activity, default_time=time)
+            entry = Activity(act_name=activity, default_time=time,
+                             pair=int(pair), img=img)
 
             db.session.add(entry)
 

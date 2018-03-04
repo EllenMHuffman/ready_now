@@ -26,4 +26,10 @@ module.exports = {
   },
   plugins: [
   ],
+  test: /\.(jpg)$/,
+  use: [
+    {
+      loader: 'url-loader'
+    }
+  ]
 };

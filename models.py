@@ -83,6 +83,8 @@ class Activity(db.Model, ToDictMixin):
     act_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     act_name = db.Column(db.String(25), nullable=False)
     default_time = db.Column(db.Integer, nullable=False)
+    pair = db.Column(db.Boolean, nullable=False)
+    img = db.Column(db.String(100), nullable=True)
 
     records = db.relationship('Record', backref='activity')
 

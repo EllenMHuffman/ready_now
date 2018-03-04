@@ -81,12 +81,32 @@ def create_activity_times(activities):
 
     activity_time = {}
 
-    for act_id, act_name, default_time in activities:
+    for act_id, act_name, default_time, pair, img in activities:
         activity_time[act_id] = {'name': act_name,
                                  'time': default_time,
-                                 'clicked': False}
+                                 'pair': pair,
+                                 'img': img
+                                 }
 
     return activity_time
+
+
+def create_activity_time_array(activity_time):
+    """Takes in a dictionary and converts it to an array of values."""
+
+    activity_time_array = []
+
+    for act_id in activity_time:
+        activity_time_array.append({
+            'actId': act_id,
+            'name': activity_time[act_id]['name'],
+            'time': activity_time[act_id]['time'],
+            'pair': activity_time[act_id]['pair'],
+            'img': activity_time[act_id]['img'],
+            'clicked': False
+        })
+
+    return activity_time_array
 
 
 def create_user_activity_names(activities):
@@ -109,8 +129,8 @@ def get_user_avg(user_id, activity_time):
 
     avg_diffs = records.group_by(Record.act_id).all()
 
-    for act_id, timedelta in avg_diffs:
-        activity_time[act_id]['time'] = int(timedelta.total_seconds())
+    for act_id, timedel in avg_diffs:
+        activity_time[act_id]['time'] = int(timedel.total_seconds())
 
     return activity_time
 

@@ -3,6 +3,16 @@
 import moment from 'moment';
 import React from 'react';
 
+import Chip from 'material-ui/Chip';
+import {
+  lightBlue50,
+  lightGreen500,
+  lightGreen200,
+  yellow500,
+  orange500,
+  red500,
+  red900
+} from 'material-ui/styles/colors';
 import {
   Table,
   TableBody,
@@ -15,6 +25,15 @@ import {
 import FriendSelect from './FriendSelect';
 import Timer from './Timer';
 
+const styles = {
+  chip: {
+    margin: 6,
+  },
+  wrapper: {
+    display: 'flex',
+    flexwrap: 'wrap',
+  },
+};
 
 
 export default class TimersContainer extends React.Component {
@@ -24,8 +43,9 @@ export default class TimersContainer extends React.Component {
     this.calculateProjectedETA = this.calculateProjectedETA.bind(this);
     let eta = this.calculateETA();
     this.state = {
-      'initialETA': eta,
-      'projectedETA': eta
+      initialETA: eta,
+      projectedETA: eta,
+      chipColor: lightBlue50
     };
   }
 
@@ -42,10 +62,34 @@ export default class TimersContainer extends React.Component {
     let actualTime = data.endTime - data.startTime;
     let difference = (this.props.timerData[data.actId]['time'] - actualTime);
     let newETA = moment(this.state['projectedETA'] - difference * 1000);
-    this.setState({['projectedETA']: newETA});
+
+    let nextState = this.state;
+    let etaDiff = (this.state.initialETA - newETA) / 1000;
+    console.log(etaDiff);
+
+    if (etaDiff > 600) {
+      nextState['chipColor'] = lightGreen500;
+    } else if (etaDiff > 300) {
+      nextState['chipColor'] = lightGreen200;
+    } else if (etaDiff >= 0) {
+      nextState['chipColor'] = lightBlue50;
+    } else if (etaDiff < -1800 ) {
+      nextState['chipColor'] = red900;
+    } else if (etaDiff < -900 ) {
+      nextState['chipColor'] = red500;
+    } else if (etaDiff < -300 ) {
+      nextState['chipColor'] = orange500;
+    } else if (etaDiff < 0) {
+      nextState['chipColor'] = yellow500;
+    }
+    nextState['projectedETA'] = newETA;
+    this.setState({nextState});
   }
 
   generateTableBody() {
+    let initialTime = this.state['initialETA'];
+    let projectedTime = this.state['projectedETA'];
+
     let timerRows = [];
 
     for (let actId in this.props.timerData) {
@@ -57,14 +101,33 @@ export default class TimersContainer extends React.Component {
                calculateProjectedETA={this.calculateProjectedETA} />
       );
     }
+    timerRows.push(
+      <TableRow key={100}>
+        <TableRowColumn></TableRowColumn>
+        <TableRowColumn>
+          <Chip
+            style={styles.chip}
+            backgroundColor={lightBlue50}
+          >
+            Initial ETA: {initialTime.format('h:mm a')}
+          </Chip>
+        </TableRowColumn>
+        <TableRowColumn>
+          <Chip
+            style={styles.chip}
+            backgroundColor={this.state.chipColor}
+          >
+            Projected ETA: {projectedTime.format('h:mm a')}
+          </Chip>
+        </TableRowColumn>
+      </TableRow>
+    );
     return (
         timerRows
     );
   }
 
   render() {
-    let initialTime = this.state['initialETA'];
-    let projectedTime = this.state['projectedETA'];
 
 
     let messageFriend = null;
@@ -74,7 +137,7 @@ export default class TimersContainer extends React.Component {
 
     return (
       <div>
-        <h2>Click 'Start' and 'Stop' for each step</h2>
+        <h3>Use the timers to keep you on track</h3>
         <Table>
           <TableHeader displaySelectAll={false}>
             <TableRow>
@@ -89,10 +152,10 @@ export default class TimersContainer extends React.Component {
         </Table>
         <br />
         <br />
-        <div>Initial ETA: {initialTime.format('h:mm a')}</div>
-        <div>Projected ETA: {projectedTime.format('h:mm a')}</div>
         {messageFriend}
       </div>
     );
   }
 }
+        // <div>Initial ETA: {initialTime.format('h:mm a')}</div>
+        // <div>Projected ETA: {projectedTime.format('h:mm a')}</div>

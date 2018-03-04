@@ -12,9 +12,10 @@ from sqlalchemy import exc
 from models import (User, Session, Activity, Record, Friend, Destination, db,
                     connect_to_db)
 from helper_functions import (create_user, update_db, verify_user,
-                              create_activity_times, get_user_avg,
-                              convert_to_datetime, clean_phone_number,
-                              twilio_ping, create_friend_info, create_dest_info,
+                              create_activity_times, create_activity_time_array,
+                              get_user_avg, convert_to_datetime,
+                              clean_phone_number, twilio_ping,
+                              create_friend_info, create_dest_info,
                               create_user_activity_names, find_min_max_dates,
                               create_tick_labels)
 
@@ -41,7 +42,8 @@ def get_activities():
     """Gets list of activities from the database, including user times."""
 
     activities = db.session.query(Activity.act_id, Activity.act_name,
-                                  Activity.default_time)
+                                  Activity.default_time, Activity.pair,
+                                  Activity.img)
 
     activity_time = create_activity_times(activities)
 
@@ -50,7 +52,9 @@ def get_activities():
 
         activity_time = get_user_avg(user_id, activity_time)
 
-    return jsonify(activity_time)
+    activity_time_array = create_activity_time_array(activity_time)
+
+    return jsonify(activity_time_array)
 
 
 @app.route('/api/add-session', methods=['POST'])
@@ -210,7 +214,6 @@ def text_friend():
         value = twilio_ping(number, message)
 
     return jsonify({'value': value})
-
 
 
 @app.route('/api/add-destination', methods=['POST'])

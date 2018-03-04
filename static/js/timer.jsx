@@ -2,7 +2,27 @@
 
 import React from 'react';
 import moment from 'moment';
+
 import {TableRow, TableRowColumn} from 'material-ui/Table';
+import Chip from 'material-ui/Chip';
+import {
+  grey300,
+  lightGreen500,
+  yellow500,
+  orange500,
+  red500,
+  red900
+} from 'material-ui/styles/colors';
+
+const styles = {
+  chip: {
+    margin: 2,
+  },
+  wrapper: {
+    display: 'flex',
+    flexwrap: 'wrap',
+  },
+};
 
 
 export default class Timer extends React.Component {
@@ -15,10 +35,12 @@ export default class Timer extends React.Component {
       seconds: this.props.time,
       status: 'idle',
       startTime: null,
+      chipColor: grey300,
     };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
+    this.formatTime = this.formatTime.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.sendData = this.sendData.bind(this);
   }
@@ -42,7 +64,7 @@ export default class Timer extends React.Component {
 
   componentDidMount() {
     let timeLeftVar = this.secondsToTime(this.state.seconds);
-    this.setState({ time: timeLeftVar });
+    this.setState({time: timeLeftVar});
   }
 
   startTimer() {
@@ -56,14 +78,41 @@ export default class Timer extends React.Component {
 
   countDown() {
     let seconds = this.state.seconds - 1;
-    this.setState({
-      time: this.secondsToTime(seconds),
-      seconds: seconds,
-    });
+    let nextState = this.state;
+
+    if ((seconds / this.props.time) > 0.6) {
+      nextState['chipColor'] = lightGreen500;
+    } else if ((seconds / this.props.time) > 0.3) {
+      nextState['chipColor'] = yellow500;
+    } else if ((seconds / this.props.time) > 0) {
+      nextState['chipColor'] = orange500;
+    } else if ((seconds / this.props.time) < -0.1) {
+      nextState['chipColor'] = red900;
+    } else if ((seconds / this.props.time) <= 0) {
+      nextState['chipColor'] = red500;
+    }
+    nextState['time'] = this.secondsToTime(seconds);
+    nextState['seconds'] = seconds;
+    this.setState({nextState});
 
     if (this.state.status == 'completed') {
       clearInterval(this.timer);
     }
+  }
+
+  formatTime(seconds) {
+    let formattedSeconds, formattedMinutes;
+    let secs = this.state.time.s;
+
+    if (seconds >= 0) {
+      formattedSeconds = ("0" + secs).slice(-2);
+      formattedMinutes = this.state.time.m;
+    } else {
+      formattedMinutes = Math.ceil(this.state.time.m + .1);
+      formattedSeconds = (("0" + Math.abs(secs)).slice(-2) + '  OVERTIME');
+    }
+
+    return [formattedMinutes, formattedSeconds]
   }
 
   sendData(data) {
@@ -100,18 +149,21 @@ export default class Timer extends React.Component {
         button = null;
     }
 
-    let seconds = this.state.time.s;
-    seconds = ("0" + seconds).slice(-2);
+    let time = this.formatTime(this.state.seconds);
 
     return (
       <TableRow>
         <TableRowColumn>{this.props.name}</TableRowColumn>
-        <TableRowColumn>{this.state.time.m}:{seconds}</TableRowColumn>
+        <TableRowColumn>
+          <Chip
+            style={styles.chip}
+            backgroundColor={this.state.chipColor}
+          >
+            {time[0]}:{time[1]}
+          </Chip>
+        </TableRowColumn>
         <TableRowColumn>{button}</TableRowColumn>
       </TableRow>
     );
   }
 }
-
-// https://stackoverflow.com/questions/40885923/countdown-timer-in-react
-// Fabian Schultz

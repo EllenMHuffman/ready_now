@@ -1,13 +1,13 @@
-Shower|600
-Wash Hair|600
-Shave|300
-Wash Face|300
-Brush Teeth|120
-Skin Care|300
-Make Up (Simple)|300
-Make Up (Full Face)|900
-Hair Styling (Simple)|600
-Hair Styling (Heat)|1200
-Choose Clothes|300
-Dressing/Shoes|300
-Accessories|180
+Shower|600|0|../img/shower.jpg
+Wash Hair|600|0|../img/wash-hair.jpg
+Shave|300|0|../img/shave.jpg
+Wash Face|300|0|../img/wash-face.jpg
+Brush Teeth|120|0|../img/brush-teeth.jpg
+Skin Care|300|0|../img/skin-care.jpg
+Make Up (Simple)|300|1|../img/makeup-simple.jpg
+Make Up (Full Face)|900|1|../img/makeup-fullface.jpg
+Hair Styling (Simple)|600|1|../img/hair-heat.jpg
+Hair Styling (Heat)|1200|1|../img/hair-simple.jpg
+Choose Clothes|300|0|../img/clothes.jpg
+Dressing/Shoes|300|0|../img/dressing.jpg
+Accessories|180|0|../img/accessories.jpg
