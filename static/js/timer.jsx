@@ -2,11 +2,11 @@
 
 import React from 'react';
 import moment from 'moment';
-import TableRowColumn from 'material-ui/Table';
-
+import {TableRow, TableRowColumn} from 'material-ui/Table';
 
 
 export default class Timer extends React.Component {
+  statics: {muiName: 'TableRow'};
   constructor(props) {
     super(props);
     this.state = {
@@ -104,11 +104,11 @@ export default class Timer extends React.Component {
     seconds = ("0" + seconds).slice(-2);
 
     return (
-      <span>
-        <TableRowColumn> {this.props.name}:</TableRowColumn>
-        <TableRowColumn>{this.state.time.m}:{seconds} ....</TableRowColumn>
+      <TableRow>
+        <TableRowColumn>{this.props.name}</TableRowColumn>
+        <TableRowColumn>{this.state.time.m}:{seconds}</TableRowColumn>
         <TableRowColumn>{button}</TableRowColumn>
-      </span>
+      </TableRow>
     );
   }
 }

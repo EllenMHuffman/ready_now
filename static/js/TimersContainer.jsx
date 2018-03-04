@@ -16,6 +16,7 @@ import FriendSelect from './FriendSelect';
 import Timer from './Timer';
 
 
+
 export default class TimersContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -44,22 +45,27 @@ export default class TimersContainer extends React.Component {
     this.setState({['projectedETA']: newETA});
   }
 
+  generateTableBody() {
+    let timerRows = [];
+
+    for (let actId in this.props.timerData) {
+      timerRows.push(
+        <Timer key={actId}
+               actId={actId}
+               name={this.props.timerData[actId]['name']}
+               time={this.props.timerData[actId]['time']}
+               calculateProjectedETA={this.calculateProjectedETA} />
+      );
+    }
+    return (
+        timerRows
+    );
+  }
+
   render() {
     let initialTime = this.state['initialETA'];
     let projectedTime = this.state['projectedETA'];
-    let activities = [];
 
-    for (let actId in this.props.timerData) {
-      activities.push(
-        <TableRow key={actId}>
-          <Timer key={actId}
-                 actId={actId}
-                 name={this.props.timerData[actId]['name']}
-                 time={this.props.timerData[actId]['time']}
-                 calculateProjectedETA={this.calculateProjectedETA} />
-        </TableRow>
-      );
-    }
 
     let messageFriend = null;
     if (this.props.loggedIn) {
@@ -70,15 +76,15 @@ export default class TimersContainer extends React.Component {
       <div>
         <h2>Click 'Start' and 'Stop' for each step</h2>
         <Table>
-          <TableHeader>
+          <TableHeader displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn>Activity</TableHeaderColumn>
               <TableHeaderColumn>Time Alotted</TableHeaderColumn>
-              <TableHeaderColumn>Click to Begin</TableHeaderColumn>
+              <TableHeaderColumn>Click to Start to Begin</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {activities}
+          <TableBody displayRowCheckbox={false}>
+          {this.generateTableBody()}
           </TableBody>
         </Table>
         <br />
