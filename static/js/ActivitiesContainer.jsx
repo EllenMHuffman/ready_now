@@ -5,7 +5,7 @@ import React from 'react';
 
 import {GridList, GridTile} from 'material-ui/GridList';
 import Chip from 'material-ui/Chip';
-import {cyan500} from 'material-ui/styles/colors';
+import {red500, cyan50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/CheckBox';
@@ -23,7 +23,9 @@ const styles = {
     overflowY: 'auto',
   },
   chip: {
-    margin: 'auto',
+    marginTop: 10,
+    marginLeft: 24,
+    backgroundColor: red500,
   },
   wrapper: {
     display: 'flex',
@@ -143,7 +145,6 @@ export default class ActivitiesContainer extends React.Component {
           >
             <Chip
               style={styles.chip}
-              backgroundColor={cyan500}
             >
               <h3 style={{color: 'white'}}>Ready at:</h3>
               <p id='total-time' style={{color: 'white'}}>{eta.format('h:mm a')}</p>
@@ -157,7 +158,6 @@ export default class ActivitiesContainer extends React.Component {
           >
             <Chip
               style={styles.chip}
-              backgroundColor={cyan500}
             >
               <h3 style={{color: 'white'}}>Total Time:</h3>
               <p id='total-time' style={{color: 'white'}}>{totalTime[0]} min, {totalTime[1]} sec</p>
@@ -167,7 +167,7 @@ export default class ActivitiesContainer extends React.Component {
 
     return (
       <div>
-        <h3>Select your activities:</h3>
+        <h3 style={{margin: 8}}>Select your activities:</h3>
         <div style={styles.root}>
           <GridList
             cols={6}

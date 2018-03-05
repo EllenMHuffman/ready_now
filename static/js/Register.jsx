@@ -10,13 +10,23 @@ import Divider from 'material-ui/Divider';
 
 const styles = {
   form: {
-    margin: 20,
+    marginLeft: 30,
+    marginTop: -20,
   },
   button: {
-    margin: 12,
+    marginTop: 8,
+    marginLeft: -18,
+    marginBottom: 20,
   },
-  customWidth: {
-    width: 150,
+  formField: {
+    width: 230,
+    display: 'inline-block',
+  },
+  genderField: {
+    marginTop: 0,
+    width: 230,
+    position: 'relative',
+    verticalAlign: 'bottom',
   },
 };
 
@@ -37,6 +47,7 @@ export default class Register extends React.Component {
       zipcode: ''
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeGender = this.handleChangeGender.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -44,6 +55,10 @@ export default class Register extends React.Component {
     const value = event.target.value;
     const name = event.target.name;
     this.setState({[name]: value});
+  }
+
+  handleChangeGender(event, index, value) {
+    this.setState({['gender']: value})
   }
 
   handleSubmit(event){
@@ -98,7 +113,10 @@ export default class Register extends React.Component {
       let nameKey = i[0];
       infoFields.push(
         <TextField
+          key={nameKey}
+          style={styles.formField}
           floatingLabelText={i[1]}
+          floatingLabelFixed={true}
           name={nameKey}
           type={nameKey === 'password' ? 'password' : 'text'}
           req={i[2]}
@@ -107,13 +125,15 @@ export default class Register extends React.Component {
         />
       );
     }
-    // infoFields.push(<br />);
 
     for (let c of contact) {
       let nameKey = c[0]
       contactFields.push(
         <TextField
+          key={nameKey}
+          style={styles.formField}
           floatingLabelText={c[1]}
+          floatingLabelFixed={true}
           name={nameKey}
           type='text'
           req={c[2]}
@@ -122,31 +142,29 @@ export default class Register extends React.Component {
         />
       );
     }
-    // contactFields.push(<br />);
 
     return (
       <div>
-        <h1>Register</h1>
+        <h2 style={{margin: 12}}>Register</h2>
         <form style={styles.form}>
 
           {infoFields}
-          <label>
-            <SelectField
-              style={styles.customWidth}
+
+            <SelectField id='gender-field'
+              style={styles.genderField}
               floatingLabelText='Gender'
-              name='gender'
-              value={this.state.value}
-              onChange={this.handleChange}
+              floatingLabelFixed={true}
+              value={this.state.gender}
+              onChange={this.handleChangeGender}
             >
               <MenuItem value='decline' primaryText='--' />
               <MenuItem value='female' primaryText='Female' />
               <MenuItem value='male' primaryText='Male' />
               <MenuItem value='other' primaryText='Other' />
             </SelectField>
-          </label>
-          <br />
-          {contactFields}
 
+          {contactFields}
+          <br />
           <RaisedButton
             primary={true}
             label='Register'

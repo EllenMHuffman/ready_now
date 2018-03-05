@@ -138,7 +138,7 @@ export default class TimersContainer extends React.Component {
 
     return (
       <div>
-        <h3>Use the timers to keep you on track</h3>
+        <h3 style={{margin: 12}}>Use the timers to keep you on track</h3>
         <Table>
           <TableHeader displaySelectAll={false}>
             <TableRow>

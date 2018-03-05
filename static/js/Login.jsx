@@ -7,10 +7,13 @@ import Divider from 'material-ui/Divider';
 
 const styles = {
   form: {
-    margin: 20,
+    marginLeft: 30,
+    marginTop: -20,
   },
   button: {
-    margin: 12,
+    marginTop: 8,
+    marginLeft: -18,
+    marginBottom: 20,
   },
 };
 
@@ -51,11 +54,12 @@ export default class Login extends React.Component {
     console.log('Login ' + this.state.username);
     return(
       <div>
-        <h1>Log In</h1>
+        <h2 style={{margin: 12}}>Log In</h2>
         <form style={styles.form}>
           <label>
             <TextField
-              hintText='Username'
+              floatingLabelText='Username'
+              floatingLabelFixed={true}
               name='username'
               type='text'
               value={this.state.username}
@@ -65,7 +69,8 @@ export default class Login extends React.Component {
           <br />
           <label>
             <TextField
-              hintText='Password'
+              floatingLabelText='Password'
+              floatingLabelFixed={true}
               name='password'
               type='password'
               value={this.state.password}

@@ -15,12 +15,21 @@ const styles = {
   button: {
     margin: 12,
     position: 'relative',
-    top: -32,
+    top: 24,
   },
   form: {
     height: 250,
+    marginLeft: 30,
+    marginTop: -20,
   },
+  formField: {
+    display: 'inline-block',
+    width: 250,
+    margin: 10,
+    marginBottom: 0,
+  }
 };
+
 
 export default class FriendSelect extends React.Component {
   constructor(props) {
@@ -106,9 +115,10 @@ export default class FriendSelect extends React.Component {
         textingAbility = (
           <div>
             <form onSubmit={this.handleSubmit} style={styles.form}>
-              <h3>Message a friend</h3>
-              <label className='friend-select'>
+              <h3 style={{margin: 12}}>Message a friend</h3>
+              <label>
                 <SelectField
+                  style={styles.formField, {verticalAlign: 'bottom'}}
                   multiple={true}
                   maxHeight={200}
                   hintText='Choose one or more friends'
@@ -120,6 +130,7 @@ export default class FriendSelect extends React.Component {
               </label>
               <label className='friend-select' id='message'>
                 <TextField
+                  style={styles.formField}
                   hintText="message"
                   floatingLabelText="Write your message:"
                   multiLine={true}

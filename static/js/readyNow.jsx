@@ -4,13 +4,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 import AppBar from 'material-ui/AppBar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVert from 'material-ui/svg-icons/navigation/more-vert';
 import FlatButton from 'material-ui/FlatButton';
-import grey50 from 'material-ui/styles/colors';
+import red500 from 'material-ui/styles/colors';
 
 
 import ActivitiesContainer from './ActivitiesContainer';
@@ -19,6 +21,16 @@ import ProfileContainer from './ProfileContainer';
 import Register from './Register';
 import SettingsContainer from './SettingsContainer';
 import TimersContainer from './TimersContainer';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    textColor: red500,
+  },
+  appBar: {
+    height: 200,
+  },
+});
+
 
 const styles = {
   title: {
@@ -171,7 +183,10 @@ class ReadyNow extends React.Component {
           title={<span style={styles.title}>Ready Now</span>}
           onTitleClick={this.showActivities}
           iconElementLeft={<IconMenu
-                             iconButtonElement={<IconButton iconStyle={{color: 'rgba(255,255,255,1)'}}><MoreVert /></IconButton>}
+                             iconButtonElement={<IconButton
+                                                  iconStyle={{color: 'rgba(255,255,255,1)'}}>
+                                                  <MoreVert />
+                                                </IconButton>}
                              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                              targetOrigin={{horizontal: 'left', vertical: 'top'}}
                            >
@@ -179,7 +194,6 @@ class ReadyNow extends React.Component {
                            </IconMenu>
                           }
           iconElementRight={profile}
-
         />
         {accountView}
         {mainView}
@@ -189,7 +203,7 @@ class ReadyNow extends React.Component {
 }
 
 const App = () => (
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={muiTheme}>
     <ReadyNow />
   </MuiThemeProvider>
 );

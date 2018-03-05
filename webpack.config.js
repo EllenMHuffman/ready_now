@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    "./static/js/readyNow.jsx"
+    "./static/js/ReadyNow.jsx"
   ],
   output: {
     path: __dirname + '/static',

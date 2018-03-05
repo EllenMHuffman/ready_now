@@ -112,7 +112,7 @@ def add_record():
 
     new_record = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
                         start_t=start_t, end_t=end_t)
-    print new_record
+
     db.session.add(new_record)
     db.session.commit()
     # value = update_db(new_record)
