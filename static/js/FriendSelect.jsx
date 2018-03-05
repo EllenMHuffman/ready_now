@@ -11,8 +11,15 @@ import TextField from 'material-ui/TextField';
 import SelectOption from './SelectOption';
 
 
-const style = {
-  margin: 12
+const styles = {
+  button: {
+    margin: 12,
+    position: 'relative',
+    top: -32,
+  },
+  form: {
+    height: 250,
+  },
 };
 
 export default class FriendSelect extends React.Component {
@@ -98,11 +105,12 @@ export default class FriendSelect extends React.Component {
       default:
         textingAbility = (
           <div>
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} style={styles.form}>
               <h3>Message a friend</h3>
-              <label>
+              <label className='friend-select'>
                 <SelectField
                   multiple={true}
+                  maxHeight={200}
                   hintText='Choose one or more friends'
                   value={this.state.phones}
                   onChange={this.handleChangePhone}
@@ -110,20 +118,17 @@ export default class FriendSelect extends React.Component {
                   {this.menuItems()}
                 </SelectField>
               </label>
-              <br />
-              <label>
-                <br />
+              <label className='friend-select' id='message'>
                 <TextField
                   hintText="message"
                   floatingLabelText="Write your message:"
                   multiLine={true}
-                  rows={2}
+                  rows={1}
                   value={this.state.message}
                   onChange={this.handleChangeMessage}
                 />
               </label>
-              <br />
-              <RaisedButton type='submit' label='Send text' style={style} />
+              <label className='friend-select'><RaisedButton type='submit' label='Send text' style={styles.button} /></label>
             </form>
             <Snackbar
               open={this.state.open}

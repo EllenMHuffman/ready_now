@@ -37,8 +37,8 @@ def show_index():
     return render_template('index.html')
 
 
-@app.route('/api/get-activities', methods=['POST'])
-def get_activities():
+@app.route('/api/get-activities-loggedin', methods=['POST'])
+def get_activities_loggedin():
     """Gets list of activities from the database, including user times."""
 
     activities = db.session.query(Activity.act_id, Activity.act_name,
@@ -51,6 +51,21 @@ def get_activities():
         user_id = session['user_id']
 
         activity_time = get_user_avg(user_id, activity_time)
+
+    activity_time_array = create_activity_time_array(activity_time)
+
+    return jsonify(activity_time_array)
+
+
+@app.route('/api/get-activities-loggedout', methods=['POST'])
+def get_activities_loggedout():
+    """Gets list of activities from the database with default times."""
+
+    activities = db.session.query(Activity.act_id, Activity.act_name,
+                                  Activity.default_time, Activity.pair,
+                                  Activity.img)
+
+    activity_time = create_activity_times(activities)
 
     activity_time_array = create_activity_time_array(activity_time)
 
@@ -80,8 +95,9 @@ def add_record():
     """Updates the database each time a user completes an activity."""
 
     timer_data = json.loads(request.data)
+    print timer_data
     sess_id = session['sess_id']
-    act_id = timer_data['actId']
+    act_id = int(timer_data['index']) + 1
     js_start = timer_data['startTime']
     start_t = convert_to_datetime(js_start)
     js_end = timer_data['endTime']
@@ -96,9 +112,12 @@ def add_record():
 
     new_record = Record(user_id=user_id, sess_id=sess_id, act_id=act_id,
                         start_t=start_t, end_t=end_t)
-    value = update_db(new_record)
+    print new_record
+    db.session.add(new_record)
+    db.session.commit()
+    # value = update_db(new_record)
 
-    return jsonify({'value': value})
+    return jsonify({'value': 'testing'})
 
 
 @app.route('/api/register', methods=['POST'])

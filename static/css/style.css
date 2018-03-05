@@ -1,5 +1,16 @@
 
-h1, h2, h3 {
+.friend-select {
+    display: inline-block;
+    width: 250px;
+    margin: 10px;
+    margin-bottom: 0px;
+}
+
+#message > div {
+    top: -56px;
+}
+
+h1, h2, h3, h4 {
     font-family: 'Roboto', sans-serif;
 }
 

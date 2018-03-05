@@ -3,6 +3,7 @@
 import React from 'react';
 import moment from 'moment';
 
+import RaisedButton from 'material-ui/RaisedButton';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 import Chip from 'material-ui/Chip';
 import {
@@ -21,6 +22,9 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexwrap: 'wrap',
+  },
+  button: {
+    margin: 6,
   },
 };
 
@@ -131,19 +135,26 @@ export default class Timer extends React.Component {
     let data = {
       startTime: this.state.startTime.unix(),
       endTime: timeNow.unix(),
-      actId: this.props.actId};
+      index: this.props.actId};
     this.sendData(data);
     this.props.calculateProjectedETA(data);
   }
 
   render() {
+    console.log(this.state);
     let button;
     switch (this.state.status) {
       case 'idle':
-        button = <button onClick={this.startTimer}>Start</button>;
+        button = <RaisedButton
+                    label="Start"
+                    style={styles.button}
+                    onClick={this.startTimer} />;
         break;
       case 'pending':
-        button = <button onClick={this.stopTimer}>Stop</button>;
+        button = <RaisedButton
+                    label="Stop"
+                    style={styles.button}
+                    onClick={this.stopTimer} />;
         break;
       case 'completed':
         button = null;

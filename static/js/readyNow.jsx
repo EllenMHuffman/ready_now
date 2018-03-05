@@ -4,6 +4,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVert from 'material-ui/svg-icons/navigation/more-vert';
+import FlatButton from 'material-ui/FlatButton';
+import grey50 from 'material-ui/styles/colors';
+
 
 import ActivitiesContainer from './ActivitiesContainer';
 import Login from './Login';
@@ -11,6 +19,12 @@ import ProfileContainer from './ProfileContainer';
 import Register from './Register';
 import SettingsContainer from './SettingsContainer';
 import TimersContainer from './TimersContainer';
+
+const styles = {
+  title: {
+    cursor: 'pointer',
+  },
+};
 
 
 class ReadyNow extends React.Component {
@@ -99,20 +113,29 @@ class ReadyNow extends React.Component {
   }
 
   render() {
-    let buttons = [<button key='home'
-                    onClick={this.showActivities}>Home</button>];
+
+    let menuItems = [];
+    let profile;
     if (this.state['loggedIn']) {
-      buttons.push(<button key='logout'
-                    onClick={this.logoutUser}>Log Out</button>);
-      buttons.push(<button key='profile'
-                    onClick={this.showProfile}>Profile</button>);
-      buttons.push(<button key='settings'
-                    onClick={this.showSettings}>Settings</button>);
+      menuItems.push(<MenuItem
+                        key='logout'
+                        primaryText='Log Out'
+                        onClick={this.logoutUser} />);
+      menuItems.push(<MenuItem
+                        key='settings'
+                        primaryText='Settings'
+                        onClick={this.showSettings} />);
+      profile = <FlatButton label='Profile' onClick={this.showProfile} />
     } else {
-      buttons.push(<button key='register'
-                    onClick={this.showRegister}>Register</button>);
-      buttons.push(<button key='login'
-                    onClick={this.showLogin}>Log In</button>);
+      menuItems.push(<MenuItem
+                        key='register'
+                        primaryText='Register'
+                        onClick={this.showRegister} />);
+      menuItems.push(<MenuItem
+                        key='login'
+                        primaryText='Login'
+                        onClick={this.showLogin} />);
+      profile = null;
     }
 
     let accountView;
@@ -130,7 +153,8 @@ class ReadyNow extends React.Component {
     if (['activities', 'actLoggedIn', 'actLoggedOut'].includes(
       this.state['mainView'])) {
         mainView = <ActivitiesContainer
-            setTimers={this.setTimers}/>;
+            setTimers={this.setTimers}
+            loggedIn={this.state.loggedIn} />;
     } else if (this.state['mainView'] === 'timers') {
       mainView = <TimersContainer
           timerData={this.getFilteredTimerData()}
@@ -143,7 +167,20 @@ class ReadyNow extends React.Component {
 
     return (
       <div>
-        {buttons}
+        <AppBar
+          title={<span style={styles.title}>Ready Now</span>}
+          onTitleClick={this.showActivities}
+          iconElementLeft={<IconMenu
+                             iconButtonElement={<IconButton iconStyle={{color: 'rgba(255,255,255,1)'}}><MoreVert /></IconButton>}
+                             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                             targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                           >
+                             {menuItems}
+                           </IconMenu>
+                          }
+          iconElementRight={profile}
+
+        />
         {accountView}
         {mainView}
       </div>

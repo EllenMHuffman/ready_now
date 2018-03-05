@@ -1,13 +1,13 @@
-Shower|600|0|../img/shower.jpg
-Wash Hair|600|0|../img/wash-hair.jpg
-Shave|300|0|../img/shave.jpg
-Wash Face|300|0|../img/wash-face.jpg
-Brush Teeth|120|0|../img/brush-teeth.jpg
-Skin Care|300|0|../img/skin-care.jpg
-Make Up (Simple)|300|1|../img/makeup-simple.jpg
-Make Up (Full Face)|900|1|../img/makeup-fullface.jpg
-Hair Styling (Simple)|600|1|../img/hair-heat.jpg
-Hair Styling (Heat)|1200|1|../img/hair-simple.jpg
-Choose Clothes|300|0|../img/clothes.jpg
-Dressing/Shoes|300|0|../img/dressing.jpg
-Accessories|180|0|../img/accessories.jpg
+Shower|600|0|static/img/shower.jpg
+Wash Hair|600|0|static/img/wash-hair.jpg
+Shave|300|0|static/img/shave.jpg
+Wash Face|300|0|static/img/wash-face.jpg
+Brush Teeth|120|0|static/img/brush-teeth.jpg
+Skin Care|300|0|static/img/skin-care.jpg
+Make Up (Simple)|300|1|static/img/makeup-simple.jpg
+Make Up (Full Face)|900|1|static/img/makeup-fullface.jpg
+Hair Styling (Simple)|600|1|static/img/hair-heat.jpg
+Hair Styling (Heat)|1200|1|static/img/hair-simple.jpg
+Choose Clothes|300|0|static/img/clothes.jpg
+Dressing/Shoes|300|0|static/img/dressing.jpg
+Accessories|180|0|static/img/accessories.jpg

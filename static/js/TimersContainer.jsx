@@ -59,8 +59,9 @@ export default class TimersContainer extends React.Component {
   }
 
   calculateProjectedETA(data) {
+    debugger;
     let actualTime = data.endTime - data.startTime;
-    let difference = (this.props.timerData[data.actId]['time'] - actualTime);
+    let difference = (this.props.timerData[data.index]['time'] - actualTime);
     let newETA = moment(this.state['projectedETA'] - difference * 1000);
 
     let nextState = this.state;
@@ -102,7 +103,7 @@ export default class TimersContainer extends React.Component {
       );
     }
     timerRows.push(
-      <TableRow key={100}>
+      <TableRow key={90}>
         <TableRowColumn></TableRowColumn>
         <TableRowColumn>
           <Chip
