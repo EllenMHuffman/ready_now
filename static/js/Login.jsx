@@ -1,6 +1,18 @@
 'use strict';
 
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
+
+const styles = {
+  form: {
+    margin: 20,
+  },
+  button: {
+    margin: 12,
+  },
+};
 
 
 export default class Login extends React.Component {
@@ -40,25 +52,35 @@ export default class Login extends React.Component {
     return(
       <div>
         <h1>Log In</h1>
-        <form onSubmit={this.handleSubmit}>
+        <form style={styles.form}>
           <label>
-            Username: <input
-                        name='username'
-                        type='text'
-                        value={this.state.username}
-                        onChange={this.handleChange} required />
+            <TextField
+              hintText='Username'
+              name='username'
+              type='text'
+              value={this.state.username}
+              onChange={this.handleChange} required
+            />
           </label>
           <br />
           <label>
-            Password: <input
-                        name='password'
-                        type='password'
-                        value={this.state.password}
-                        onChange={this.handleChange} required />
+            <TextField
+              hintText='Password'
+              name='password'
+              type='password'
+              value={this.state.password}
+              onChange={this.handleChange} required
+            />
           </label>
           <br />
-          <input type='submit' value='Log In' />
+          <RaisedButton
+            primary={true}
+            label='Log In'
+            style={styles.button}
+            onClick={this.handleSubmit}
+          />
         </form>
+        <Divider />
       </div>
     );
   }

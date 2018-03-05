@@ -5,7 +5,7 @@ import React from 'react';
 
 import {GridList, GridTile} from 'material-ui/GridList';
 import Chip from 'material-ui/Chip';
-import {blueGrey100} from 'material-ui/styles/colors';
+import {cyan500} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/CheckBox';
@@ -127,20 +127,11 @@ export default class ActivitiesContainer extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-    let activities = [];
-    for (let activity of this.state.activityInfo) {
-      activities.push(<ActivityButton key={activity.actId}
-                                      actId={activity.actId}
-                                      time={activity.time}
-                                      name={activity.name}
-                                      handleClick={this.handleClick} />);
-    }
-
     let totalTime = this.formatTime(this.calculateTime());
     let eta = this.calculateETA()
 
     let gridItems = null;
+
     if (this.state.activityInfo.length > 0) {
       gridItems = [this.gridItems()]
       gridItems.push(
@@ -152,10 +143,10 @@ export default class ActivitiesContainer extends React.Component {
           >
             <Chip
               style={styles.chip}
-              backgroundColor={blueGrey100}
+              backgroundColor={cyan500}
             >
-              <h3>Ready at:</h3>
-              <p id='total-time'>{eta.format('h:mm a')}</p>
+              <h3 style={{color: 'white'}}>Ready at:</h3>
+              <p id='total-time' style={{color: 'white'}}>{eta.format('h:mm a')}</p>
             </Chip>
           </GridTile>);
       gridItems.push(
@@ -166,10 +157,10 @@ export default class ActivitiesContainer extends React.Component {
           >
             <Chip
               style={styles.chip}
-              backgroundColor={blueGrey100}
+              backgroundColor={cyan500}
             >
-              <h3>Total Time:</h3>
-              <p id='total-time'>{totalTime[0]} min, {totalTime[1]} sec</p>
+              <h3 style={{color: 'white'}}>Total Time:</h3>
+              <p id='total-time' style={{color: 'white'}}>{totalTime[0]} min, {totalTime[1]} sec</p>
             </Chip>
           </GridTile>);
     }
@@ -190,7 +181,6 @@ export default class ActivitiesContainer extends React.Component {
             label={<b>Click to Start Timers</b>}
             style={{width: 200, height: 100}}
             primary={true}
-            backgroundColor={blueGrey100}
             onClick={this.handleSubmit} />
         </div>
       </div>

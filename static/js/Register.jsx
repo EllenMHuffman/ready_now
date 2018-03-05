@@ -1,7 +1,24 @@
 'use strict';
 
 import React from 'react';
-import InputField from './InputField';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
+
+
+const styles = {
+  form: {
+    margin: 20,
+  },
+  button: {
+    margin: 12,
+  },
+  customWidth: {
+    width: 150,
+  },
+};
 
 
 export default class Register extends React.Component {
@@ -78,45 +95,66 @@ export default class Register extends React.Component {
     let contactFields = [];
 
     for (let i of info) {
-      infoFields.push(<InputField key={i[0]}
-                                  name={i[0]}
-                                  display={i[1]}
-                                  req={i[2]}
-                                  handleChange={this.handleChange}
-                                  state={this.state} />);
+      let nameKey = i[0];
+      infoFields.push(
+        <TextField
+          floatingLabelText={i[1]}
+          name={nameKey}
+          type={nameKey === 'password' ? 'password' : 'text'}
+          req={i[2]}
+          value={this.state.nameKey}
+          onChange={this.handleChange}
+        />
+      );
     }
+    // infoFields.push(<br />);
 
     for (let c of contact) {
-      contactFields.push(<InputField key={c[0]}
-                                     name={c[0]}
-                                     display={c[1]}
-                                     req={c[2]}
-                                     handleChange={this.handleChange}
-                                     state={this.state} />);
+      let nameKey = c[0]
+      contactFields.push(
+        <TextField
+          floatingLabelText={c[1]}
+          name={nameKey}
+          type='text'
+          req={c[2]}
+          value={this.state.nameKey}
+          onChange={this.handleChange}
+        />
+      );
     }
+    // contactFields.push(<br />);
 
     return (
       <div>
         <h1>Register</h1>
-        <form onSubmit={this.handleSubmit}>
+        <form style={styles.form}>
 
           {infoFields}
           <label>
-            Gender:
-            <select name='gender'
-                    value={this.state.value}
-                    onChange={this.handleChange}>
-              <option value='decline'> - </option>
-              <option value='female'> Female </option>
-              <option value='male'> Male </option>
-              <option value='other'> Other </option>
-            </select>
+            <SelectField
+              style={styles.customWidth}
+              floatingLabelText='Gender'
+              name='gender'
+              value={this.state.value}
+              onChange={this.handleChange}
+            >
+              <MenuItem value='decline' primaryText='--' />
+              <MenuItem value='female' primaryText='Female' />
+              <MenuItem value='male' primaryText='Male' />
+              <MenuItem value='other' primaryText='Other' />
+            </SelectField>
           </label>
           <br />
           {contactFields}
 
-          <input type='submit' value='Register' />
+          <RaisedButton
+            primary={true}
+            label='Register'
+            style={styles.button}
+            onClick={this.handleSubmit}
+          />
         </form>
+        <Divider />
       </div>
     );
   }
