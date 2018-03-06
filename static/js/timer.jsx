@@ -15,6 +15,14 @@ import {
   red900
 } from 'material-ui/styles/colors';
 
+const colorPalette = {
+  'purple': '#7C6196',
+  'red': '#B26060',
+  'blue': '#44AABF',
+  'white': '#FFFBF9',
+  'black': '#19020D',
+};
+
 const styles = {
   chip: {
     margin: 2,
@@ -25,6 +33,9 @@ const styles = {
   },
   button: {
     margin: 6,
+  },
+  text: {
+    color: colorPalette.black,
   },
 };
 
@@ -141,18 +152,19 @@ export default class Timer extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let button;
     switch (this.state.status) {
       case 'idle':
         button = <RaisedButton
                     label="Start"
+                    labelColor={styles.text}
                     style={styles.button}
                     onClick={this.startTimer} />;
         break;
       case 'pending':
         button = <RaisedButton
                     label="Stop"
+                    labelColor={styles.text}
                     style={styles.button}
                     onClick={this.stopTimer} />;
         break;
@@ -164,13 +176,17 @@ export default class Timer extends React.Component {
 
     return (
       <TableRow>
-        <TableRowColumn>{this.props.name}</TableRowColumn>
+        <TableRowColumn>
+          <span style={styles.text}>
+            {this.props.name}
+          </span>
+        </TableRowColumn>
         <TableRowColumn>
           <Chip
             style={styles.chip}
             backgroundColor={this.state.chipColor}
           >
-            {time[0]}:{time[1]}
+            <span style={styles.text}>{time[0]}:{time[1]}</span>
           </Chip>
         </TableRowColumn>
         <TableRowColumn>{button}</TableRowColumn>

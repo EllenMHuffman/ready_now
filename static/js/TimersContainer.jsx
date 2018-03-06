@@ -25,6 +25,14 @@ import {
 import FriendSelect from './FriendSelect';
 import Timer from './Timer';
 
+const colorPalette = {
+  'purple': '#7C6196',
+  'red': '#B26060',
+  'blue': '#44AABF',
+  'white': '#FFFBF9',
+  'black': '#19020D',
+};
+
 const styles = {
   chip: {
     margin: 6,
@@ -32,6 +40,9 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexwrap: 'wrap',
+  },
+  text: {
+    color: colorPalette.black,
   },
 };
 
@@ -110,7 +121,9 @@ export default class TimersContainer extends React.Component {
             style={styles.chip}
             backgroundColor={lightBlue50}
           >
-            Initial ETA: {initialTime.format('h:mm a')}
+            <span style={styles.text}>
+              Initial ETA: {initialTime.format('h:mm a')}
+            </span>
           </Chip>
         </TableRowColumn>
         <TableRowColumn>
@@ -118,7 +131,9 @@ export default class TimersContainer extends React.Component {
             style={styles.chip}
             backgroundColor={this.state.chipColor}
           >
-            Projected ETA: {projectedTime.format('h:mm a')}
+            <span style={styles.text}>
+              Projected ETA: {projectedTime.format('h:mm a')}
+            </span>
           </Chip>
         </TableRowColumn>
       </TableRow>

@@ -7,6 +7,13 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
+const colorPalette = {
+  'purple': '#7C6196',
+  'red': '#B26060',
+  'blue': '#44AABF',
+  'white': '#FFFBF9',
+  'black': '#19020D',
+};
 
 const styles = {
   form: {
@@ -27,6 +34,9 @@ const styles = {
     width: 230,
     position: 'relative',
     verticalAlign: 'bottom',
+  },
+  menuItem: {
+    color: '#19020D',
   },
 };
 
@@ -157,10 +167,10 @@ export default class Register extends React.Component {
               value={this.state.gender}
               onChange={this.handleChangeGender}
             >
-              <MenuItem value='decline' primaryText='--' />
-              <MenuItem value='female' primaryText='Female' />
-              <MenuItem value='male' primaryText='Male' />
-              <MenuItem value='other' primaryText='Other' />
+              <MenuItem style={styles.menuItem} value='decline' primaryText='--' />
+              <MenuItem style={styles.menuItem} value='female' primaryText='Female' />
+              <MenuItem style={styles.menuItem} value='male' primaryText='Male' />
+              <MenuItem style={styles.menuItem} value='other' primaryText='Other' />
             </SelectField>
 
           {contactFields}

@@ -12,7 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVert from 'material-ui/svg-icons/navigation/more-vert';
 import FlatButton from 'material-ui/FlatButton';
-import red500 from 'material-ui/styles/colors';
+import {fade} from 'material-ui/utils/colorManipulator';
 
 
 import ActivitiesContainer from './ActivitiesContainer';
@@ -22,12 +22,37 @@ import Register from './Register';
 import SettingsContainer from './SettingsContainer';
 import TimersContainer from './TimersContainer';
 
+const colorPalette = {
+  'purple': '#7C6196',
+  'red': '#B26060',
+  'blue': '#44AABF',
+  'white': '#FFFBF9',
+  'black': '#19020D',
+};
+
 const muiTheme = getMuiTheme({
+  fontFamily: 'Roboto, sans-serif',
   palette: {
-    textColor: red500,
+    primary1Color: colorPalette.purple,
+    primary2Color: colorPalette.red,
+    primary3Color: colorPalette.purple,
+    accent1Color: colorPalette.blue,
+    accent2Color: colorPalette.red,
+    accent3Color: colorPalette.red,
+    textColor: colorPalette.white,
+    alternateTextColor: colorPalette.white,
+    canvasColor: colorPalette.white,
+    borderColor: colorPalette.black,
+    disabledColor: fade(colorPalette.black, 0.3),
+    pickerHeaderColor: colorPalette.red,
+    clockCircleColor: fade(colorPalette.black, 0.07),
+    shadowColor: colorPalette.black,
   },
-  appBar: {
-    height: 200,
+  textField: {
+    textColor: colorPalette.black,
+  },
+  selectField: {
+    inputColor: colorPalette.black,
   },
 });
 
@@ -35,6 +60,9 @@ const muiTheme = getMuiTheme({
 const styles = {
   title: {
     cursor: 'pointer',
+  },
+  menuItem: {
+    color: colorPalette.black,
   },
 };
 
@@ -130,20 +158,24 @@ class ReadyNow extends React.Component {
     let profile;
     if (this.state['loggedIn']) {
       menuItems.push(<MenuItem
+                        style={styles.menuItem}
                         key='logout'
                         primaryText='Log Out'
                         onClick={this.logoutUser} />);
       menuItems.push(<MenuItem
+                        style={styles.menuItem}
                         key='settings'
                         primaryText='Settings'
                         onClick={this.showSettings} />);
       profile = <FlatButton label='Profile' onClick={this.showProfile} />
     } else {
       menuItems.push(<MenuItem
+                        style={styles.menuItem}
                         key='register'
                         primaryText='Register'
                         onClick={this.showRegister} />);
       menuItems.push(<MenuItem
+                        style={styles.menuItem}
                         key='login'
                         primaryText='Login'
                         onClick={this.showLogin} />);

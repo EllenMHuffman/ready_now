@@ -5,11 +5,18 @@ import React from 'react';
 
 import {GridList, GridTile} from 'material-ui/GridList';
 import Chip from 'material-ui/Chip';
-import {red500, cyan50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/CheckBox';
 import CheckboxOutline from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+
+const colorPalette = {
+  'purple': '#7C6196',
+  'red': '#B26060',
+  'blue': '#44AABF',
+  'white': '#FFFBF9',
+  'black': '#19020D',
+};
 
 const styles = {
   root: {
@@ -22,10 +29,13 @@ const styles = {
     height: 550,
     overflowY: 'auto',
   },
+  titleStyle: {
+    color: colorPalette.white,
+  },
   chip: {
     marginTop: 10,
-    marginLeft: 24,
-    backgroundColor: red500,
+    marginLeft: 15,
+    backgroundColor: colorPalette.purple,
   },
   wrapper: {
     display: 'flex',
@@ -33,10 +43,15 @@ const styles = {
   },
   button: {
     margin: 12,
+    verticalAlign: 'bottom',
   },
   checkbox: {
     margin: 8,
-    color: 'white',
+    color: colorPalette.white,
+  },
+  header: {
+    margin: 8,
+    color: colorPalette.black,
   },
 };
 
@@ -109,6 +124,7 @@ export default class ActivitiesContainer extends React.Component {
       return (
         <GridTile
           key={activity.actId}
+          titleStyle={styles.titleStyle}
           title={activity.name + ', ' + time[0] + ':' + time[1] + ' mins'}
           tooltip={activity.time}
           actionIcon={<Checkbox style={styles.checkbox}
@@ -139,6 +155,7 @@ export default class ActivitiesContainer extends React.Component {
       gridItems.push(
           <GridTile
             key={'eta-time'}
+            titleStyle={styles.titleStyle}
             title={''}
             cols={1}
             rows={2}
@@ -146,28 +163,29 @@ export default class ActivitiesContainer extends React.Component {
             <Chip
               style={styles.chip}
             >
-              <h3 style={{color: 'white'}}>Ready at:</h3>
-              <p id='total-time' style={{color: 'white'}}>{eta.format('h:mm a')}</p>
+              <h3 style={{color: '#FFFBF9'}}>Ready at:</h3>
+              <p id='total-time' style={{color: '#FFFBF9'}}>{eta.format('h:mm a')}</p>
             </Chip>
           </GridTile>);
       gridItems.push(
           <GridTile
             key={'total-time'}
+            titleStyle={styles.titleStyle}
             cols={1}
             rows={2}
           >
             <Chip
               style={styles.chip}
             >
-              <h3 style={{color: 'white'}}>Total Time:</h3>
-              <p id='total-time' style={{color: 'white'}}>{totalTime[0]} min, {totalTime[1]} sec</p>
+              <h3 style={{color: '#FFFBF9'}}>Total Time:</h3>
+              <p id='total-time' style={{color: '#FFFBF9'}}>{totalTime[0]} min, {totalTime[1]} sec</p>
             </Chip>
           </GridTile>);
     }
 
     return (
       <div>
-        <h3 style={{margin: 8}}>Select your activities:</h3>
+        <h4 style={styles.header}>Select your activities:</h4>
         <div style={styles.root}>
           <GridList
             cols={6}
@@ -177,11 +195,13 @@ export default class ActivitiesContainer extends React.Component {
           >
             {gridItems}
           </GridList>
+          <div style={{marginTop: 428}}>
           <RaisedButton
-            label={<b>Click to Start Timers</b>}
+            label={<b style={{color: '#FFFBF9'}}>Click to Start Timers</b>}
             style={{width: 200, height: 100}}
-            primary={true}
+            secondary={true}
             onClick={this.handleSubmit} />
+            </div>
         </div>
       </div>
     );
