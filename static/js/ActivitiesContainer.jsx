@@ -11,15 +11,16 @@ import Checkbox from 'material-ui/CheckBox';
 import CheckboxOutline from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 const colorPalette = {
-  'purple': '#7C6196',
-  'red': '#B26060',
-  'blue': '#44AABF',
-  'white': '#FFFBF9',
-  'black': '#19020D',
+  'blue': '#34A3BA',
+  'white': '#FFF8F4',
+  'dkBlue': '#217A8C',
+  'black': '#000105',
+  'red': '#863b87',
 };
 
 const styles = {
   root: {
+    marginTop: 30,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
@@ -32,27 +33,75 @@ const styles = {
   titleStyle: {
     color: colorPalette.white,
   },
-  chip: {
-    marginTop: 10,
-    marginLeft: 15,
-    backgroundColor: colorPalette.purple,
-  },
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  button: {
-    margin: 12,
-    verticalAlign: 'bottom',
-  },
   checkbox: {
     margin: 8,
     color: colorPalette.white,
   },
-  header: {
-    margin: 8,
-    color: colorPalette.black,
+  chip: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 20,
+    marginLeft: 30,
   },
+  chipReady: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginLeft: 26,
+    marginTop: 10,
+    borderRadius: 6,
+    backgroundColor: colorPalette.dkBlue,
+  },
+  chipTotal: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: 16,
+    borderRadius: 6,
+    backgroundColor: colorPalette.dkBlue,
+  },
+  text: {
+    fontSize: 16,
+  },
+  sidePanel: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    width: 300,
+    marginTop: 58,
+  },
+  headerSelect: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    height: 110,
+    marginTop: 20,
+    marginLeft: -46,
+    color: colorPalette.white,
+    fontFamily: 'Satisfy, cursive',
+    fontSize: 100,
+  },
+  headerActivities: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    height: 110,
+    marginTop: -20,
+    marginLeft: -8,
+    color: colorPalette.white,
+    fontFamily: 'Satisfy, cursive',
+    fontSize: 100,
+  },
+  button: {
+    borderRadius: 16,
+    marginTop: 162,
+    marginLeft: 44,
+    verticalAlign: 'bottom',
+    width: 208,
+    height: 80,
+  },
+  buttonStyle: {
+    borderRadius: 16,
+  },
+  buttonText: {
+    color: colorPalette.white,
+  }
 };
 
 
@@ -157,35 +206,34 @@ export default class ActivitiesContainer extends React.Component {
             key={'eta-time'}
             titleStyle={styles.titleStyle}
             title={''}
-            cols={1}
+            cols={2}
             rows={2}
           >
-            <Chip
-              style={styles.chip}
-            >
-              <h3 style={{color: '#FFFBF9'}}>Ready at:</h3>
-              <p id='total-time' style={{color: '#FFFBF9'}}>{eta.format('h:mm a')}</p>
-            </Chip>
+            <div style={styles.chip}>
+              <Chip
+                style={styles.chipReady}
+              >
+                <span style={styles.text}>Ready at: {eta.format('h:mm a')}</span>
+              </Chip>
+              <Chip
+                style={styles.chipTotal}
+              >
+                <span style={styles.text}>Total Time: {totalTime[0]} min, {totalTime[1]} sec</span>
+              </Chip>
+            </div>
           </GridTile>);
-      gridItems.push(
-          <GridTile
-            key={'total-time'}
-            titleStyle={styles.titleStyle}
-            cols={1}
-            rows={2}
-          >
-            <Chip
-              style={styles.chip}
-            >
-              <h3 style={{color: '#FFFBF9'}}>Total Time:</h3>
-              <p id='total-time' style={{color: '#FFFBF9'}}>{totalTime[0]} min, {totalTime[1]} sec</p>
-            </Chip>
-          </GridTile>);
+      // gridItems.push(
+      //     <GridTile
+      //       key={'total-time'}
+      //       titleStyle={styles.titleStyle}
+      //       cols={1}
+      //       rows={2}
+      //     >
+      //     </GridTile>);
     }
 
     return (
       <div>
-        <h4 style={styles.header}>Select your activities:</h4>
         <div style={styles.root}>
           <GridList
             cols={6}
@@ -195,13 +243,18 @@ export default class ActivitiesContainer extends React.Component {
           >
             {gridItems}
           </GridList>
-          <div style={{marginTop: 428}}>
-          <RaisedButton
-            label={<b style={{color: '#FFFBF9'}}>Click to Start Timers</b>}
-            style={{width: 200, height: 100}}
-            secondary={true}
-            onClick={this.handleSubmit} />
+          <div style={styles.sidePanel}>
+            <div>
+              <span style={styles.headerSelect}>Select</span>
+              <span style={styles.headerActivities}>activities</span>
             </div>
+              <RaisedButton
+                label={<span style={styles.buttonText}>Click to Start Timers</span>}
+                style={styles.button}
+                buttonStyle={styles.buttonStyle}
+                secondary={true}
+                onClick={this.handleSubmit} />
+          </div>
         </div>
       </div>
     );

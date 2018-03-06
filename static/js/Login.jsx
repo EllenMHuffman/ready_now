@@ -51,7 +51,6 @@ export default class Login extends React.Component {
   }
 
   render() {
-    console.log('Login ' + this.state.username);
     return(
       <div>
         <h2 style={{margin: 12}}>Log In</h2>

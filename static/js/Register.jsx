@@ -8,14 +8,18 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 const colorPalette = {
-  'purple': '#7C6196',
-  'red': '#B26060',
-  'blue': '#44AABF',
-  'white': '#FFFBF9',
-  'black': '#19020D',
+  'blue': '#34A3BA',
+  'white': '#FFF8F4',
+  'dkBlue': '#217A8C',
+  'black': '#000105',
+  'red': '#863b87',
 };
 
 const styles = {
+  header: {
+    color: colorPalette.white,
+    margin: 12,
+  },
   form: {
     marginLeft: 30,
     marginTop: -20,
@@ -36,7 +40,7 @@ const styles = {
     verticalAlign: 'bottom',
   },
   menuItem: {
-    color: '#19020D',
+    color: colorPalette.black,
   },
 };
 
@@ -155,7 +159,7 @@ export default class Register extends React.Component {
 
     return (
       <div>
-        <h2 style={{margin: 12}}>Register</h2>
+        <h2 style={styles.header}>Register</h2>
         <form style={styles.form}>
 
           {infoFields}

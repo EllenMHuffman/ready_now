@@ -23,36 +23,36 @@ import SettingsContainer from './SettingsContainer';
 import TimersContainer from './TimersContainer';
 
 const colorPalette = {
-  'purple': '#7C6196',
-  'red': '#B26060',
-  'blue': '#44AABF',
-  'white': '#FFFBF9',
-  'black': '#19020D',
+  'blue': '#34A3BA',
+  'white': '#FFF8F4',
+  'dkBlue': '#217A8C',
+  'black': '#000105',
+  'red': '#863b87',
 };
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: colorPalette.purple,
+    primary1Color: colorPalette.blue,
     primary2Color: colorPalette.red,
-    primary3Color: colorPalette.purple,
+    primary3Color: colorPalette.red,
     accent1Color: colorPalette.blue,
     accent2Color: colorPalette.red,
     accent3Color: colorPalette.red,
     textColor: colorPalette.white,
     alternateTextColor: colorPalette.white,
     canvasColor: colorPalette.white,
-    borderColor: colorPalette.black,
+    borderColor: colorPalette.white,
     disabledColor: fade(colorPalette.black, 0.3),
     pickerHeaderColor: colorPalette.red,
     clockCircleColor: fade(colorPalette.black, 0.07),
-    shadowColor: colorPalette.black,
+    shadowColor: colorPalette.white,
   },
   textField: {
-    textColor: colorPalette.black,
+    textColor: colorPalette.white,
   },
   selectField: {
-    inputColor: colorPalette.black,
+    inputColor: colorPalette.white,
   },
 });
 
@@ -60,9 +60,14 @@ const muiTheme = getMuiTheme({
 const styles = {
   title: {
     cursor: 'pointer',
+    fontFamily: 'Satisfy, cursive',
+    fontSize: 40,
   },
   menuItem: {
     color: colorPalette.black,
+  },
+  iconStyle: {
+    color: colorPalette.white,
   },
 };
 
@@ -216,7 +221,7 @@ class ReadyNow extends React.Component {
           onTitleClick={this.showActivities}
           iconElementLeft={<IconMenu
                              iconButtonElement={<IconButton
-                                                  iconStyle={{color: 'rgba(255,255,255,1)'}}>
+                                                  iconStyle={styles.iconStyle}>
                                                   <MoreVert />
                                                 </IconButton>}
                              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
