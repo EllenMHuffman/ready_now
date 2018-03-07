@@ -1,6 +1,9 @@
 'use strict';
 
 import React from 'react';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+
 
 
 export default class FriendList extends React.Component {
@@ -23,13 +26,19 @@ export default class FriendList extends React.Component {
   render() {
     let friends = [];
     for (let friendId in this.state.data) {
-      friends.push(<li>{this.state.data[friendId]['name']}</li>);
-    }    return (
+      friends.push(
+        <ListItem
+          primaryText={this.state.data[friendId]['name']}
+          style={{padding: 2}}
+        />);
+    }
+    return (
       <div>
         <h3>Saved Friends</h3>
-        <ul>
+        <Divider />
+        <List>
           {friends}
-        </ul>
+        </List>
       </div>
 
     );

@@ -5,15 +5,30 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 
+const colorPalette = {
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
+};
+
 const styles = {
   form: {
     marginLeft: 30,
-    marginTop: -20,
+    marginTop: -18,
   },
   button: {
     marginTop: 8,
     marginLeft: -18,
     marginBottom: 20,
+  },
+  formColor: {
+    color: colorPalette.white,
+    borderColor: colorPalette.white,
+  },
+  underlineFocus: {
+    borderColor: colorPalette.dkBlue,
   },
 };
 
@@ -59,6 +74,10 @@ export default class Login extends React.Component {
             <TextField
               floatingLabelText='Username'
               floatingLabelFixed={true}
+              floatingLabelStyle={styles.formColor}
+              floatingLabelFocusStyle={styles.formColor}
+              underlineStyle={styles.formColor}
+              underlineFocusStyle={styles.underlineFocus}
               name='username'
               type='text'
               value={this.state.username}
@@ -70,6 +89,10 @@ export default class Login extends React.Component {
             <TextField
               floatingLabelText='Password'
               floatingLabelFixed={true}
+              floatingLabelStyle={styles.formColor}
+              floatingLabelFocusStyle={styles.formColor}
+              underlineStyle={styles.formColor}
+              underlineFocusStyle={styles.underlineFocus}
               name='password'
               type='password'
               value={this.state.password}

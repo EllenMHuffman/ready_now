@@ -8,21 +8,20 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 const colorPalette = {
-  'blue': '#34A3BA',
-  'white': '#FFF8F4',
-  'dkBlue': '#217A8C',
-  'black': '#000105',
-  'red': '#863b87',
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
 };
 
 const styles = {
   header: {
-    color: colorPalette.white,
     margin: 12,
   },
   form: {
     marginLeft: 30,
-    marginTop: -20,
+    marginTop: -18,
   },
   button: {
     marginTop: 8,
@@ -41,6 +40,13 @@ const styles = {
   },
   menuItem: {
     color: colorPalette.black,
+  },
+  formColor: {
+    color: colorPalette.white,
+    borderColor: colorPalette.white,
+  },
+  underlineFocus: {
+    borderColor: colorPalette.dkBlue,
   },
 };
 
@@ -131,6 +137,10 @@ export default class Register extends React.Component {
           style={styles.formField}
           floatingLabelText={i[1]}
           floatingLabelFixed={true}
+          floatingLabelStyle={styles.formColor}
+          floatingLabelFocusStyle={styles.formColor}
+          underlineStyle={styles.formColor}
+          underlineFocusStyle={styles.underlineFocus}
           name={nameKey}
           type={nameKey === 'password' ? 'password' : 'text'}
           req={i[2]}
@@ -148,6 +158,10 @@ export default class Register extends React.Component {
           style={styles.formField}
           floatingLabelText={c[1]}
           floatingLabelFixed={true}
+          floatingLabelStyle={styles.formColor}
+          floatingLabelFocusStyle={styles.formColor}
+          underlineStyle={styles.formColor}
+          underlineFocusStyle={styles.underlineFocus}
           name={nameKey}
           type='text'
           req={c[2]}
@@ -168,6 +182,10 @@ export default class Register extends React.Component {
               style={styles.genderField}
               floatingLabelText='Gender'
               floatingLabelFixed={true}
+              floatingLabelStyle={styles.formColor}
+              floatingLabelFocusStyle={styles.formColor}
+              underlineStyle={styles.formColor}
+              underlineFocusStyle={styles.underlineFocus}
               value={this.state.gender}
               onChange={this.handleChangeGender}
             >

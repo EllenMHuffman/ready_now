@@ -32,7 +32,7 @@ export default class DestinationList extends React.Component {
           </span>
         </div>
                         );
-      console.log(destinations);
+      // console.log(destinations);
     }    return (
       <div>
         <h3>Saved Destinations</h3>

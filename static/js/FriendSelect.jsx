@@ -10,24 +10,52 @@ import TextField from 'material-ui/TextField';
 
 import SelectOption from './SelectOption';
 
+const colorPalette = {
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
+};
 
 const styles = {
   button: {
+    borderRadius: 16,
     margin: 12,
     position: 'relative',
     top: 24,
+  },
+  buttonStyle: {
+    borderRadius: 16,
   },
   form: {
     height: 250,
     marginLeft: 30,
     marginTop: -20,
   },
+  phoneField: {
+    display: 'inline-block',
+    width: 250,
+    margin: 10,
+    marginBottom: 0,
+    verticalAlign: 'bottom',
+  },
   formField: {
     display: 'inline-block',
     width: 250,
     margin: 10,
     marginBottom: 0,
-  }
+  },
+  menuItem: {
+    color: colorPalette.black,
+  },
+  formColor: {
+    color: colorPalette.white,
+    borderColor: colorPalette.white,
+  },
+  underlineFocus: {
+    borderColor: colorPalette.dkBlue,
+  },
 };
 
 
@@ -96,6 +124,7 @@ export default class FriendSelect extends React.Component {
     return this.state.friendInfo.map((friend) => (
       <MenuItem
         key={friend.id}
+        style={styles.menuItem}
         insetChildren={true}
         checked={this.state.phones.indexOf(friend.phone) > -1}
         value={friend.phone}
@@ -118,10 +147,15 @@ export default class FriendSelect extends React.Component {
               <h3 style={{margin: 12}}>Message a friend</h3>
               <label>
                 <SelectField
-                  style={styles.formField, {verticalAlign: 'bottom'}}
+                  style={styles.phoneField}
+                  floatingLabelText='Choose one or more friends'
+                  floatingLabelFixed={true}
+                  floatingLabelStyle={styles.formColor}
+                  floatingLabelFocusStyle={styles.formColor}
+                  underlineStyle={styles.formColor}
+                  underlineFocusStyle={styles.underlineFocus}
                   multiple={true}
                   maxHeight={200}
-                  hintText='Choose one or more friends'
                   value={this.state.phones}
                   onChange={this.handleChangePhone}
                 >
@@ -133,13 +167,26 @@ export default class FriendSelect extends React.Component {
                   style={styles.formField}
                   hintText="message"
                   floatingLabelText="Write your message:"
+                  floatingLabelFixed={true}
+                  floatingLabelStyle={styles.formColor}
+                  floatingLabelFocusStyle={styles.formColor}
+                  underlineStyle={styles.formColor}
+                  underlineFocusStyle={styles.underlineFocus}
                   multiLine={true}
                   rows={1}
                   value={this.state.message}
                   onChange={this.handleChangeMessage}
                 />
               </label>
-              <label className='friend-select'><RaisedButton type='submit' label='Send text' style={styles.button} /></label>
+              <label className='friend-select'>
+                <RaisedButton
+                  type='submit'
+                  label='Send text'
+                  primary={true}
+                  style={styles.button}
+                  buttonStyle={styles.buttonStyle}
+                  overlayStyle={styles.buttonStyle} />
+              </label>
             </form>
             <Snackbar
               open={this.state.open}

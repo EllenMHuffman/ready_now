@@ -11,11 +11,11 @@ import Checkbox from 'material-ui/CheckBox';
 import CheckboxOutline from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 const colorPalette = {
-  'blue': '#34A3BA',
-  'white': '#FFF8F4',
-  'dkBlue': '#217A8C',
-  'black': '#000105',
-  'red': '#863b87',
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
 };
 
 const styles = {
@@ -32,6 +32,7 @@ const styles = {
   },
   titleStyle: {
     color: colorPalette.white,
+    fontFamily: 'Roboto, sans-serif',
   },
   checkbox: {
     margin: 8,
@@ -60,22 +61,21 @@ const styles = {
   },
   text: {
     fontSize: 16,
+    color: colorPalette.white,
   },
   sidePanel: {
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
     width: 300,
-    marginTop: 58,
+    marginTop: 78,
+    fontFamily: 'Satisfy, cursive',
   },
   headerSelect: {
     display: 'flex',
     flexWrap: 'wrap',
     height: 110,
-    marginTop: 20,
     marginLeft: -46,
-    color: colorPalette.white,
-    fontFamily: 'Satisfy, cursive',
     fontSize: 100,
   },
   headerActivities: {
@@ -84,8 +84,6 @@ const styles = {
     height: 110,
     marginTop: -20,
     marginLeft: -8,
-    color: colorPalette.white,
-    fontFamily: 'Satisfy, cursive',
     fontSize: 100,
   },
   button: {
@@ -99,9 +97,6 @@ const styles = {
   buttonStyle: {
     borderRadius: 16,
   },
-  buttonText: {
-    color: colorPalette.white,
-  }
 };
 
 
@@ -138,11 +133,12 @@ export default class ActivitiesContainer extends React.Component {
 
   formatTime(secs) {
     let time = moment.duration(secs, 'seconds')
+    let hours = time.hours();
     let minutes = time.minutes();
     let seconds = time.seconds() % 60;
     seconds = ('0' + seconds).slice(-2);
 
-    return [minutes, seconds]
+    return [minutes, seconds, hours]
   }
 
   calculateETA() {
@@ -194,7 +190,12 @@ export default class ActivitiesContainer extends React.Component {
   }
 
   render() {
+    let hours;
     let totalTime = this.formatTime(this.calculateTime());
+    if (totalTime[2] > 0) {
+      hours = totalTime[2] + ' hr, ';
+    }
+
     let eta = this.calculateETA()
 
     let gridItems = null;
@@ -218,43 +219,34 @@ export default class ActivitiesContainer extends React.Component {
               <Chip
                 style={styles.chipTotal}
               >
-                <span style={styles.text}>Total Time: {totalTime[0]} min, {totalTime[1]} sec</span>
+                <span style={styles.text}>Total Time: {hours}{totalTime[0]} min, {totalTime[1]} sec</span>
               </Chip>
             </div>
           </GridTile>);
-      // gridItems.push(
-      //     <GridTile
-      //       key={'total-time'}
-      //       titleStyle={styles.titleStyle}
-      //       cols={1}
-      //       rows={2}
-      //     >
-      //     </GridTile>);
     }
 
     return (
-      <div>
-        <div style={styles.root}>
-          <GridList
-            cols={6}
-            cellHeight={65}
-            padding={1}
-            style={styles.gridList}
-          >
-            {gridItems}
-          </GridList>
-          <div style={styles.sidePanel}>
-            <div>
-              <span style={styles.headerSelect}>Select</span>
-              <span style={styles.headerActivities}>activities</span>
-            </div>
-              <RaisedButton
-                label={<span style={styles.buttonText}>Click to Start Timers</span>}
-                style={styles.button}
-                buttonStyle={styles.buttonStyle}
-                secondary={true}
-                onClick={this.handleSubmit} />
+      <div style={styles.root}>
+        <GridList
+          cols={6}
+          cellHeight={65}
+          padding={1}
+          style={styles.gridList}
+        >
+          {gridItems}
+        </GridList>
+        <div style={styles.sidePanel}>
+          <div>
+            <span style={styles.headerSelect}>Select</span>
+            <span style={styles.headerActivities}>activities</span>
           </div>
+            <RaisedButton
+              label='Click to Start Timers'
+              style={styles.button}
+              buttonStyle={styles.buttonStyle}
+              overlayStyle={styles.buttonStyle}
+              primary={true}
+              onClick={this.handleSubmit} />
         </div>
       </div>
     );

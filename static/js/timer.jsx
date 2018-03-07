@@ -6,26 +6,29 @@ import moment from 'moment';
 import RaisedButton from 'material-ui/RaisedButton';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 import Chip from 'material-ui/Chip';
-import {
-  grey300,
-  lightGreen500,
-  yellow500,
-  orange500,
-  red500,
-  red900
-} from 'material-ui/styles/colors';
 
 const colorPalette = {
-  'purple': '#7C6196',
-  'red': '#B26060',
-  'blue': '#44AABF',
-  'white': '#FFFBF9',
-  'black': '#19020D',
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
+};
+
+const timerColors = {
+  dkRed: '#AD1414',
+  ltRed: '#cc3232',
+  orange: '#db7b2b',
+  yellow: "#e7b416",
+  ltGreen: '#99c140',
+  dkGreen: '#2dc937',
 };
 
 const styles = {
   chip: {
     margin: 2,
+    color: colorPalette.black,
+    fontSize: 14
   },
   wrapper: {
     display: 'flex',
@@ -33,9 +36,14 @@ const styles = {
   },
   button: {
     margin: 6,
+    borderRadius: 16,
+  },
+  buttonStyle: {
+    borderRadius: 16,
   },
   text: {
-    color: colorPalette.black,
+    color: colorPalette.white,
+    fontSize: 20,
   },
 };
 
@@ -50,7 +58,7 @@ export default class Timer extends React.Component {
       seconds: this.props.time,
       status: 'idle',
       startTime: null,
-      chipColor: grey300,
+      chipColor: colorPalette.ltBlue,
     };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
@@ -96,15 +104,15 @@ export default class Timer extends React.Component {
     let nextState = this.state;
 
     if ((seconds / this.props.time) > 0.6) {
-      nextState['chipColor'] = lightGreen500;
+      nextState['chipColor'] = timerColors.ltGreen;
     } else if ((seconds / this.props.time) > 0.3) {
-      nextState['chipColor'] = yellow500;
+      nextState['chipColor'] = timerColors.yellow;
     } else if ((seconds / this.props.time) > 0) {
-      nextState['chipColor'] = orange500;
+      nextState['chipColor'] = timerColors.orange;
     } else if ((seconds / this.props.time) < -0.1) {
-      nextState['chipColor'] = red900;
+      nextState['chipColor'] = timerColors.ltRed;
     } else if ((seconds / this.props.time) <= 0) {
-      nextState['chipColor'] = red500;
+      nextState['chipColor'] = timerColors.dkRed;
     }
     nextState['time'] = this.secondsToTime(seconds);
     nextState['seconds'] = seconds;
@@ -157,15 +165,19 @@ export default class Timer extends React.Component {
       case 'idle':
         button = <RaisedButton
                     label="Start"
-                    labelColor={styles.text}
+                    primary={true}
                     style={styles.button}
+                    buttonStyle={styles.buttonStyle}
+                    overlayStyle={styles.buttonStyle}
                     onClick={this.startTimer} />;
         break;
       case 'pending':
         button = <RaisedButton
                     label="Stop"
-                    labelColor={styles.text}
+                    primary={true}
                     style={styles.button}
+                    buttonStyle={styles.buttonStyle}
+                    overlayStyle={styles.buttonStyle}
                     onClick={this.stopTimer} />;
         break;
       case 'completed':
@@ -176,20 +188,20 @@ export default class Timer extends React.Component {
 
     return (
       <TableRow>
-        <TableRowColumn>
+        <TableRowColumn style={{paddingLeft: 40}}>
           <span style={styles.text}>
             {this.props.name}
           </span>
         </TableRowColumn>
-        <TableRowColumn>
+        <TableRowColumn style={{paddingLeft: 112}}>
           <Chip
             style={styles.chip}
             backgroundColor={this.state.chipColor}
           >
-            <span style={styles.text}>{time[0]}:{time[1]}</span>
+            <span style={styles.chip}>{time[0]}:{time[1]}</span>
           </Chip>
         </TableRowColumn>
-        <TableRowColumn>{button}</TableRowColumn>
+        <TableRowColumn style={{textAlign: 'right', paddingRight: 34}}>{button}</TableRowColumn>
       </TableRow>
     );
   }

@@ -23,28 +23,28 @@ import SettingsContainer from './SettingsContainer';
 import TimersContainer from './TimersContainer';
 
 const colorPalette = {
-  'blue': '#34A3BA',
-  'white': '#FFF8F4',
-  'dkBlue': '#217A8C',
-  'black': '#000105',
-  'red': '#863b87',
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
 };
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
   palette: {
     primary1Color: colorPalette.blue,
-    primary2Color: colorPalette.red,
-    primary3Color: colorPalette.red,
+    primary2Color: colorPalette.dkBlue,
+    primary3Color: colorPalette.ltBlue,
     accent1Color: colorPalette.blue,
-    accent2Color: colorPalette.red,
-    accent3Color: colorPalette.red,
+    accent2Color: colorPalette.ltBlue,
+    accent3Color: colorPalette.white,
     textColor: colorPalette.white,
     alternateTextColor: colorPalette.white,
     canvasColor: colorPalette.white,
     borderColor: colorPalette.white,
     disabledColor: fade(colorPalette.black, 0.3),
-    pickerHeaderColor: colorPalette.red,
+    pickerHeaderColor: colorPalette.ltBlue,
     clockCircleColor: fade(colorPalette.black, 0.07),
     shadowColor: colorPalette.white,
   },
@@ -172,7 +172,10 @@ class ReadyNow extends React.Component {
                         key='settings'
                         primaryText='Settings'
                         onClick={this.showSettings} />);
-      profile = <FlatButton label='Profile' onClick={this.showProfile} />
+      profile = <FlatButton
+                  label='Profile'
+                  onClick={this.showProfile}
+                  style={{marginRight: 15}} />
     } else {
       menuItems.push(<MenuItem
                         style={styles.menuItem}

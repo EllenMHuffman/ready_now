@@ -18,7 +18,6 @@ export default class ActivityTimeLineChart extends React.Component {
   render() {
     let chartActivities = this.props.chartActivities;
     let latestActivity = this.props.latestChoice;
-    console.log(chartActivities);
     let activitySeries = [];
     const COLORS = ['green', 'blue', 'purple'];
 

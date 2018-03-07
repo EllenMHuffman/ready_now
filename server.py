@@ -286,7 +286,8 @@ def get_user_info():
 
         user_info = (db.session.query(User.fname, User.lname, User.username)
                        .filter(User.user_id == user_id).first())
-        return user_info
+
+        return jsonify({'userInfo': user_info})
 
 
 @app.route('/api/get-average-times', methods=['POST'])
