@@ -7,7 +7,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import Chip from 'material-ui/Chip';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import Checkbox from 'material-ui/CheckBox';
+import Checkbox from 'material-ui/Checkbox';
 import CheckboxOutline from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 const colorPalette = {
