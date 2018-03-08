@@ -80,7 +80,7 @@ export default class FriendSelect extends React.Component {
   fetchFriends() {
     fetch('/api/get-friends', {
       method: 'post',
-      credentials: 'include'
+      credentials: 'include',
     })
     .then((response) => response.json())
     .then((data) => this.setState({['friendInfo']: data}));
