@@ -1,6 +1,16 @@
 'use strict';
 
 import React from 'react';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+
+const colorPalette = {
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
+};
 
 export default class DestinationList extends React.Component {
   constructor(props) {
@@ -24,23 +34,27 @@ export default class DestinationList extends React.Component {
     for (let destId in this.state.data) {
       destinations.push(
         <div key={destId}>
-          <li><i>{this.state.data[destId]['name']}:</i> </li>
-          <span>
-            {this.state.data[destId]['street']},&nbsp;
-            {this.state.data[destId]['state']},&nbsp;
-            {this.state.data[destId]['zipcode']}
-          </span>
-        </div>
-                        );
-      // console.log(destinations);
-    }    return (
+          <ListItem
+            primaryText={this.state.data[destId]['name']}
+            style={{padding: 2}}
+            secondaryText={
+              <span style={{color: colorPalette.white}}>
+                {this.state.data[destId]['street']},&nbsp;
+                {this.state.data[destId]['state']},&nbsp;
+                {this.state.data[destId]['zipcode']}
+              </span>
+            }
+          />
+        </div>);
+    }
+    return (
       <div>
         <h3>Saved Destinations</h3>
-        <ul>
+        <Divider />
+        <List>
           {destinations}
-        </ul>
+        </List>
       </div>
-
     );
   }
 }

@@ -7,3 +7,4 @@ DS_Store
 .pytest*
 *node_modules*
 bundle.js
+demo*

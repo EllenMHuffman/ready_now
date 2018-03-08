@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import Divider from 'material-ui/Divider';
+
 import FriendList from './FriendList';
 import DestinationList from './DestinationList';
 import AvgTimesBarChart from './AvgTimesBarChart';
@@ -92,7 +94,6 @@ export default class ProfileContainer extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <h2 style={styles.header}>{this.state.userInfo[0]} {this.state.userInfo[1]}</h2>
@@ -101,6 +102,8 @@ export default class ProfileContainer extends React.Component {
             <AvgTimesBarChart />
             <ActivitySelect />
           </div>
+          <br />
+          <Divider />
           <div id='profile-info' style={styles.infoPanel}>
             <FriendList />
             <DestinationList />

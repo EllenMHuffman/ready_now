@@ -29,7 +29,7 @@ export default class FriendList extends React.Component {
       friends.push(
         <ListItem
           primaryText={this.state.data[friendId]['name']}
-          style={{padding: 2}}
+          style={{padding: 4}}
         />);
     }
     return (
@@ -40,7 +40,6 @@ export default class FriendList extends React.Component {
           {friends}
         </List>
       </div>
-
     );
   }
 }

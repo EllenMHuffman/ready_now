@@ -190,6 +190,7 @@ export default class FriendSelect extends React.Component {
             </form>
             <Snackbar
               open={this.state.open}
+              bodyStyle={{backgroundColor: colorPalette.blue, textAlign: 'center'}}
               message='Text sent!'
               autoHideDuration={this.state.autoHideDuration}
             />

@@ -8,6 +8,14 @@ import {
   LineMarkSeries
 } from 'react-vis';
 
+const colorPalette = {
+  blue: '#34A3BA',
+  white: '#FFF8F4',
+  dkBlue: '#217A8C',
+  black: '#000105',
+  ltBlue: '#C3ECF4',
+};
+
 
 export default class ActivityTimeLineChart extends React.Component {
   constructor(props) {
@@ -19,16 +27,25 @@ export default class ActivityTimeLineChart extends React.Component {
     let chartActivities = this.props.chartActivities;
     let latestActivity = this.props.latestChoice;
     let activitySeries = [];
-    const COLORS = ['green', 'blue', 'purple'];
+    const COLORS = {
+      activity1: colorPalette.dkBlue,
+      activity2: colorPalette.ltBlue,
+    };
 
     for (let activity in chartActivities) {
-      activitySeries.push(<LineMarkSeries
+      if (chartActivities[activity]['actId'] != null) {
+        let color = (COLORS[activity]);
+        activitySeries.push(
+          <LineMarkSeries
             key={chartActivities[activity]['actId']}
             className={chartActivities[activity]['actId']}
-            style={{stroke: v => COLORS[v]}}
+            color={color}
             curve={'curveMonotoneX'}
-            data={chartActivities[activity]['chartTimes']['activitySessions']}/>
-    )}
+            data={chartActivities[activity]['chartTimes']['activitySessions']}
+          />
+        );
+      }
+    }
 
     let tickLabels = chartActivities[latestActivity]['chartTimes']['dates'];
 

@@ -112,10 +112,13 @@ def create_activity_time_array(activity_time):
 def create_user_activity_names(activities):
     """Takes list of activity tuples and creates a dictionary of name."""
 
-    activity_name = {}
+    activity_name = []
 
     for act_id, act_name in activities:
-        activity_name[act_id] = {'name': act_name}
+        activity_name.append({
+            'actId': act_id,
+            'name': act_name,
+        })
 
     return activity_name
 

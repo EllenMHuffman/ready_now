@@ -302,7 +302,8 @@ def get_user_activity_averages():
             Activity.act_name)
             .join(Activity)
             .filter(Record.user_id == user_id)
-            .group_by(Activity.act_name).all())
+            .group_by(Activity.act_name, Activity.act_id)
+            .order_by(Activity.act_id).all())
 
         activity_averages = []
 
@@ -310,6 +311,9 @@ def get_user_activity_averages():
             activity_averages.append({'x': act_name,
                                       'y': time_delta.total_seconds()/60})
 
+        print activity_averages
+        print user_id
+        print user_recs
         return json.dumps({'activityAverages': activity_averages})
 
     return jsonify({'value': False})
@@ -324,6 +328,7 @@ def get_user_activities():
     activities = (db.session.query(Record.act_id, Activity.act_name)
                     .join(Activity)
                     .filter(Record.user_id == user_id)
+                    .order_by(Record.act_id)
                     .distinct())
 
     activity_name = create_user_activity_names(activities)
@@ -355,6 +360,7 @@ def get_activity_session_time():
         tick_int = start_t - min_day
         activity_sessions.append({'x': tick_int.days,
                                   'y': (time_delta.total_seconds() / 60)})
+
     return json.dumps(
         {'activitySessions': activity_sessions,
          'dates': dates})
@@ -363,7 +369,7 @@ def get_activity_session_time():
 ################################################################################
 
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     # make sure templates, etc. are not cached in debug mode
     app.jinja_env.auto_reload = app.debug
 
